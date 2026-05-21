@@ -1,0 +1,686 @@
+# KennelMart — Vibe Coding Context & OOP Implementation Guide
+
+## Project Identity
+
+### App Name
+
+KennelMart
+
+### System Type
+
+Campus-based marketplace platform for National University Laguna students and faculty.
+
+### Core Purpose
+
+Provide a secure and moderated marketplace where verified NU users can:
+
+* Buy products/services
+* Sell products/services
+* Manage orders
+* Communicate safely within campus
+
+---
+
+# Core Development Philosophy
+
+## Main Rule
+
+> Build SIMPLE, CLEAN, and EXTENSIBLE systems.
+
+Avoid:
+
+* overengineering
+* unnecessary abstractions
+* complex architectures too early
+
+Prioritize:
+
+* readability
+* maintainability
+* modularity
+* scalability
+* OOP clarity
+
+---
+
+# Architecture Vibe
+
+## Preferred Architecture
+
+```text
+Frontend (React + TypeScript)
+    ↓
+REST API
+    ↓
+Backend (Java Spring Boot)
+    ↓
+MySQL Database
+```
+
+---
+
+# Backend Development Vibe (Java)
+
+## Coding Style
+
+### Preferred
+
+* small classes
+* small methods
+* interface-driven design
+* layered architecture
+* DTO separation
+* meaningful naming
+
+### Avoid
+
+* God classes
+* massive controllers
+* duplicated logic
+* deeply nested conditions
+* exposing entities directly
+
+---
+
+# Required Backend Layers
+
+```text
+Controller
+↓
+Service
+↓
+Repository
+↓
+Database
+```
+
+---
+
+# Backend Folder Structure
+
+```text
+com.kennelmart
+├── controller
+├── service
+├── service.impl
+├── repository
+├── entity
+├── dto
+├── mapper
+├── security
+├── config
+├── exception
+├── util
+└── enums
+```
+
+---
+
+# Frontend Development Vibe (React + TypeScript)
+
+## Coding Style
+
+### Preferred
+
+* reusable components
+* strongly typed props
+* feature-based structure
+* clean state management
+* minimal prop drilling
+
+### Avoid
+
+* giant components
+* duplicated UI logic
+* inline business logic
+* excessive global state
+
+---
+
+# Frontend Folder Structure
+
+```text
+src/
+├── components/
+├── pages/
+├── features/
+├── services/
+├── hooks/
+├── context/
+├── layouts/
+├── types/
+├── routes/
+└── utils/
+```
+
+---
+
+# OOP Principles Implementation Guide
+
+# 1. Encapsulation
+
+## Vibe
+
+Protect internal data.
+
+## Rules
+
+* all entity fields must be private
+* use getters/setters
+* validate sensitive updates
+
+## Example Use
+
+```java
+private String password;
+```
+
+---
+
+# 2. Abstraction
+
+## Vibe
+
+Hide complexity behind clean interfaces.
+
+## Rules
+
+* use interfaces for services
+* expose behavior, not implementation
+
+## Example
+
+```java
+interface OrderService
+```
+
+---
+
+# 3. Composition Over Inheritance
+
+## Vibe
+
+Assemble behavior instead of forcing hierarchies.
+
+## Preferred
+
+```java
+Order has OrderItems
+```
+
+## Avoid
+
+Deep inheritance chains.
+
+---
+
+# 4. Single Responsibility Principle (SRP)
+
+## Vibe
+
+One class = one responsibility.
+
+## Good
+
+```text
+AuthService
+ProductService
+OrderService
+```
+
+## Bad
+
+```text
+MarketplaceManager
+```
+
+---
+
+# 5. Separation of Concerns
+
+## Vibe
+
+Every layer has a clear job.
+
+---
+
+## Controller
+
+Handles HTTP requests/responses.
+
+## Service
+
+Handles business logic.
+
+## Repository
+
+Handles database access.
+
+## DTO
+
+Transfers safe data.
+
+---
+
+# 6. Interface-Based Design
+
+## Vibe
+
+Depend on contracts, not implementations.
+
+## Example
+
+```java
+PaymentStrategy paymentStrategy;
+```
+
+---
+
+# 7. Low Coupling
+
+## Vibe
+
+Classes should not heavily depend on each other.
+
+## Preferred
+
+Use dependency injection.
+
+```java
+OrderService(PaymentService paymentService)
+```
+
+---
+
+# 8. High Cohesion
+
+## Vibe
+
+Related logic stays together.
+
+## Example
+
+`OrderService`
+ONLY handles:
+
+* order processing
+* status updates
+* order validation
+
+---
+
+# 9. Layered Architecture
+
+## Vibe
+
+Strict architectural boundaries.
+
+## Rule
+
+Controllers NEVER directly access repositories.
+
+---
+
+# 10. Dependency Injection
+
+## Vibe
+
+Spring manages dependencies.
+
+## Preferred
+
+Constructor injection.
+
+```java
+@RequiredArgsConstructor
+```
+
+---
+
+# 11. DTO Pattern
+
+## Vibe
+
+Never expose entities directly.
+
+## Required DTOs
+
+```text
+ProductRequestDTO
+ProductResponseDTO
+OrderResponseDTO
+```
+
+---
+
+# 12. Strategy Pattern
+
+## Vibe
+
+Replace condition-heavy logic.
+
+## Best Use Cases
+
+* payment methods
+* notification channels
+* delivery options
+
+---
+
+# 13. Factory Pattern
+
+## Vibe
+
+Centralized object creation.
+
+## Best Use Cases
+
+* listing creation
+* notification builders
+
+---
+
+# 14. Observer Pattern
+
+## Vibe
+
+Automatic event notifications.
+
+## Best Use Cases
+
+* order updates
+* seller notifications
+* admin alerts
+
+---
+
+# Domain Modeling Vibe
+
+# Core Entities
+
+## User
+
+Roles:
+
+* BUYER
+* SELLER
+* ADMIN
+
+---
+
+## Product
+
+Contains:
+
+* title
+* description
+* price
+* stock
+* images
+* category
+
+---
+
+## Order
+
+Contains:
+
+* buyer
+* seller
+* orderItems
+* paymentMethod
+* status
+
+---
+
+## Cart
+
+Contains:
+
+* cartItems
+* totalPrice
+
+---
+
+# Enum Vibe
+
+Always use enums for fixed states.
+
+## Examples
+
+```java
+enum OrderStatus
+```
+
+```text
+ORDER_RECEIVED
+ACCEPTED
+PREPARING
+SHIPPED
+DELIVERED
+```
+
+---
+
+# API Development Vibe
+
+## REST Standards
+
+### Good
+
+```text
+GET /products
+POST /orders
+PUT /orders/{id}/status
+```
+
+### Avoid
+
+```text
+/getProductsNow
+```
+
+---
+
+# Database Design Vibe
+
+## Rules
+
+* normalize properly
+* use foreign keys
+* avoid duplicated data
+* use audit timestamps
+
+---
+
+# Security Vibe
+
+## Required
+
+* JWT authentication
+* password hashing
+* role-based authorization
+* protected admin routes
+
+---
+
+# Error Handling Vibe
+
+## Preferred
+
+Custom exceptions.
+
+```java
+ProductNotFoundException
+```
+
+## Avoid
+
+```java
+catch(Exception e)
+```
+
+---
+
+# Validation Vibe
+
+## Backend validates EVERYTHING.
+
+### Use
+
+```java
+@NotBlank
+@Email
+@Min
+```
+
+---
+
+# Frontend Component Vibe
+
+# Components Should Be
+
+## Small
+
+## Reusable
+
+## Typed
+
+## Focused
+
+---
+
+# Recommended Shared Components
+
+```text
+ProductCard
+SearchBar
+Navbar
+Modal
+Pagination
+OrderStatusBadge
+```
+
+---
+
+# State Management Vibe
+
+## Preferred
+
+Context API first.
+
+## Avoid Early
+
+* Redux
+* complex stores
+
+Unless application complexity truly requires it.
+
+---
+
+# Naming Convention Vibe
+
+# Backend
+
+## Entities
+
+```text
+Product
+Order
+User
+```
+
+## Services
+
+```text
+ProductService
+OrderService
+```
+
+## Controllers
+
+```text
+ProductController
+```
+
+---
+
+# Frontend
+
+## Components
+
+PascalCase:
+
+```text
+ProductCard.tsx
+```
+
+## Hooks
+
+```text
+useCart.ts
+```
+
+---
+
+# MVP Engineering Rules
+
+# PRIORITIZE THESE FEATURES
+
+1. Authentication
+2. Verification
+3. Product Listings
+4. Marketplace Browsing
+5. Cart
+6. Orders
+7. Seller Dashboard
+8. Admin Moderation
+
+---
+
+# CUT THESE FIRST IF NEEDED
+
+1. Messaging
+2. Reviews
+3. Analytics
+4. Follow system
+5. Real-time notifications
+
+---
+
+# Engineering Anti-Patterns to Avoid
+
+## Avoid
+
+* God classes
+* giant React components
+* duplicated business logic
+* direct DB access from controllers
+* exposing entities in APIs
+* premature optimization
+* unnecessary design patterns
+* overusing inheritance
+
+---
+
+# Final Development Mindset
+
+## KennelMart should feel:
+
+### Clean
+
+### Understandable
+
+### Modular
+
+### Easy to maintain
+
+### Academically strong in OOP
+
+### Realistically implementable
+
+---
+
+# Golden Rule
+
+> “Simple systems scale better than complicated systems pretending to be scalable.”

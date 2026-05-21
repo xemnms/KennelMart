@@ -1,0 +1,879 @@
+# KennelMart — Low-Level Requirements (MVP First)
+
+## 1. Project Goal
+
+Build a campus-only marketplace platform for the National University Laguna community where verified students and faculty can safely buy and sell products/services.
+
+The MVP should prioritize:
+
+1. Secure account registration/login
+2. Identity verification
+3. Product listing management
+4. Product browsing
+5. Cart and ordering
+6. Order tracking
+7. Basic admin moderation
+
+Everything else should support those workflows.
+
+---
+
+# 2. Recommended Technical Stack
+
+## Frontend
+
+* React
+* TypeScript
+* React Router
+* Axios
+* Zustand (simple global state)
+* React Hook Form
+* TailwindCSS or Material UI
+
+## Backend
+
+* Java 21
+* Spring Boot
+* Spring Security + JWT
+* Spring Data JPA
+* Hibernate
+* MySQL
+
+## Infrastructure
+
+* REST API architecture
+* Monolithic backend for MVP
+* Cloudinary/local file storage for images
+* Docker optional
+
+---
+
+# 3. Recommended Architecture
+
+## Backend Architecture
+
+Use a clean layered architecture.
+
+```text
+controller/
+service/
+repository/
+domain/
+dto/
+mapper/
+security/
+config/
+exception/
+util/
+```
+
+---
+
+# 4. Core Domain Model (MVP)
+
+## Base Abstract Class
+
+```java
+abstract class BaseEntity {
+    UUID id;
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
+}
+```
+
+Demonstrates:
+
+* Abstraction
+* Inheritance
+
+---
+
+# 5. Main Entities
+
+---
+
+## User
+
+### Responsibilities
+
+Represents all platform users.
+
+### Fields
+
+```java
+User
+- UUID id
+- String firstName
+- String lastName
+- String email
+- String password
+- UserRole role
+- VerificationStatus verificationStatus
+- AccountStatus accountStatus
+- String studentOrFacultyId
+- String profileImage
+```
+
+### Relationships
+
+```text
+User
+ ├── Listings
+ ├── Orders
+ ├── Reviews
+ ├── Messages
+ └── Reports
+```
+
+---
+
+## ProductListing
+
+```java
+ProductListing
+- UUID id
+- String title
+- String description
+- BigDecimal price
+- Integer stockQuantity
+- ProductStatus status
+- ListingCategory category
+- User seller
+```
+
+---
+
+## ProductImage
+
+```java
+ProductImage
+- UUID id
+- String imageUrl
+- ProductListing listing
+```
+
+Composition relationship:
+
+* Listing owns ProductImages
+
+---
+
+## Cart
+
+```java
+Cart
+- UUID id
+- User buyer
+```
+
+---
+
+## CartItem
+
+```java
+CartItem
+- UUID id
+- ProductListing listing
+- Integer quantity
+- Cart cart
+```
+
+---
+
+## Order
+
+```java
+Order
+- UUID id
+- String orderNumber
+- User buyer
+- User seller
+- OrderStatus status
+- BigDecimal totalPrice
+- PaymentMethod paymentMethod
+```
+
+---
+
+## OrderItem
+
+```java
+OrderItem
+- UUID id
+- ProductListing listing
+- Integer quantity
+- BigDecimal itemPrice
+```
+
+---
+
+## Review
+
+```java
+Review
+- UUID id
+- Integer rating
+- String comment
+- User reviewer
+- User seller
+```
+
+---
+
+## Message
+
+```java
+Message
+- UUID id
+- User sender
+- User receiver
+- String content
+- Boolean isRead
+```
+
+---
+
+## Report
+
+```java
+Report
+- UUID id
+- User reporter
+- String reason
+- ReportStatus status
+```
+
+---
+
+# 6. Enumerations
+
+## UserRole
+
+```java
+BUYER
+SELLER
+ADMIN
+```
+
+---
+
+## VerificationStatus
+
+```java
+PENDING
+VERIFIED
+REJECTED
+```
+
+---
+
+## AccountStatus
+
+```java
+ACTIVE
+SUSPENDED
+```
+
+---
+
+## OrderStatus
+
+```java
+ORDER_RECEIVED
+ACCEPTED
+PREPARING
+SHIPPED
+DELIVERED
+CANCELLED
+```
+
+---
+
+## PaymentMethod
+
+```java
+COD
+GCASH
+CAMPUS_MEETUP
+```
+
+---
+
+# 7. MVP Scope Prioritization
+
+# PHASE 1 — FOUNDATION (Critical)
+
+## 7.1 Authentication Module
+
+### Features
+
+* Register
+* Login
+* JWT Authentication
+* Password hashing
+* Role assignment
+
+### Backend Requirements
+
+#### APIs
+
+```http
+POST /api/auth/register
+POST /api/auth/login
+GET  /api/auth/me
+```
+
+### Validation Rules
+
+* NU email required
+* Password minimum 8 chars
+* Email uniqueness
+
+### Acceptance Criteria
+
+* User can create account
+* User can login
+* JWT returned successfully
+
+---
+
+## 7.2 Identity Verification
+
+## Goal
+
+Only verified NU Laguna users can transact.
+
+### Requirements
+
+* Upload student/faculty ID
+* Compare against sample SQL database
+* Admin approval flow
+
+### Tables
+
+```java
+VerifiedIdentity
+- schoolId
+- fullName
+- email
+```
+
+### APIs
+
+```http
+POST /api/verification/submit
+GET  /api/verification/status
+PUT  /api/admin/verification/{id}/approve
+PUT  /api/admin/verification/{id}/reject
+```
+
+### MVP Simplification
+
+* Manual admin approval
+* No OCR/image recognition
+
+---
+
+# PHASE 2 — MARKETPLACE CORE (Critical)
+
+## 7.3 Product Listing Management
+
+### Seller Features
+
+* Create listing
+* Edit listing
+* Delete listing
+* Upload images
+* Set stock quantity
+
+### APIs
+
+```http
+POST   /api/listings
+PUT    /api/listings/{id}
+DELETE /api/listings/{id}
+GET    /api/listings/my-listings
+```
+
+### Validation Rules
+
+* Price > 0
+* Stock >= 0
+* Minimum 1 image
+
+---
+
+## 7.4 Browse Marketplace
+
+### Buyer Features
+
+* View listings
+* Search
+* Filter by category
+* View seller profile
+
+### APIs
+
+```http
+GET /api/listings
+GET /api/listings/{id}
+GET /api/users/{id}
+```
+
+### Sorting
+
+* Latest
+* Lowest price
+* Highest price
+
+---
+
+## 7.5 Cart System
+
+### Features
+
+* Add to cart
+* Remove item
+* Adjust quantity
+
+### APIs
+
+```http
+POST   /api/cart/items
+PUT    /api/cart/items/{id}
+DELETE /api/cart/items/{id}
+GET    /api/cart
+```
+
+### Business Rules
+
+* Cannot exceed stock quantity
+* Prevent duplicate cart items
+
+---
+
+## 7.6 Order Placement
+
+### Features
+
+* Checkout
+* Select payment method
+* Generate order number
+
+### APIs
+
+```http
+POST /api/orders
+GET  /api/orders/my-orders
+GET  /api/orders/{id}
+```
+
+### Business Rules
+
+* Stock deduction upon checkout
+* Transaction rollback if failure occurs
+
+### Important
+
+Use:
+
+* Service Layer Transactions
+* Repository pattern
+
+---
+
+## 7.7 Order Tracking
+
+### Seller Actions
+
+Update order status.
+
+### APIs
+
+```http
+PUT /api/orders/{id}/status
+```
+
+### Allowed Flow
+
+```text
+ORDER_RECEIVED
+→ ACCEPTED
+→ PREPARING
+→ SHIPPED
+→ DELIVERED
+```
+
+### Design Pattern
+
+Use Strategy Pattern for:
+
+* Order status transitions
+* Payment processing
+
+---
+
+# PHASE 3 — ADMIN MODERATION (Critical)
+
+## 7.8 Admin Dashboard
+
+### Features
+
+* View pending verifications
+* Moderate listings
+* Suspend users
+* Review reports
+
+### APIs
+
+```http
+GET /api/admin/users
+GET /api/admin/listings
+PUT /api/admin/users/{id}/suspend
+PUT /api/admin/listings/{id}/approve
+```
+
+---
+
+## 7.9 Report System
+
+### Features
+
+* Report listing
+* Report user
+
+### APIs
+
+```http
+POST /api/reports
+GET  /api/admin/reports
+```
+
+---
+
+# PHASE 4 — NICE TO HAVE (Post-MVP)
+
+These should NOT block MVP completion.
+
+---
+
+## Messaging System
+
+### Features
+
+* Buyer ↔ Seller communication
+* Read/unread messages
+
+### Recommended
+
+Use WebSocket later if time permits.
+
+MVP alternative:
+
+* Simple polling REST API
+
+---
+
+## Reviews & Ratings
+
+### Features
+
+* Rate seller
+* Leave comments
+
+### APIs
+
+```http
+POST /api/reviews
+GET  /api/sellers/{id}/reviews
+```
+
+---
+
+## Analytics Dashboard
+
+### Seller Metrics
+
+* Total sales
+* Revenue
+* Views
+
+---
+
+## Notifications
+
+### Events
+
+* New order
+* Order shipped
+* Verification approved
+
+### Design Pattern
+
+Observer Pattern
+
+---
+
+# 8. Frontend Module Breakdown
+
+# Public Pages
+
+```text
+/login
+/register
+/marketplace
+/listing/:id
+```
+
+---
+
+# Buyer Pages
+
+```text
+/cart
+/checkout
+/orders
+/profile
+```
+
+---
+
+# Seller Pages
+
+```text
+/seller/dashboard
+/seller/listings
+/seller/orders
+```
+
+---
+
+# Admin Pages
+
+```text
+/admin
+/admin/verifications
+/admin/reports
+/admin/users
+```
+
+---
+
+# 9. Recommended Frontend Structure
+
+```text
+src/
+ ├── api/
+ ├── components/
+ ├── pages/
+ ├── layouts/
+ ├── hooks/
+ ├── store/
+ ├── types/
+ ├── services/
+ ├── utils/
+ └── routes/
+```
+
+---
+
+# 10. State Management Strategy
+
+## Zustand Stores
+
+```text
+authStore
+cartStore
+notificationStore
+```
+
+Keep state simple for MVP.
+
+Avoid Redux unless complexity increases.
+
+---
+
+# 11. Security Requirements
+
+## Required
+
+### Password Security
+
+* BCrypt hashing
+
+### Authentication
+
+* JWT Access Token
+
+### Authorization
+
+* Role-based access control
+
+### Validation
+
+* Backend validation required
+* Never trust frontend validation
+
+### File Upload
+
+* Restrict file type
+* Restrict file size
+
+---
+
+# 12. Design Patterns Usage
+
+## Factory Pattern
+
+### Use Case
+
+Create payment strategies.
+
+```java
+PaymentStrategyFactory
+```
+
+---
+
+## Strategy Pattern
+
+### Use Cases
+
+* Payment processing
+* Order transitions
+
+---
+
+## Observer Pattern
+
+### Use Cases
+
+* Notifications
+* Order updates
+
+---
+
+## Singleton Pattern
+
+### Use Cases
+
+* Config managers
+* Notification manager
+
+(Spring Beans naturally support singleton scope.)
+
+---
+
+# 13. OOP Demonstration Mapping
+
+| OOP Principle | Example                      |
+| ------------- | ---------------------------- |
+| Encapsulation | Private entity fields        |
+| Inheritance   | BaseEntity                   |
+| Abstraction   | Abstract services/interfaces |
+| Polymorphism  | PaymentStrategy              |
+| Composition   | Listing → Images             |
+| Interfaces    | Service contracts            |
+
+---
+
+# 14. Database Tables (MVP)
+
+## Required Tables
+
+```text
+users
+verified_identities
+product_listings
+product_images
+cart
+cart_items
+orders
+order_items
+reviews
+messages
+reports
+```
+
+---
+
+# 15. Suggested Sprint Plan
+
+# Sprint 1
+
+* Authentication
+* User management
+* JWT security
+* Database setup
+
+# Sprint 2
+
+* Verification module
+* Seller listing management
+
+# Sprint 3
+
+* Marketplace browsing
+* Cart system
+
+# Sprint 4
+
+* Order system
+* Order tracking
+
+# Sprint 5
+
+* Admin moderation
+
+# Sprint 6
+
+* Reviews
+* Messaging
+* Notifications
+
+---
+
+# 16. MVP Definition of Done
+
+The MVP is complete when:
+
+✅ User can register/login
+✅ User can be verified
+✅ Seller can post listings
+✅ Buyer can browse listings
+✅ Buyer can add to cart
+✅ Buyer can place order
+✅ Seller can manage orders
+✅ Admin can moderate users/listings
+✅ Basic security implemented
+✅ System deployable locally
+
+---
+
+# 17. Recommended Simplifications for Academic Success
+
+To ensure stable delivery:
+
+## Avoid for MVP
+
+* Microservices
+* Real-time sockets
+* AI moderation
+* Complex recommendation systems
+* Multiple payment gateways
+* Mobile app
+
+## Prefer
+
+* Monolith architecture
+* REST APIs
+* Simple relational database
+* Basic admin moderation
+* Manual workflows
+
+This increases:
+
+* Stability
+* Maintainability
+* Faster completion
+* Easier demonstration during defense/project presentation

@@ -1,0 +1,19 @@
+{
+  "name": "Java + Node",
+  "image": "mcr.microsoft.com/devcontainers/java:3-21-trixie",
+
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "none",
+      "installMaven": "true",
+      "installGradle": "false"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "lts"
+    }
+  }
+
+  // "forwardPorts": [],
+  // "postCreateCommand": "java -version && node -v && npm -v",
+  // "remoteUser": "root"
+}
