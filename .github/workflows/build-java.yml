@@ -41,4 +41,5 @@ jobs:
             mkdir -p bin
             find . -name "*.java" > sources.txt
             javac -d bin -cp bin @sources.txt
+          fi
           
