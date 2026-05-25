@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -17,14 +17,17 @@ public interface ProductListingRepository extends JpaRepository<ProductListing, 
 
     // Find all listings by seller (for seller dashboard)
     Page<ProductListing> findBySeller(User seller, Pageable pageable);
-    
-    // Find active listings (visible to buyers) – with pagination and sorting
+
+    // Find active listings (visible to buyers) – with pagination
     Page<ProductListing> findByStatus(ProductStatus status, Pageable pageable);
 
     // Filter by category and status
     Page<ProductListing> findByCategoryAndStatus(ListingCategory category, ProductStatus status, Pageable pageable);
 
-    // Search by title or description (case-insensitive)
+    // Search by title or description (case‑insensitive) and status
     Page<ProductListing> findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndStatus(
             String titleKeyword, String descriptionKeyword, ProductStatus status, Pageable pageable);
+
+    // Find a single listing by ID and status (e.g., check if active before adding to cart)
+    Optional<ProductListing> findByIdAndStatus(UUID id, ProductStatus status);
 }
