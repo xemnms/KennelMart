@@ -1,18 +1,18 @@
 {
   "name": "Java + Node + Docker",
-  "image": "mcr.microsoft.com/devcontainers/java:21-trixie",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
   "features": {
     "ghcr.io/devcontainers/features/java:1": {
       "version": "21",
-      "installMaven": "true",
-      "installGradle": "false"
+      "installMaven": true,
+      "installGradle": false
     },
     "ghcr.io/devcontainers/features/node:1": {
       "version": "lts"
     },
     "ghcr.io/devcontainers/features/docker-in-docker:2": {
       "version": "latest",
-      "enableNonRootAccess": "true"
+      "enableNonRootAccess": true
     }
   },
   "customizations": {
@@ -23,5 +23,6 @@
       ]
     }
   },
-  "forwardPorts": [8080, 5432]
+  "forwardPorts": [8080, 5432],
+  "postCreateCommand": "docker --version && java -version && node -v"
 }
