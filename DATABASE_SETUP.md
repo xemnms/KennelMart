@@ -1,0 +1,459 @@
+# KennelMart PostgreSQL Database Setup Guide
+
+**Purpose:** Set up the PostgreSQL database for identity verification and user authentication
+
+---
+
+## 📋 Overview
+
+The KennelMart database consists of two main tables:
+
+1. **verified_identities** - Master list of verified NU Laguna students and faculty
+2. **users** - Registered platform users (created after registration)
+
+### Verification Flow
+
+```
+User provides email during registration
+        ↓
+Check: Does email exist in verified_identities table?
+        ↓
+    YES → User can register (verification_status = VERIFIED)
+    NO  → Registration rejected (must be in verified list)
+```
+
+---
+
+## 🚀 Quick Start
+
+### Option 1: Automatic Setup (Recommended)
+
+```bash
+# 1. Create database
+createdb -U postgres kennelmart_db
+
+# 2. Run SQL schema file
+psql -U postgres -d kennelmart_db -f database/kennelmart_schema.sql
+
+# 3. Verify setup
+psql -U postgres -d kennelmart_db -c "SELECT COUNT(*) FROM verified_identities;"
+```
+
+### Option 2: Manual Setup (Step by Step)
+
+Follow the sections below.
+
+---
+
+## 📝 Step 1: Create PostgreSQL Database
+
+### Using Command Line
+
+```bash
+# Connect to PostgreSQL as superuser
+psql -U postgres
+
+# In psql terminal, create database
+CREATE DATABASE kennelmart_db;
+
+# Exit psql
+\q
+```
+
+### Using pgAdmin GUI
+
+1. Open pgAdmin
+2. Right-click "Databases"
+3. Select "Create" → "Database"
+4. Name: `kennelmart_db`
+5. Click "Save"
+
+---
+
+## 📝 Step 2: Create Tables
+
+### Table 1: verified_identities
+
+**Purpose:** Store verified NU Laguna students and faculty for registration validation
+
+```sql
+CREATE TABLE verified_identities (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    school_id VARCHAR(50) NOT NULL UNIQUE,
+    full_name VARCHAR(150) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    status VARCHAR(50) NOT NULL DEFAULT 'VERIFIED',
+    department VARCHAR(100),
+    program VARCHAR(100),
+    academic_year VARCHAR(10),
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT ck_verified_status CHECK (status IN ('VERIFIED', 'PENDING', 'REJECTED', 'INACTIVE'))
+);
+```
+
+**Execute in psql:**
+```bash
+psql -U postgres -d kennelmart_db
+
+# Then paste the CREATE TABLE statement above
+```
+
+### Table 2: users
+
+**Purpose:** Store registered platform users
+
+```sql
+CREATE TABLE users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    student_or_faculty_id VARCHAR(50),
+    profile_image VARCHAR(500),
+    role VARCHAR(50) NOT NULL DEFAULT 'BUYER',
+    verification_status VARCHAR(50) NOT NULL,
+    account_status VARCHAR(50) NOT NULL DEFAULT 'ACTIVE',
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT ck_user_role CHECK (role IN ('BUYER', 'SELLER', 'ADMIN')),
+    CONSTRAINT ck_verification_status CHECK (verification_status IN ('PENDING', 'VERIFIED', 'REJECTED')),
+    CONSTRAINT ck_account_status CHECK (account_status IN ('ACTIVE', 'SUSPENDED'))
+);
+```
+
+### Create Indexes (Performance Optimization)
+
+```sql
+-- verified_identities indexes
+CREATE INDEX idx_verified_identities_email ON verified_identities(email) WHERE status = 'VERIFIED';
+CREATE INDEX idx_verified_identities_school_id ON verified_identities(school_id) WHERE status = 'VERIFIED';
+CREATE INDEX idx_verified_identities_status ON verified_identities(status);
+
+-- users indexes
+CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_users_student_faculty_id ON users(student_or_faculty_id);
+```
+
+---
+
+## 📝 Step 3: Insert Verified Students/Faculty Data
+
+### Sample Data (for Testing)
+
+```sql
+INSERT INTO verified_identities 
+    (school_id, full_name, email, status, department, program, academic_year)
+VALUES
+    ('2024-00001', 'Juan dela Cruz', 'juan.delacruz@nu.edu.ph', 'VERIFIED', 'College of Engineering', 'Computer Science', '2023-2024'),
+    ('2024-00002', 'Maria Santos', 'maria.santos@nu.edu.ph', 'VERIFIED', 'College of Liberal Arts', 'English Education', '2023-2024'),
+    ('2024-00003', 'Pedro Reyes', 'pedro.reyes@nu.edu.ph', 'VERIFIED', 'College of Business', 'Accountancy', '2023-2024'),
+    ('FAC-00001', 'Dr. Robert Johnson', 'robert.johnson@nu.edu.ph', 'VERIFIED', 'College of Engineering', 'Faculty', '2023-2024'),
+    ('FAC-00002', 'Prof. Sarah Williams', 'sarah.williams@nu.edu.ph', 'VERIFIED', 'College of Liberal Arts', 'Faculty', '2023-2024');
+```
+
+### Add Your Own Verified Users
+
+Template to add your own data:
+
+```sql
+INSERT INTO verified_identities 
+    (school_id, full_name, email, status, department, program, academic_year)
+VALUES
+    ('STUDENT-ID', 'Full Name', 'email@nu.edu.ph', 'VERIFIED', 'Department', 'Program', '2023-2024'),
+    ('STUDENT-ID-2', 'Another Name', 'email2@nu.edu.ph', 'VERIFIED', 'Department', 'Program', '2023-2024');
+```
+
+**Important Fields:**
+- **school_id:** Student/Faculty ID card number (MUST be UNIQUE)
+- **full_name:** Full name as shown on ID card
+- **email:** Official NU Laguna email (MUST end with @students.nu-laguna.edu.ph, MUST be UNIQUE)
+- **status:** 
+  - `VERIFIED` - Can register
+  - `PENDING` - Under review
+  - `REJECTED` - Cannot register
+  - `INACTIVE` - Was verified but no longer active
+
+---
+
+## 📝 Step 4: Verify Your Setup
+
+### Check Tables Created
+
+```bash
+psql -U postgres -d kennelmart_db
+
+# List all tables
+\dt
+
+# You should see: verified_identities, users
+```
+
+### Check verified_identities Structure
+
+```bash
+# In psql
+\d verified_identities
+```
+
+Output should show:
+```
+Table "public.verified_identities"
+Column    |              Type               | Collation | Nullable | Default
+----------+---------------------------------+-----------+----------+---------
+id        | uuid                            |           | not null | gen_random_uuid()
+school_id | character varying(50)           |           | not null | 
+full_name | character varying(150)          |           | not null |
+email     | character varying(255)          |           | not null |
+status    | character varying(50)           |           | not null | 'VERIFIED'
+...
+```
+
+### Count Records
+
+```bash
+# In psql
+SELECT COUNT(*) FROM verified_identities;
+SELECT COUNT(*) FROM users;
+```
+
+### View Sample Data
+
+```bash
+# In psql
+SELECT school_id, full_name, email, status FROM verified_identities;
+```
+
+---
+
+## 🔗 Step 5: Update Application Configuration
+
+Update `kennelmart/src/main/resources/application.properties`:
+
+```properties
+# PostgreSQL Configuration
+spring.datasource.url=jdbc:postgresql://localhost:5432/kennelmart_db
+spring.datasource.username=postgres
+spring.datasource.password=your_postgres_password
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+# Hibernate (auto-create missing tables)
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+```
+
+---
+
+## 🧪 Step 6: Test Registration Flow
+
+### Test Case 1: Valid Registration (Email in verified list)
+
+1. Start application: `mvn spring-boot:run`
+2. Register with email from verified_identities table:
+```bash
+curl -X POST http://localhost:8080/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "firstName": "Axel",
+    "lastName": "Bagay",
+    "email": "bagayam@students.nu-laguna.edu.ph",
+    "password": "SecurePass123",
+    "confirmPassword": "SecurePass123",
+    "studentOrFacultyId": "2025-1020735"
+  }'
+```
+
+**Expected Response (201 Created):**
+```json
+{
+  "userId": "uuid-here",
+  "firstName": "Juan",
+  "lastName": "dela Cruz",
+  "email": "juan.delacruz@nu.edu.ph",
+  "role": "BUYER",
+  "verificationStatus": "VERIFIED",
+  "accountStatus": "ACTIVE",
+  "accessToken": "eyJhbGc...",
+  "tokenType": "Bearer",
+  "expiresIn": 86400
+}
+```
+
+### Test Case 2: Invalid Registration (Email NOT in verified list)
+
+```bash
+curl -X POST http://localhost:8080/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@students.nu-laguna.edu.ph",  # NOT in verified_identities table
+    "password": "SecurePass123",
+    "confirmPassword": "SecurePass123",
+    "studentOrFacultyId": "2024-99999"
+  }'
+```
+
+**Expected Response (400 Bad Request):**
+```json
+{
+  "error": "Email is not in the verified NU list. Contact admin for verification."
+}
+```
+
+---
+
+## 📊 Database Schema Diagram
+
+```
+┌─────────────────────────────────────┐
+│    verified_identities              │
+├─────────────────────────────────────┤
+│ id (UUID) - Primary Key             │
+│ school_id (VARCHAR) - Unique        │◄──── Used to verify: "Do I exist?"
+│ full_name (VARCHAR)                 │
+│ email (VARCHAR) - Unique            │◄──── Checked during registration
+│ status (VARCHAR)                    │◄──── VERIFIED = Can register
+│ department (VARCHAR)                │
+│ program (VARCHAR)                   │
+│ academic_year (VARCHAR)             │
+│ created_at (TIMESTAMP)              │
+│ updated_at (TIMESTAMP)              │
+└─────────────────────────────────────┘
+              ↓
+        Registration
+              ↓
+┌─────────────────────────────────────┐
+│         users                       │
+├─────────────────────────────────────┤
+│ id (UUID) - Primary Key             │
+│ first_name (VARCHAR)                │
+│ last_name (VARCHAR)                 │
+│ email (VARCHAR) - Unique            │
+│ password (VARCHAR) - Hashed         │
+│ student_or_faculty_id (VARCHAR)     │
+│ profile_image (VARCHAR)             │
+│ role (VARCHAR)                      │◄──── BUYER, SELLER, ADMIN
+│ verification_status (VARCHAR)       │◄──── VERIFIED (from check above)
+│ account_status (VARCHAR)            │◄──── ACTIVE, SUSPENDED
+│ created_at (TIMESTAMP)              │
+│ updated_at (TIMESTAMP)              │
+└─────────────────────────────────────┘
+```
+
+---
+
+## 🔐 Security Notes
+
+1. **Email Validation:** Backend checks that provided email matches @nu.edu.ph domain
+2. **School ID Matching:** Backend can verify student ID matches the verified record
+3. **Password Hashing:** Passwords stored in users table are BCrypt hashed
+4. **Status Checking:** Only users with status = 'VERIFIED' in verified_identities can register
+5. **Account Suspension:** Admins can set account_status = 'SUSPENDED' to block users
+
+---
+
+## 🛠️ Common Tasks
+
+### Add New Verified Student
+
+```sql
+INSERT INTO verified_identities 
+    (school_id, full_name, email, status, department, program, academic_year)
+VALUES
+    ('2024-12345', 'New Student Name', 'newstudent@nu.edu.ph', 'VERIFIED', 'College', 'Program', '2023-2024');
+```
+
+### Update Student Status
+
+```sql
+UPDATE verified_identities 
+SET status = 'REJECTED' 
+WHERE email = 'student@nu.edu.ph';
+```
+
+### Suspend User Account
+
+```sql
+UPDATE users 
+SET account_status = 'SUSPENDED' 
+WHERE email = 'user@nu.edu.ph';
+```
+
+### View Pending Verifications
+
+```sql
+SELECT * FROM verified_identities WHERE status = 'PENDING';
+```
+
+### Get All Registered Users
+
+```sql
+SELECT id, email, first_name, last_name, role, verification_status, account_status 
+FROM users 
+ORDER BY created_at DESC;
+```
+
+---
+
+## 🐛 Troubleshooting
+
+### Error: Database does not exist
+```
+Solution: Run createdb kennelmart_db first
+```
+
+### Error: Table already exists
+```
+Solution: Drop table and recreate, or use IF NOT EXISTS
+DROP TABLE verified_identities;
+```
+
+### Error: Email already exists
+```
+Solution: Emails must be unique. Check if email already in table.
+SELECT * FROM verified_identities WHERE email = 'student@nu.edu.ph';
+```
+
+### Error: Status value invalid
+```
+Solution: Use only: VERIFIED, PENDING, REJECTED, INACTIVE
+```
+
+### Cannot connect from Spring Boot
+```
+Solution: Check application.properties has correct URL, username, password
+spring.datasource.url=jdbc:postgresql://localhost:5432/kennelmart_db
+spring.datasource.username=postgres
+spring.datasource.password=YOUR_PASSWORD
+```
+
+---
+
+## ✅ Checklist
+
+- [ ] PostgreSQL installed and running
+- [ ] `kennelmart_db` database created
+- [ ] `verified_identities` table created with sample data
+- [ ] `users` table created (will be populated via registration)
+- [ ] Indexes created for performance
+- [ ] application.properties updated with database credentials
+- [ ] Spring Boot application can connect to database
+- [ ] Test registration with verified email works
+- [ ] Test registration with unverified email fails
+
+---
+
+## 📞 Support
+
+For questions about the database setup:
+- Check the SQL files in `/database/` folder
+- Review the CHANGELOG.md for Phase 1 implementation details
+- Test queries in pgAdmin or psql command line first
+
+---
+
+**Database Setup Complete! ✅**
+
+Your KennelMart database is ready for authentication and registration workflows.
