@@ -1,15 +1,27 @@
 {
-  "name": "Java + Node",
-  "image": "mcr.microsoft.com/devcontainers/java:3-21-trixie",  // ← changed from 25 to 21
-
+  "name": "Java + Node + Docker",
+  "image": "mcr.microsoft.com/devcontainers/java:21-trixie",
   "features": {
     "ghcr.io/devcontainers/features/java:1": {
-      "version": "21",                // ← explicitly set JDK 21
+      "version": "21",
       "installMaven": "true",
       "installGradle": "false"
     },
     "ghcr.io/devcontainers/features/node:1": {
       "version": "lts"
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "enableNonRootAccess": "true"
     }
-  }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "ms-azuretools.vscode-docker"
+      ]
+    }
+  },
+  "forwardPorts": [8080, 5432]
 }
