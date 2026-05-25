@@ -51,7 +51,7 @@ curl -X POST http://localhost:8080/api/auth/register \
     "email": "bagayam@students.nu-laguna.edu.ph",
     "password": "SecurePass123",
     "confirmPassword": "SecurePass123",
-    "studentOrFacultyId": "2025-1020735"
+    "schoolId": "2025-1020735"
   }'
 ```
 
@@ -92,7 +92,7 @@ curl -X POST http://localhost:8080/api/auth/register \
     "email": "juan.delacruz@students.nu-laguna.edu.ph",
     "password": "SecurePass123",
     "confirmPassword": "SecurePass123",
-    "studentOrFacultyId": "2024-00001"
+    "schoolId": "2024-00001"
   }'
 ```
 

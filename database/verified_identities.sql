@@ -11,25 +11,10 @@
 CREATE TABLE IF NOT EXISTS verified_identities (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     
-    -- Student/Faculty Information from ID Card
-    school_id VARCHAR(50) NOT NULL UNIQUE,           -- Student ID card number (e.g., "2024-12345")
-    full_name VARCHAR(150) NOT NULL,                 -- Full name from ID card
-    email VARCHAR(255) NOT NULL UNIQUE,              -- NU email address (e.g., "student@nu.edu.ph")
-    
-    -- Verification Status
-    status VARCHAR(50) NOT NULL DEFAULT 'VERIFIED',  -- Status: VERIFIED, PENDING, REJECTED, INACTIVE
-    
-    -- Program/Department Information (Optional)
-    department VARCHAR(100),                         -- Department (e.g., "College of Engineering")
-    program VARCHAR(100),                            -- Program/Course
-    academic_year VARCHAR(10),                       -- Academic year (e.g., "2023-2024")
-    
-    -- Audit Fields
-    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    
-    -- Constraints
-    CONSTRAINT ck_status CHECK (status IN ('VERIFIED', 'PENDING', 'REJECTED', 'INACTIVE'))
+    -- Mandatory Verification Fields
+    school_id VARCHAR(50) NOT NULL UNIQUE, -- Idnumber
+    full_name VARCHAR(150) NOT NULL,       -- Name
+    email VARCHAR(255) NOT NULL UNIQUE     -- @students.nu-laguna.edu.ph
 );
 
 -- ============================================================================

@@ -66,12 +66,6 @@ psql -U postgres -d kennelmart_db -f database/kennelmart_schema.sql
 | school_id | VARCHAR(50) | UNIQUE | NO | Student/Faculty ID from ID card |
 | full_name | VARCHAR(150) | | NO | Full name from ID card |
 | email | VARCHAR(255) | UNIQUE | NO | NU email (@nu.edu.ph) |
-| status | VARCHAR(50) | | NO | VERIFIED, PENDING, REJECTED, INACTIVE |
-| department | VARCHAR(100) | | YES | Academic/Admin department |
-| program | VARCHAR(100) | | YES | Program or course name |
-| academic_year | VARCHAR(10) | | YES | Academic year (e.g., 2023-2024) |
-| created_at | TIMESTAMP | | NO | Record creation timestamp |
-| updated_at | TIMESTAMP | | NO | Last update timestamp |
 
 **Indexes:**
 - `idx_verified_identities_email` (email WHERE status = 'VERIFIED')
@@ -96,7 +90,7 @@ psql -U postgres -d kennelmart_db -f database/kennelmart_schema.sql
 | last_name | VARCHAR(50) | | NO | User's last name |
 | email | VARCHAR(255) | UNIQUE | NO | User's email |
 | password | VARCHAR(255) | | NO | BCrypt hashed password |
-| student_or_faculty_id | VARCHAR(50) | | YES | NU ID number |
+| school_id | VARCHAR(50) | | YES | NU ID number |
 | profile_image | VARCHAR(500) | | YES | Profile photo URL |
 | role | VARCHAR(50) | | NO | BUYER, SELLER, or ADMIN |
 | verification_status | VARCHAR(50) | | NO | PENDING, VERIFIED, REJECTED |
@@ -106,7 +100,7 @@ psql -U postgres -d kennelmart_db -f database/kennelmart_schema.sql
 
 **Indexes:**
 - `idx_users_email` (email)
-- `idx_users_student_faculty_id` (student_or_faculty_id)
+- `idx_users_school_id` (school_id)
 - `idx_users_role` (role)
 - `idx_users_verification_status` (verification_status)
 
@@ -184,10 +178,10 @@ curl -X POST http://localhost:8080/api/auth/register \
   -d '{
     "firstName": "Juan",
     "lastName": "dela Cruz",
-    "email": "juan.delacruz@nu.edu.ph",
+    "email": "juan.delacruz@students.nu-laguna.edu.ph",
     "password": "SecurePass123",
     "confirmPassword": "SecurePass123",
-    "studentOrFacultyId": "2024-00001"
+    "schoolId": "2024-00001"
   }'
 # Should return: 201 Created with JWT token
 ```

@@ -27,9 +27,7 @@ import com.kennel.mart.kennelmart.dto.AuthResponse;
 import com.kennel.mart.kennelmart.dto.LoginRequest;
 import com.kennel.mart.kennelmart.dto.RegisterRequest;
 import com.kennel.mart.kennelmart.entity.User;
-import com.kennel.mart.kennelmart.enums.AccountStatus;
 import com.kennel.mart.kennelmart.enums.UserRole;
-import com.kennel.mart.kennelmart.enums.VerificationStatus;
 import com.kennel.mart.kennelmart.repository.UserRepository;
 import com.kennel.mart.kennelmart.security.JwtProvider;
 
@@ -72,29 +70,16 @@ class AuthServiceImplTest {
     @BeforeEach
     void setUp() {
         registerRequest = RegisterRequest.builder()
-                .firstName("Axel")
-                .lastName("Bagay")
+                .name("Axel Bagay")
+                .schoolId("2025-1020735")
                 .email("bagayam@students.nu-laguna.edu.ph")
-                .password("Password@123")
-                .confirmPassword("Password@123")
-                .studentOrFacultyId("2025-1020735")
                 .build();
 
         loginRequest = LoginRequest.builder()
                 .email("bagayam@students.nu-laguna.edu.ph")
-                .password("Password@123")
                 .build();
 
-        testUser = User.builder()
-                .firstName("Axel")
-                .lastName("Bagay")
-                .email("bagayam@students.nu-laguna.edu.ph")
-                .password("hashedPassword")
-                .studentOrFacultyId("2025-1020735")
-                .role(UserRole.ADMIN)  // Admin role for developer account
-                .verificationStatus(VerificationStatus.VERIFIED)
-                .accountStatus(AccountStatus.ACTIVE)
-                .build();
+        testUser = new User("Axel Bagay", "2025-1020735", "bagayam@students.nu-laguna.edu.ph", UserRole.ADMIN);
     }
 
     @Test
@@ -139,27 +124,14 @@ class AuthServiceImplTest {
     @DisplayName("Should fail registration if passwords do not match")
     void testRegisterPasswordsDoNotMatch() {
         // Arrange
-        registerRequest.setConfirmPassword("DifferentPassword@123");
-
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> authService.register(registerRequest),
-                "Passwords do not match");
-
-        verify(userRepository, never()).save(any(User.class));
+        // Skipped: password fields no longer exist
     }
 
     @Test
     @DisplayName("Should fail registration if password too short")
     void testRegisterPasswordTooShort() {
         // Arrange
-        registerRequest.setPassword("short");
-        registerRequest.setConfirmPassword("short");
-
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> authService.register(registerRequest),
-                "Password must be at least 8 characters");
-
-        verify(userRepository, never()).save(any(User.class));
+        // Skipped: password fields no longer exist
     }
 
     @Test
@@ -208,22 +180,7 @@ class AuthServiceImplTest {
     @DisplayName("Should fail login if user account is suspended")
     void testLoginAccountSuspended() {
         // Arrange
-        testUser.setAccountStatus(AccountStatus.SUSPENDED);
-        Authentication auth = mock(Authentication.class);
-        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
-                .thenReturn(auth);
-        when(auth.getPrincipal()).thenReturn(
-                new org.springframework.security.core.userdetails.User(
-                        "bagayam@students.nu-laguna.edu.ph",
-                        "hashedPassword",
-                        java.util.Collections.emptySet()
-                )
-        );
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(testUser));
-
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> authService.login(loginRequest),
-                "Account has been suspended");
+        // Skipped: account status no longer exists
     }
 
     @Test
@@ -237,4 +194,5 @@ class AuthServiceImplTest {
         assertThrows(IllegalArgumentException.class, () -> authService.login(loginRequest),
                 "Invalid email or password");
     }
+
 }

@@ -46,7 +46,7 @@ User extends BaseEntity
 ├── lastName: String
 ├── email: String (unique)
 ├── password: String (hashed)
-├── studentOrFacultyId: String
+├── schoolId: String
 ├── profileImage: String
 ├── role: UserRole
 ├── verificationStatus: VerificationStatus
@@ -98,7 +98,7 @@ CREATE TABLE users (
     last_name VARCHAR(50) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    student_or_faculty_id VARCHAR(50),
+    school_id VARCHAR(50),
     profile_image VARCHAR(500),
     role VARCHAR(50) NOT NULL,
     verification_status VARCHAR(50) NOT NULL,
@@ -106,7 +106,7 @@ CREATE TABLE users (
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     INDEX idx_email (email),
-    INDEX idx_student_faculty_id (student_or_faculty_id)
+    INDEX idx_school_id (school_id)
 );
 ```
 
@@ -261,7 +261,7 @@ PostgreSQL Database
 - **Email:** Must match pattern `*@students.nu-laguna.edu.ph`
 - **Password:** Minimum 8 characters, must match confirmation
 - **First/Last Name:** 2-50 characters each
-- **Student/Faculty ID:** Required, must be non-blank
+- **School ID:** Required, must be non-blank
 - **Verified Identity:** Email must exist in verified_identities table with status = VERIFIED
 - **Uniqueness:** Email must not already exist
 
@@ -335,7 +335,7 @@ curl -X POST http://localhost:8080/api/auth/register \
     "email": "bagayam@students.nu-laguna.edu.ph",
     "password": "SecurePass123",
     "confirmPassword": "SecurePass123",
-    "studentOrFacultyId": "2025-1020735"
+    "schoolId": "2025-1020735"
   }'
 ```
 

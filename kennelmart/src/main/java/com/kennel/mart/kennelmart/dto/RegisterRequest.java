@@ -2,7 +2,6 @@ package com.kennel.mart.kennelmart.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 // Lombok removed: explicit constructors, getters, setters, builder
 
 /**
@@ -15,73 +14,47 @@ import jakarta.validation.constraints.Size;
  */
 // Lombok removed: explicit constructors, getters, setters, builder
 public class RegisterRequest {
+    @NotBlank(message = "Name is required")
+    private String name;
 
-    @NotBlank(message = "First name is required")
-    @Size(min = 2, max = 50, message = "First name must be between 2 and 50 characters")
-    private String firstName;
-
-    @NotBlank(message = "Last name is required")
-    @Size(min = 2, max = 50, message = "Last name must be between 2 and 50 characters")
-    private String lastName;
+    @NotBlank(message = "Idnumber is required")
+    private String schoolId;
 
     @NotBlank(message = "Email is required")
     @Email(message = "Email should be valid")
     private String email;
 
-    @NotBlank(message = "Password is required")
-    @Size(min = 8, message = "Password must be at least 8 characters")
-    private String password;
-
-    @NotBlank(message = "Confirm password is required")
-    private String confirmPassword;
-
-    @NotBlank(message = "Student/Faculty ID is required")
-    private String studentOrFacultyId;
-
     public RegisterRequest() {}
-    public RegisterRequest(String firstName, String lastName, String email, String password, String confirmPassword, String studentOrFacultyId) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public RegisterRequest(String name, String schoolId, String email) {
+        this.name = name;
+        this.schoolId = schoolId;
         this.email = email;
-        this.password = password;
-        this.confirmPassword = confirmPassword;
-        this.studentOrFacultyId = studentOrFacultyId;
     }
 
-    public String getFirstName() { return firstName; }
-    public void setFirstName(String firstName) { this.firstName = firstName; }
-    public String getLastName() { return lastName; }
-    public void setLastName(String lastName) { this.lastName = lastName; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public String getSchoolId() { return schoolId; }
+    public void setSchoolId(String schoolId) { this.schoolId = schoolId; }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
-    public String getConfirmPassword() { return confirmPassword; }
-    public void setConfirmPassword(String confirmPassword) { this.confirmPassword = confirmPassword; }
-    public String getStudentOrFacultyId() { return studentOrFacultyId; }
-    public void setStudentOrFacultyId(String studentOrFacultyId) { this.studentOrFacultyId = studentOrFacultyId; }
 
     // Builder pattern
     public static RegisterRequestBuilder builder() { return new RegisterRequestBuilder(); }
     public static class RegisterRequestBuilder {
-        private String firstName, lastName, email, password, confirmPassword, studentOrFacultyId;
-        public RegisterRequestBuilder firstName(String firstName) { this.firstName = firstName; return this; }
-        public RegisterRequestBuilder lastName(String lastName) { this.lastName = lastName; return this; }
+        private String name, schoolId, email;
+        public RegisterRequestBuilder name(String name) { this.name = name; return this; }
+        public RegisterRequestBuilder schoolId(String schoolId) { this.schoolId = schoolId; return this; }
         public RegisterRequestBuilder email(String email) { this.email = email; return this; }
-        public RegisterRequestBuilder password(String password) { this.password = password; return this; }
-        public RegisterRequestBuilder confirmPassword(String confirmPassword) { this.confirmPassword = confirmPassword; return this; }
-        public RegisterRequestBuilder studentOrFacultyId(String studentOrFacultyId) { this.studentOrFacultyId = studentOrFacultyId; return this; }
         public RegisterRequest build() {
-            return new RegisterRequest(firstName, lastName, email, password, confirmPassword, studentOrFacultyId);
+            return new RegisterRequest(name, schoolId, email);
         }
     }
     @Override
     public String toString() {
         return "RegisterRequest{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
+                "name='" + name + '\'' +
+                ", schoolId='" + schoolId + '\'' +
                 ", email='" + email + '\'' +
-                ", studentOrFacultyId='" + studentOrFacultyId + '\'' +
                 '}';
     }
 }

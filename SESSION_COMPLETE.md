@@ -133,7 +133,7 @@ curl -X POST http://localhost:8080/api/auth/register \
     "email": "bagayam@students.nu-laguna.edu.ph",
     "password": "SecurePass123",
     "confirmPassword": "SecurePass123",
-    "studentOrFacultyId": "2025-1020735"
+    "schoolId": "2025-1020735"
   }'
 
 # Response will show: "role": "ADMIN" ✅
@@ -420,7 +420,7 @@ cd kennelmart-ui && npm run dev
 # Register Test Account
 curl -X POST http://localhost:8080/api/auth/register \
   -H "Content-Type: application/json" \
-  -d '{"firstName":"Axel","lastName":"Bagay","email":"bagayam@students.nu-laguna.edu.ph","password":"SecurePass123","confirmPassword":"SecurePass123","studentOrFacultyId":"2025-1020735"}'
+  -d '{"firstName":"Axel","lastName":"Bagay","email":"bagayam@students.nu-laguna.edu.ph","password":"SecurePass123","confirmPassword":"SecurePass123","schoolId":"2025-1020735"}'
 
 # Login
 curl -X POST http://localhost:8080/api/auth/login \

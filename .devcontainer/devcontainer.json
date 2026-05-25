@@ -1,10 +1,10 @@
 {
   "name": "Java + Node",
-  "image": "mcr.microsoft.com/devcontainers/java:3-25-trixie",
+  "image": "mcr.microsoft.com/devcontainers/java:3-21-trixie",  // ← changed from 25 to 21
 
   "features": {
     "ghcr.io/devcontainers/features/java:1": {
-      "version": "none",
+      "version": "21",                // ← explicitly set JDK 21
       "installMaven": "true",
       "installGradle": "false"
     },
@@ -12,8 +12,4 @@
       "version": "lts"
     }
   }
-
-  // "forwardPorts": [],
-  // "postCreateCommand": "java -version && node -v && npm -v",
-  // "remoteUser": "root"
 }

@@ -15,78 +15,33 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";  -- For UUID generation
 
 -- ============================================================================
--- TABLE 1: users
--- Description: Platform users (buyers, sellers, admins)
--- ============================================================================
+
+============================================================================
 CREATE TABLE IF NOT EXISTS users (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    
-    -- Personal Information
-    first_name VARCHAR(50) NOT NULL,
-    last_name VARCHAR(50) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    student_or_faculty_id VARCHAR(50),
-    profile_image VARCHAR(500),
-    
-    -- Account Status
-    role VARCHAR(50) NOT NULL DEFAULT 'USER',           -- ADMIN, USER (all users can buy and sell)
-    verification_status VARCHAR(50) NOT NULL,           -- PENDING, VERIFIED, REJECTED
-    account_status VARCHAR(50) NOT NULL DEFAULT 'ACTIVE', -- ACTIVE, SUSPENDED
-    
-    -- Audit Fields
-    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    
-    -- Constraints
-    CONSTRAINT ck_user_role CHECK (role IN ('ADMIN', 'USER')),
-    CONSTRAINT ck_verification_status CHECK (verification_status IN ('PENDING', 'VERIFIED', 'REJECTED')),
-    CONSTRAINT ck_account_status CHECK (account_status IN ('ACTIVE', 'SUSPENDED'))
+   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+   name VARCHAR(150) NOT NULL,
+   idnumber VARCHAR(50) NOT NULL,
+   email VARCHAR(255) NOT NULL UNIQUE,
+   role VARCHAR(10) NOT NULL DEFAULT 'USER' -- 'ADMIN' or 'USER'
 );
 
--- Create indexes for users table
 CREATE INDEX idx_users_email ON users(email);
-CREATE INDEX idx_users_student_faculty_id ON users(student_or_faculty_id);
+CREATE INDEX idx_users_idnumber ON users(idnumber);
 CREATE INDEX idx_users_role ON users(role);
-CREATE INDEX idx_users_verification_status ON users(verification_status);
 
 -- ============================================================================
--- TABLE 2: verified_identities
--- Description: Master list of verified NU Laguna students and faculty
---              Used to validate users during registration
--- ============================================================================
+
+============================================================================
 CREATE TABLE IF NOT EXISTS verified_identities (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    
-    -- Student/Faculty Information from ID Card
-    school_id VARCHAR(50) NOT NULL UNIQUE,
-    full_name VARCHAR(150) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    
-    -- Status: Whether this person can register
-    status VARCHAR(50) NOT NULL DEFAULT 'VERIFIED',  -- VERIFIED, PENDING, REJECTED, INACTIVE
-    
-    -- Optional Information
-    department VARCHAR(100),
-    program VARCHAR(100),
-    academic_year VARCHAR(10),
-    
-    -- Audit Fields
-    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    
-    -- Constraints
-    CONSTRAINT ck_verified_status CHECK (status IN ('VERIFIED', 'PENDING', 'REJECTED', 'INACTIVE'))
+   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+   idnumber VARCHAR(50) NOT NULL UNIQUE, -- Idnumber
+   name VARCHAR(150) NOT NULL,           -- Name
+   email VARCHAR(255) NOT NULL UNIQUE    -- Official NU Email
 );
 
--- Create indexes for verified_identities table
-CREATE INDEX idx_verified_identities_email 
-    ON verified_identities(email) WHERE status = 'VERIFIED';
-CREATE INDEX idx_verified_identities_school_id 
-    ON verified_identities(school_id) WHERE status = 'VERIFIED';
-CREATE INDEX idx_verified_identities_status ON verified_identities(status);
-CREATE INDEX idx_verified_identities_email_status 
-    ON verified_identities(email, status);
+CREATE INDEX idx_verified_identities_email ON verified_identities(email);
+CREATE INDEX idx_verified_identities_idnumber ON verified_identities(idnumber);
+CREATE INDEX idx_verified_identities_name ON verified_identities(name);
 
 -- ============================================================================
 -- REGISTRATION & VERIFICATION WORKFLOW
@@ -126,27 +81,13 @@ LOGIN WORKFLOW:
 */
 
 -- ============================================================================
--- SAMPLE DATA FOR TESTING
--- ============================================================================
 
--- Insert verified students and faculty
-INSERT INTO verified_identities 
-    (school_id, full_name, email, status, department, program, academic_year)
-VALUES
-    -- Developer Account
-    ('2025-1020735', 'Axel Drake Bagay', 'bagayam@students.nu-laguna.edu.ph', 'VERIFIED', 'College of Engineering', 'Computer Science', '2024-2025'),
-    
-    -- Verified Students (Sample Data for Testing)
-    ('2024-00001', 'Juan dela Cruz', 'juan.delacruz@students.nu-laguna.edu.ph', 'VERIFIED', 'College of Engineering', 'Computer Science', '2023-2024'),
-    ('2024-00002', 'Maria Santos', 'maria.santos@students.nu-laguna.edu.ph', 'VERIFIED', 'College of Liberal Arts', 'English Education', '2023-2024'),
-    ('2024-00003', 'Pedro Reyes', 'pedro.reyes@students.nu-laguna.edu.ph', 'VERIFIED', 'College of Business', 'Accountancy', '2023-2024'),
-    ('2024-00004', 'Ana Garcia', 'ana.garcia@students.nu-laguna.edu.ph', 'PENDING', 'College of Engineering', 'Civil Engineering', '2023-2024'),
-    ('2024-00005', 'Carlos Lopez', 'carlos.lopez@students.nu-laguna.edu.ph', 'REJECTED', 'College of Medicine', 'Medicine', '2022-2023'),
-    
-    -- Verified Faculty
-    ('FAC-00001', 'Dr. Robert Johnson', 'robert.johnson@students.nu-laguna.edu.ph', 'VERIFIED', 'College of Engineering', 'Faculty', '2023-2024'),
-    ('FAC-00002', 'Prof. Sarah Williams', 'sarah.williams@students.nu-laguna.edu.ph', 'VERIFIED', 'College of Liberal Arts', 'Faculty', '2023-2024')
-ON CONFLICT (email) DO NOTHING;
+-- Insert verified identities (sample)
+INSERT INTO verified_identities (idnumber, name, email) VALUES
+   ('2025-1020735', 'Axel Drake Bagay', 'bagayam@students.nu-laguna.edu.ph'),
+   ('2024-00001', 'Juan dela Cruz', 'juan.delacruz@students.nu-laguna.edu.ph'),
+   ('2024-00002', 'Maria Santos', 'maria.santos@students.nu-laguna.edu.ph'),
+   ('2024-00003', 'Pedro Reyes', 'pedro.reyes@students.nu-laguna.edu.ph');
 
 -- ============================================================================
 -- VERIFICATION QUERIES FOR BACKEND

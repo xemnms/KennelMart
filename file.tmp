@@ -79,9 +79,16 @@ CREATE DATABASE kennelmart_db;
 ```sql
 CREATE TABLE verified_identities (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    school_id VARCHAR(50) NOT NULL UNIQUE, -- Idnumber
-    full_name VARCHAR(150) NOT NULL,       -- Name
-    email VARCHAR(255) NOT NULL UNIQUE     -- NU Laguna Email
+    school_id VARCHAR(50) NOT NULL UNIQUE,
+    full_name VARCHAR(150) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    status VARCHAR(50) NOT NULL DEFAULT 'VERIFIED',
+    department VARCHAR(100),
+    program VARCHAR(100),
+    academic_year VARCHAR(10),
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT ck_verified_status CHECK (status IN ('VERIFIED', 'PENDING', 'REJECTED', 'INACTIVE'))
 );
 ```
 
@@ -154,8 +161,8 @@ Template to add your own data:
 INSERT INTO verified_identities 
     (school_id, full_name, email, status, department, program, academic_year)
 VALUES
-    ('STUDENT-ID', 'Full Name', 'email@nu.edu.ph', 'VERIFIED', 'Department', 'Program', '2023-2024'),
-    ('STUDENT-ID-2', 'Another Name', 'email2@nu.edu.ph', 'VERIFIED', 'Department', 'Program', '2023-2024');
+    ('STUDENT-ID', 'Full Name', 'email@students.nu-laguna.edu.ph', 'VERIFIED', 'Department', 'Program', '2023-2024'),
+    ('STUDENT-ID-2', 'Another Name', 'email2@students.nu-laguna.edu.ph', 'VERIFIED', 'Department', 'Program', '2023-2024');
 ```
 
 **Important Fields:**

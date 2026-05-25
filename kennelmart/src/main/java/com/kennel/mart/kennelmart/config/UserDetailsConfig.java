@@ -36,12 +36,12 @@ public class UserDetailsConfig {
     public UserDetailsService userDetailsService() {
         return email -> {
             User user = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
             return new org.springframework.security.core.userdetails.User(
-                    user.getEmail(),
-                    user.getPassword(),
-                    Collections.singleton(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()))
+                user.getEmail(),
+                "", // No password
+                Collections.singleton(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()))
             );
         };
     }

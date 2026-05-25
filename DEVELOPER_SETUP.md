@@ -26,11 +26,8 @@
 All SQL files now include your account as the first verified entry:
 
 ```sql
-INSERT INTO verified_identities 
-    (school_id, full_name, email, status, department, program, academic_year)
-VALUES
-    ('2025-1020735', 'Axel Drake Bagay', 'bagayam@students.nu-laguna.edu.ph', 'VERIFIED', 'College of Engineering', 'Computer Science', '2024-2025'),
-    ...
+INSERT INTO verified_identities (school_id, full_name, email)
+VALUES ('2025-1020735', 'Axel Drake Bagay', 'bagayam@students.nu-laguna.edu.ph');
 ```
 
 **Files Updated:**
@@ -174,7 +171,7 @@ curl -X POST http://localhost:8080/api/auth/register \
     "email": "bagayam@students.nu-laguna.edu.ph",
     "password": "YourSecurePassword123",
     "confirmPassword": "YourSecurePassword123",
-    "studentOrFacultyId": "2025-1020735"
+    "schoolId": "2025-1020735"
   }'
 ```
 

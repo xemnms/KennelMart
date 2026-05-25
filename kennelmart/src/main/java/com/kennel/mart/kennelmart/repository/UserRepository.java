@@ -1,11 +1,12 @@
 package com.kennel.mart.kennelmart.repository;
 
-import com.kennel.mart.kennelmart.entity.User;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-import java.util.UUID;
+import com.kennel.mart.kennelmart.entity.User;
 
 /**
  * Repository for User entity persistence operations.
@@ -36,10 +37,10 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     boolean existsByEmail(String email);
 
     /**
-     * Find a user by student/faculty ID.
-     * 
-     * @param studentOrFacultyId the NU student/faculty ID
+     * Find a user by idnumber.
+     *
+     * @param idnumber the NU idnumber
      * @return Optional containing the user if found
      */
-    Optional<User> findByStudentOrFacultyId(String studentOrFacultyId);
+    Optional<User> findByIdnumber(String idnumber);
 }
