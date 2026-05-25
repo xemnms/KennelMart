@@ -6,7 +6,6 @@ import com.kennel.mart.kennelmart.enums.VerificationStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
 
 /**
  * User entity representing all platform users (buyers, sellers, admins).
@@ -38,7 +37,7 @@ public class User extends BaseEntity {
     private String password;   // stored as BCrypt hash
 
     @Column(name = "student_or_faculty_id", unique = true)
-    private String studentOrFacultyId;   // matches the school ID used in verified_identities
+    private String studentOrFacultyId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -54,6 +53,10 @@ public class User extends BaseEntity {
 
     @Column(length = 500)
     private String profileImage;
+
+    // Average rating for sellers (Phase 7)
+    @Column(name = "average_rating")
+    private Double averageRating;
 
     // Default constructor (required by JPA)
     public User() {}
@@ -135,6 +138,14 @@ public class User extends BaseEntity {
         this.profileImage = profileImage;
     }
 
+    public Double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(Double averageRating) {
+        this.averageRating = averageRating;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -144,6 +155,7 @@ public class User extends BaseEntity {
                 ", role=" + role +
                 ", verificationStatus=" + verificationStatus +
                 ", accountStatus=" + accountStatus +
+                ", averageRating=" + averageRating +
                 '}';
     }
 }

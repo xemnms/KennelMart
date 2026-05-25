@@ -85,11 +85,14 @@ public class SecurityConfig {
                                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                 .requestMatchers("/api/verification/status").permitAll()
                                 
-                                // Public GET endpoints for browsing listings (no login needed)
+                                // Public GET endpoints for browsing listings
                                 .requestMatchers(HttpMethod.GET, "/api/listings", "/api/listings/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/categories").permitAll()
                                 
-                                // Listing management (create, update, delete) - require authentication
+                                // Public GET for reviews (average and list)
+                                .requestMatchers(HttpMethod.GET, "/api/reviews/sellers/**").permitAll()
+                                
+                                // Listing management - require authentication
                                 .requestMatchers(HttpMethod.POST, "/api/listings").authenticated()
                                 .requestMatchers(HttpMethod.PUT, "/api/listings/**").authenticated()
                                 .requestMatchers(HttpMethod.DELETE, "/api/listings/**").authenticated()
@@ -98,6 +101,10 @@ public class SecurityConfig {
                                 // Cart and Orders - require authentication
                                 .requestMatchers("/api/cart/**").authenticated()
                                 .requestMatchers("/api/orders/**").authenticated()
+                                
+                                // Reviews - submit requires authentication, admin only for admin endpoints
+                                .requestMatchers(HttpMethod.POST, "/api/reviews").authenticated()
+                                .requestMatchers("/api/reviews/admin/**").hasRole("ADMIN")
                                 
                                 // Admin endpoints - only ADMIN role
                                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
