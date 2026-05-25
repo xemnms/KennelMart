@@ -24,7 +24,6 @@ import jakarta.persistence.MappedSuperclass;
  * - Inheritance: All entities extend this class
  */
 @MappedSuperclass
-// Lombok removed
 public abstract class BaseEntity {
 
     @Id
@@ -46,5 +45,9 @@ public abstract class BaseEntity {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 }
