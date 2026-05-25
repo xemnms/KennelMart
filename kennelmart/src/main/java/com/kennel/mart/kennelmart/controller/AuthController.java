@@ -1,17 +1,21 @@
 package com.kennel.mart.kennelmart.controller;
 
-import com.kennel.mart.kennelmart.dto.AuthResponse;
-import com.kennel.mart.kennelmart.dto.LoginRequest;
-import com.kennel.mart.kennelmart.dto.RegisterRequest;
-import com.kennel.mart.kennelmart.service.AuthService;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.kennel.mart.kennelmart.dto.AuthResponse;
+import com.kennel.mart.kennelmart.dto.LoginRequest;
+import com.kennel.mart.kennelmart.dto.RegisterRequest;
+import com.kennel.mart.kennelmart.service.AuthService;
+
+import jakarta.validation.Valid;
 
 /**
  * REST Controller for authentication endpoints.
@@ -30,11 +34,15 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/auth")
-@RequiredArgsConstructor
-@Slf4j
+// Lombok removed
 public class AuthController {
 
-    private final AuthService authService;
+    private AuthService authService;
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AuthController.class);
+
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
 
     /**
      * Register a new user.

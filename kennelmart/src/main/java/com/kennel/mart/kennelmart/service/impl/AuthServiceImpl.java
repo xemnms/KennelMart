@@ -1,5 +1,13 @@
 package com.kennel.mart.kennelmart.service.impl;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.kennel.mart.kennelmart.dto.AuthResponse;
 import com.kennel.mart.kennelmart.dto.LoginRequest;
 import com.kennel.mart.kennelmart.dto.RegisterRequest;
@@ -10,15 +18,6 @@ import com.kennel.mart.kennelmart.enums.VerificationStatus;
 import com.kennel.mart.kennelmart.repository.UserRepository;
 import com.kennel.mart.kennelmart.security.JwtProvider;
 import com.kennel.mart.kennelmart.service.AuthService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Implementation of Authentication Service.
@@ -31,8 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
  * - Transactional Safety: Database consistency
  */
 @Service
-@Slf4j
-@RequiredArgsConstructor
+// Lombok removed
 @Transactional
 public class AuthServiceImpl implements AuthService {
 
@@ -41,23 +39,38 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
 
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AuthServiceImpl.class);
+
+    public AuthServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtProvider jwtProvider) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+        this.jwtProvider = jwtProvider;
+    }
+
     @Override
     public AuthResponse register(RegisterRequest request) {
         log.info("Registering new user with email: {}", request.getEmail());
+        
+        // Normalize email
+        String normalizedEmail = request.getEmail().toLowerCase();
 
         // Validation
         validateRegistrationRequest(request);
 
         // Check if user already exists
-        if (userRepository.existsByEmail(request.getEmail())) {
-            log.warn("User registration failed: email already exists - {}", request.getEmail());
+        if (userRepository.existsByEmail(normalizedEmail)) {
+            log.warn("User registration failed: email already exists - {}", normalizedEmail);
             throw new IllegalArgumentException("Email is already registered");
         }
 
         // Determine user role (admin or regular user)
-        UserRole role = request.getEmail().equals("bagayam@students.nu-laguna.edu.ph") 
+        UserRole role = normalizedEmail.equalsIgnoreCase("bagayam@students.nu-laguna.edu.ph") 
                 ? UserRole.ADMIN 
                 : UserRole.USER;
+
+        // Admin accounts are automatically verified in this phase
+        VerificationStatus vStatus = (role == UserRole.ADMIN) ? VerificationStatus.VERIFIED : VerificationStatus.PENDING;
 
         // Create new user
         User user = User.builder()
@@ -67,7 +80,7 @@ public class AuthServiceImpl implements AuthService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .studentOrFacultyId(request.getStudentOrFacultyId())
                 .role(role)  // ADMIN if bagayam, USER otherwise
-                .verificationStatus(VerificationStatus.PENDING)
+                .verificationStatus(vStatus)
                 .accountStatus(AccountStatus.ACTIVE)
                 .build();
 
@@ -90,26 +103,32 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponse login(LoginRequest request) {
         log.info("Authenticating user with email: {}", request.getEmail());
 
+        // Authenticate with Spring Security
+        Authentication authentication;
         try {
-            // Authenticate with Spring Security
-            Authentication authentication = authenticationManager.authenticate(
+            authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             request.getEmail(),
                             request.getPassword()
                     )
             );
+        } catch (org.springframework.security.core.AuthenticationException e) {
+            log.warn("Login failed for email: {} - {}", request.getEmail(), e.getMessage());
+            throw new IllegalArgumentException("Invalid email or password");
+        }
 
-            // Get authenticated user
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            User user = userRepository.findByEmail(userDetails.getUsername())
-                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        // Get authenticated user
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User user = userRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-            // Check account status
-            if (!user.isActive()) {
-                log.warn("Login attempt for suspended account: {}", user.getEmail());
-                throw new IllegalArgumentException("Account has been suspended");
-            }
+        // Check account status
+        if (!user.isActive()) {
+            log.warn("Login attempt for suspended account: {}", user.getEmail());
+            throw new IllegalArgumentException("Account has been suspended");
+        }
 
+        try {
             // Generate JWT token
             String token = jwtProvider.generateToken(userDetails);
 
@@ -117,8 +136,8 @@ public class AuthServiceImpl implements AuthService {
             return buildAuthResponse(user, token);
 
         } catch (Exception e) {
-            log.warn("Login failed for email: {} - {}", request.getEmail(), e.getMessage());
-            throw new IllegalArgumentException("Invalid email or password");
+            log.error("Unexpected error during login for email: {}", request.getEmail(), e);
+            throw new RuntimeException("An internal error occurred during login");
         }
     }
 

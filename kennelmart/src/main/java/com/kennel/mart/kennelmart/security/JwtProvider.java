@@ -14,7 +14,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import lombok.extern.slf4j.Slf4j;
+// Lombok removed
 
 /**
  * JWT Token Provider for generating and validating JWT tokens.
@@ -30,8 +30,10 @@ import lombok.extern.slf4j.Slf4j;
  * - HS512 algorithm with strong key
  */
 @Component
-@Slf4j
+// Lombok removed
 public class JwtProvider {
+
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(JwtProvider.class);
 
     @Value("${jwt.secret:your-secret-key-change-this-in-production-at-least-256-bits-long}")
     private String jwtSecret;

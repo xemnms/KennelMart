@@ -1,16 +1,15 @@
 package com.kennel.mart.kennelmart.config;
 
-import com.kennel.mart.kennelmart.entity.User;
-import com.kennel.mart.kennelmart.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.Collections;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import java.util.Collections;
+import com.kennel.mart.kennelmart.entity.User;
+import com.kennel.mart.kennelmart.repository.UserRepository;
 
 /**
  * User Details Service Configuration.
@@ -19,10 +18,14 @@ import java.util.Collections;
  * Used by Spring Security during authentication process.
  */
 @Configuration
-@RequiredArgsConstructor
+// Lombok removed
 public class UserDetailsConfig {
 
-    private final UserRepository userRepository;
+    private UserRepository userRepository;
+
+        public UserDetailsConfig(UserRepository userRepository) {
+            this.userRepository = userRepository;
+        }
 
     /**
      * Load user by email (username in this context).

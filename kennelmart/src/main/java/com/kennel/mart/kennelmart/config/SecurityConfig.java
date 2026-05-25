@@ -22,7 +22,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import com.kennel.mart.kennelmart.security.JwtAuthenticationFilter;
 import com.kennel.mart.kennelmart.security.JwtProvider;
 
-import lombok.RequiredArgsConstructor;
+// Lombok removed
 
 /**
  * Spring Security Configuration.
@@ -41,11 +41,16 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
-@RequiredArgsConstructor
+// Lombok removed
 public class SecurityConfig {
 
-    private final JwtProvider jwtProvider;
-    private final UserDetailsService userDetailsService;
+    private JwtProvider jwtProvider;
+    private UserDetailsService userDetailsService;
+
+        public SecurityConfig(JwtProvider jwtProvider, UserDetailsService userDetailsService) {
+            this.jwtProvider = jwtProvider;
+            this.userDetailsService = userDetailsService;
+        }
 
     /**
      * Password encoder using BCrypt with strength 12.

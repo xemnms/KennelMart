@@ -46,12 +46,13 @@
 		</dependency>
 
 		<!-- Lombok -->
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>1.18.30</version>
-			<optional>true</optional>
-		</dependency>
+		<!-- Lombok removed -->
+		<!-- <dependency> -->
+		<!-- 	<groupId>org.projectlombok</groupId> -->
+		<!-- 	<artifactId>lombok</artifactId> -->
+		<!-- 	<version>1.18.30</version> -->
+		<!-- 	<optional>true</optional> -->
+		<!-- </dependency> -->
 
 		<!-- JWT -->
 		<dependency>
@@ -111,13 +112,13 @@
 				<configuration>
 					<source>21</source>
 					<target>21</target>
-					<annotationProcessorPaths>
-						<path>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-							<version>1.18.30</version>
-						</path>
-					</annotationProcessorPaths>
+					<!-- <annotationProcessorPaths> -->
+					<!-- 	<path> -->
+					<!-- 		<groupId>org.projectlombok</groupId> -->
+					<!-- 		<artifactId>lombok</artifactId> -->
+					<!-- 		<version>1.18.30</version> -->
+					<!-- 	</path> -->
+					<!-- </annotationProcessorPaths> -->
 				</configuration>
 			</plugin>
 		</plugins>

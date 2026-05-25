@@ -1,5 +1,28 @@
 package com.kennel.mart.kennelmart.service.impl;
 
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import com.kennel.mart.kennelmart.dto.AuthResponse;
 import com.kennel.mart.kennelmart.dto.LoginRequest;
 import com.kennel.mart.kennelmart.dto.RegisterRequest;
@@ -9,26 +32,6 @@ import com.kennel.mart.kennelmart.enums.UserRole;
 import com.kennel.mart.kennelmart.enums.VerificationStatus;
 import com.kennel.mart.kennelmart.repository.UserRepository;
 import com.kennel.mart.kennelmart.security.JwtProvider;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
 
 /**
  * Unit tests for AuthServiceImpl.
@@ -41,6 +44,11 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Authentication Service Tests")
 class AuthServiceImplTest {
+
+    static {
+        // Workaround for Byte Buddy incompatibility with Java 25
+        System.setProperty("net.bytebuddy.experimental", "true");
+    }
 
     @Mock
     private UserRepository userRepository;
@@ -78,16 +86,14 @@ class AuthServiceImplTest {
                 .build();
 
         testUser = User.builder()
-                .id(UUID.randomUUID())
                 .firstName("Axel")
                 .lastName("Bagay")
                 .email("bagayam@students.nu-laguna.edu.ph")
                 .password("hashedPassword")
                 .studentOrFacultyId("2025-1020735")
                 .role(UserRole.ADMIN)  // Admin role for developer account
-                .verificationStatus(VerificationStatus.PENDING)
+                .verificationStatus(VerificationStatus.VERIFIED)
                 .accountStatus(AccountStatus.ACTIVE)
-                .createdAt(LocalDateTime.now())
                 .build();
     }
 
@@ -164,7 +170,7 @@ class AuthServiceImplTest {
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> authService.register(registerRequest),
-                "Only NU.edu.ph emails are allowed");
+                "Only @students.nu-laguna.edu.ph emails are allowed");
 
         verify(userRepository, never()).save(any(User.class));
     }
@@ -208,7 +214,7 @@ class AuthServiceImplTest {
                 .thenReturn(auth);
         when(auth.getPrincipal()).thenReturn(
                 new org.springframework.security.core.userdetails.User(
-                        "john.doe@nu.edu.ph",
+                        "bagayam@students.nu-laguna.edu.ph",
                         "hashedPassword",
                         java.util.Collections.emptySet()
                 )

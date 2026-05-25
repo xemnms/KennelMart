@@ -1,14 +1,16 @@
 package com.kennel.mart.kennelmart.entity;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
 
 /**
  * Abstract base entity for all domain entities.
@@ -22,9 +24,7 @@ import java.util.UUID;
  * - Inheritance: All entities extend this class
  */
 @MappedSuperclass
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+// Lombok removed
 public abstract class BaseEntity {
 
     @Id
@@ -39,4 +39,12 @@ public abstract class BaseEntity {
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
+
+    public UUID getId() {
+        return id;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 }
