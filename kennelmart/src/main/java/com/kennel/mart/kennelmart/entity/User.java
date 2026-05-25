@@ -1,75 +1,149 @@
 package com.kennel.mart.kennelmart.entity;
 
+import com.kennel.mart.kennelmart.enums.AccountStatus;
 import com.kennel.mart.kennelmart.enums.UserRole;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
+import com.kennel.mart.kennelmart.enums.VerificationStatus;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-// Lombok removed: explicit constructors, getters, setters, builder
+import java.time.LocalDateTime;
 
 /**
  * User entity representing all platform users (buyers, sellers, admins).
  * 
- * Core user information and account status for authentication and authorization.
+ * Core user information for authentication, authorization, and identity verification.
  * 
- * OOP Principles Demonstrated:
- * - Encapsulation: Private fields with getters/setters
- * - Composition: User has role and verification status
- * - Single Responsibility: Manages user core data only
+ * OOP Principles:
+ * - Encapsulation: private fields with public getters/setters
+ * - Single Responsibility: manages user data and account state only
  */
 @Entity
 @Table(name = "users", indexes = {
     @Index(name = "idx_email", columnList = "email", unique = true),
-    @Index(name = "idx_idnumber", columnList = "idnumber")
+    @Index(name = "idx_student_or_faculty_id", columnList = "studentOrFacultyId")
 })
 public class User extends BaseEntity {
-    @NotBlank(message = "Name is required")
-    @Column(name = "name", nullable = false)
-    private String name;
 
-    @NotBlank(message = "Idnumber is required")
-    @Column(name = "idnumber", nullable = false)
-    private String idnumber;
+    @NotBlank(message = "Name is required")
+    @Column(nullable = false)
+    private String name;
 
     @NotBlank(message = "Email is required")
     @Email(message = "Email should be valid")
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String email;
 
+    @NotBlank(message = "Password is required")
+    @Column(nullable = false)
+    private String password;   // stored as BCrypt hash
+
+    @Column(name = "student_or_faculty_id", unique = true)
+    private String studentOrFacultyId;   // matches the school ID used in verified_identities
+
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
+    @Column(nullable = false)
     private UserRole role;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private VerificationStatus verificationStatus = VerificationStatus.PENDING;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AccountStatus accountStatus = AccountStatus.ACTIVE;
+
+    @Column(length = 500)
+    private String profileImage;
+
+    // Default constructor (required by JPA)
     public User() {}
 
-    public User(String name, String idnumber, String email, UserRole role) {
+    // Convenience constructor for essential fields
+    public User(String name, String email, String password, String studentOrFacultyId, UserRole role) {
         this.name = name;
-        this.idnumber = idnumber;
         this.email = email;
+        this.password = password;
+        this.studentOrFacultyId = studentOrFacultyId;
+        this.role = role;
+        this.verificationStatus = VerificationStatus.PENDING;
+        this.accountStatus = AccountStatus.ACTIVE;
+    }
+
+    // Getters and Setters
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getStudentOrFacultyId() {
+        return studentOrFacultyId;
+    }
+
+    public void setStudentOrFacultyId(String studentOrFacultyId) {
+        this.studentOrFacultyId = studentOrFacultyId;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
         this.role = role;
     }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public String getIdnumber() { return idnumber; }
-    public void setIdnumber(String idnumber) { this.idnumber = idnumber; }
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-    public UserRole getRole() { return role; }
-    public void setRole(UserRole role) { this.role = role; }
+    public VerificationStatus getVerificationStatus() {
+        return verificationStatus;
+    }
+
+    public void setVerificationStatus(VerificationStatus verificationStatus) {
+        this.verificationStatus = verificationStatus;
+    }
+
+    public AccountStatus getAccountStatus() {
+        return accountStatus;
+    }
+
+    public void setAccountStatus(AccountStatus accountStatus) {
+        this.accountStatus = accountStatus;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
 
     @Override
     public String toString() {
         return "User{" +
-                "name='" + name + '\'' +
-                ", idnumber='" + idnumber + '\'' +
+                "id=" + getId() +
+                ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", role=" + role +
+                ", verificationStatus=" + verificationStatus +
+                ", accountStatus=" + accountStatus +
                 '}';
     }
 }
