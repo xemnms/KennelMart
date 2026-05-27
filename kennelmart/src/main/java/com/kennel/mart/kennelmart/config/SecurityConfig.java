@@ -106,6 +106,11 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST, "/api/reviews").authenticated()
                                 .requestMatchers("/api/reviews/admin/**").hasRole("ADMIN")
                                 
+                                // Messaging endpoints - all require authentication
+                                .requestMatchers(HttpMethod.POST, "/api/messages").authenticated()
+                                .requestMatchers(HttpMethod.GET, "/api/messages/**").authenticated()
+                                .requestMatchers(HttpMethod.PUT, "/api/messages/**").authenticated()
+                                
                                 // Admin endpoints - only ADMIN role
                                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                                 
