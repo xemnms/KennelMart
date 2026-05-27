@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -17,6 +18,9 @@ public interface ProductListingRepository extends JpaRepository<ProductListing, 
 
     // Find all listings by seller (for seller dashboard)
     Page<ProductListing> findBySeller(User seller, Pageable pageable);
+    
+    // Non-paginated list of all seller's listings (for analytics)
+    List<ProductListing> findBySeller(User seller);
 
     // Find active listings (visible to buyers) – with pagination
     Page<ProductListing> findByStatus(ProductStatus status, Pageable pageable);

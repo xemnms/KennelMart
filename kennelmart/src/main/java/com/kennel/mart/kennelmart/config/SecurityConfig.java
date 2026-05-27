@@ -114,6 +114,9 @@ public class SecurityConfig {
                                 // Notifications - require authentication
                                 .requestMatchers("/api/notifications/**").authenticated()
                                 
+                                // Analytics - require authentication
+                                .requestMatchers("/api/analytics/**").authenticated()
+                                
                                 // Admin endpoints - only ADMIN role
                                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                                 
