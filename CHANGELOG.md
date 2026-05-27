@@ -1,5 +1,20 @@
 # KennelMart Backend Changelog
 
+## [Frontend UI Shell] - 2026-05-27
+
+### Added
+
+- Replaced the default Vite starter screen with a responsive KennelMart marketplace UI.
+- Added frontend TSX models for product listings, categories, product status, paged backend responses, and order preview data.
+- Added a lightweight TSX frontend service for `GET /api/listings`, matching the existing Spring Boot marketplace browsing endpoint.
+- Added UI sections for marketplace browsing, category filtering, search, cart checkout preview, seller order tracking, listing management, and admin moderation.
+- Added fallback preview data so the frontend remains usable when the backend is not running locally.
+
+### Notes
+
+- Backend files were not modified.
+- No tests or builds were run for this design-only pass, per instruction.
+
 ## [Phase 1: Authentication Module] - 2026-05-25
 
 ### Added
