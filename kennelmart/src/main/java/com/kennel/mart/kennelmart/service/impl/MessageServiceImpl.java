@@ -7,6 +7,7 @@ import com.kennel.mart.kennelmart.entity.User;
 import com.kennel.mart.kennelmart.repository.MessageRepository;
 import com.kennel.mart.kennelmart.repository.UserRepository;
 import com.kennel.mart.kennelmart.service.MessageService;
+import com.kennel.mart.kennelmart.service.NotificationService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,11 +21,13 @@ public class MessageServiceImpl implements MessageService {
 
     private final MessageRepository messageRepository;
     private final UserRepository userRepository;
+    private final NotificationService notificationService;
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(MessageServiceImpl.class);
 
-    public MessageServiceImpl(MessageRepository messageRepository, UserRepository userRepository) {
+    public MessageServiceImpl(MessageRepository messageRepository, UserRepository userRepository, NotificationService notificationService) {
         this.messageRepository = messageRepository;
         this.userRepository = userRepository;
+        this.notificationService = notificationService;
     }
 
     @Override
@@ -36,6 +39,16 @@ public class MessageServiceImpl implements MessageService {
 
         Message message = new Message(sender, receiver, request.getContent());
         Message saved = messageRepository.save(message);
+
+        // Send notification to receiver
+        String contentPreview = request.getContent().length() > 100 ? request.getContent().substring(0, 100) + "..." : request.getContent();
+        notificationService.sendNotification(
+                receiver.getId(),
+                "New message from " + sender.getName(),
+                contentPreview,
+                "MESSAGE",
+                saved.getId().toString()
+        );
 
         log.info("Message sent from {} to {}", sender.getEmail(), receiver.getEmail());
         return convertToResponse(saved);
@@ -58,7 +71,6 @@ public class MessageServiceImpl implements MessageService {
     public int getUnreadCount(String userEmail) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        // Corrected method name
         return messageRepository.countByReceiverAndReadFalse(user);
     }
 

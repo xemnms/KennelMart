@@ -7,6 +7,7 @@ import com.kennel.mart.kennelmart.entity.*;
 import com.kennel.mart.kennelmart.enums.OrderStatus;
 import com.kennel.mart.kennelmart.enums.ProductStatus;
 import com.kennel.mart.kennelmart.repository.*;
+import com.kennel.mart.kennelmart.service.NotificationService;
 import com.kennel.mart.kennelmart.service.OrderService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +29,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemRepository orderItemRepository;
     private final UserRepository userRepository;
     private final ProductListingRepository productListingRepository;
+    private final NotificationService notificationService; // added
 
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(OrderServiceImpl.class);
 
@@ -36,13 +38,15 @@ public class OrderServiceImpl implements OrderService {
                             OrderRepository orderRepository,
                             OrderItemRepository orderItemRepository,
                             UserRepository userRepository,
-                            ProductListingRepository productListingRepository) {
+                            ProductListingRepository productListingRepository,
+                            NotificationService notificationService) {
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.userRepository = userRepository;
         this.productListingRepository = productListingRepository;
+        this.notificationService = notificationService;
     }
 
     @Override
@@ -108,14 +112,32 @@ public class OrderServiceImpl implements OrderService {
             savedOrder.setItems(orderItems);
             createdOrders.add(savedOrder);
             log.info("Order {} created for seller {}", orderNumber, seller.getEmail());
+
+            // Send notification to buyer
+            notificationService.sendNotification(
+                    buyer.getId(),
+                    "Order Confirmation",
+                    "Your order #" + orderNumber + " has been placed successfully. Total: PHP " + orderTotal,
+                    "ORDER",
+                    savedOrder.getId().toString()
+            );
+
+            // Send notification to seller
+            notificationService.sendNotification(
+                    seller.getId(),
+                    "New Order Received",
+                    "You have received a new order #" + orderNumber + " from " + buyer.getName() + ". Total: PHP " + orderTotal,
+                    "ORDER",
+                    savedOrder.getId().toString()
+            );
         }
 
         // Clear cart after successful checkout
         cartItemRepository.deleteAll(cart.getItems());
         cart.getItems().clear();
-        cartRepository.save(cart);  // persist the empty cart
+        cartRepository.save(cart);
 
-        // For simplicity, return the first order (if multiple, you may return a list)
+        // Return the first order (if multiple, you may return a list)
         return convertToResponse(createdOrders.get(0));
     }
 
@@ -159,13 +181,29 @@ public class OrderServiceImpl implements OrderService {
             throw new IllegalStateException("Cannot change status of a delivered or cancelled order");
         }
 
+        OrderStatus oldStatus = order.getStatus();
         order.setStatus(newStatus);
         if (newStatus == OrderStatus.DELIVERED) {
             order.setDeliveredAt(LocalDateTime.now());
         }
 
         Order updatedOrder = orderRepository.save(order);
-        log.info("Order {} status updated to {} by seller {}", orderId, newStatus, sellerEmail);
+        log.info("Order {} status updated from {} to {} by seller {}", orderId, oldStatus, newStatus, sellerEmail);
+
+        // Send notification to buyer about status change
+        String title = "Order #" + order.getOrderNumber() + " status updated";
+        String message = "Your order #" + order.getOrderNumber() + " has been updated from " + oldStatus + " to " + newStatus + ".";
+        if (newStatus == OrderStatus.DELIVERED) {
+            message = "Your order #" + order.getOrderNumber() + " has been delivered. Thank you for shopping!";
+        }
+        notificationService.sendNotification(
+                order.getBuyer().getId(),
+                title,
+                message,
+                "ORDER",
+                orderId.toString()
+        );
+
         return convertToResponse(updatedOrder);
     }
 

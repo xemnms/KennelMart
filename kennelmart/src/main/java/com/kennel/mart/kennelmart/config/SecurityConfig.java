@@ -111,6 +111,9 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/api/messages/**").authenticated()
                                 .requestMatchers(HttpMethod.PUT, "/api/messages/**").authenticated()
                                 
+                                // Notifications - require authentication
+                                .requestMatchers("/api/notifications/**").authenticated()
+                                
                                 // Admin endpoints - only ADMIN role
                                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                                 
