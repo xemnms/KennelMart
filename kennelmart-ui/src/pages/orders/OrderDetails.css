@@ -1,0 +1,108 @@
+.order-details-container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.order-meta {
+  background: #f9fafb;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.order-status {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.order-status.order_received { background: #e3f2fd; color: #1565c0; }
+.order-status.accepted { background: #e8f5e9; color: #2e7d32; }
+.order-status.preparing { background: #fff3e0; color: #ed6c02; }
+.order-status.shipped { background: #e3f2fd; color: #0d47a1; }
+.order-status.delivered { background: #c8e6c9; color: #1b5e20; }
+.order-status.cancelled { background: #ffebee; color: #c62828; }
+
+.order-seller {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.items-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.items-table th,
+.items-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.items-table th {
+  background: #f5f5f5;
+  font-weight: 600;
+}
+
+.total-label {
+  text-align: right;
+  font-weight: bold;
+}
+
+.total-value {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.order-actions {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.order-actions a {
+  display: inline-block;
+  background: #1877f2;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.review-action {
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.write-review-btn {
+  background: #1877f2;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.review-submitted-message {
+  background: #e8f5e9;
+  color: #2e7d32;
+  padding: 0.75rem;
+  border-radius: 8px;
+  text-align: center;
+  margin: 1rem 0;
+}

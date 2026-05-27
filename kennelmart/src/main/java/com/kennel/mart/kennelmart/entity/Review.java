@@ -1,6 +1,5 @@
 package com.kennel.mart.kennelmart.entity;
 
-import com.kennel.mart.kennelmart.enums.ReviewStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -10,8 +9,7 @@ import jakarta.validation.constraints.Size;
 @Table(name = "reviews", indexes = {
     @Index(name = "idx_seller", columnList = "seller_id"),
     @Index(name = "idx_buyer", columnList = "buyer_id"),
-    @Index(name = "idx_order", columnList = "order_id"),
-    @Index(name = "idx_status", columnList = "status")
+    @Index(name = "idx_order", columnList = "order_id")
 })
 public class Review extends BaseEntity {
 
@@ -35,10 +33,6 @@ public class Review extends BaseEntity {
     @Size(max = 1000)
     private String comment;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private ReviewStatus status = ReviewStatus.PENDING;
-
     public Review() {}
 
     public Review(User seller, User buyer, Order order, Integer rating, String comment) {
@@ -47,7 +41,6 @@ public class Review extends BaseEntity {
         this.order = order;
         this.rating = rating;
         this.comment = comment;
-        this.status = ReviewStatus.PENDING;
     }
 
     // Getters and setters
@@ -65,7 +58,4 @@ public class Review extends BaseEntity {
 
     public String getComment() { return comment; }
     public void setComment(String comment) { this.comment = comment; }
-
-    public ReviewStatus getStatus() { return status; }
-    public void setStatus(ReviewStatus status) { this.status = status; }
 }

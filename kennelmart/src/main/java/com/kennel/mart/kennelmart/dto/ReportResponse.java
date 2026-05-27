@@ -14,7 +14,7 @@ public class ReportResponse {
     private ReportStatus status;
     private LocalDateTime createdAt;
 
-    // builder pattern
+    // Builder
     public static Builder builder() { return new Builder(); }
     public static class Builder {
         private ReportResponse response = new ReportResponse();
@@ -28,7 +28,8 @@ public class ReportResponse {
         public Builder createdAt(LocalDateTime createdAt) { response.createdAt = createdAt; return this; }
         public ReportResponse build() { return response; }
     }
-    // getters
+
+    // Getters
     public UUID getId() { return id; }
     public UUID getReporterId() { return reporterId; }
     public String getReporterEmail() { return reporterEmail; }

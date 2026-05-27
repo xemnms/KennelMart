@@ -31,6 +31,9 @@ public class ProductListingController {
     @PostMapping
     public ResponseEntity<ProductListingResponse> createListing(@Valid @RequestBody CreateListingRequest request,
                                                                 Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         String email = authentication.getName();
         ProductListingResponse response = productListingService.createListing(request, email);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -41,6 +44,9 @@ public class ProductListingController {
     public ResponseEntity<ProductListingResponse> updateListing(@PathVariable UUID id,
                                                                 @RequestBody UpdateListingRequest request,
                                                                 Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         String email = authentication.getName();
         ProductListingResponse response = productListingService.updateListing(id, request, email);
         return ResponseEntity.ok(response);
@@ -50,9 +56,26 @@ public class ProductListingController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteListing(@PathVariable UUID id,
                                               Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            log.warn("Delete attempt without authentication");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         String email = authentication.getName();
-        productListingService.deleteListing(id, email);
-        return ResponseEntity.noContent().build();
+        log.info("Attempting to delete listing {} by user {}", id, email);
+        try {
+            productListingService.deleteListing(id, email);
+            log.info("Listing {} deleted successfully", id);
+            return ResponseEntity.noContent().build();
+        } catch (SecurityException e) {
+            log.warn("Security exception while deleting listing {}: {}", id, e.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        } catch (IllegalArgumentException e) {
+            log.warn("Listing not found: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            log.error("Unexpected error while deleting listing {}: {}", id, e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     // Get listing by ID (public)
@@ -66,6 +89,9 @@ public class ProductListingController {
     @GetMapping("/my-listings")
     public ResponseEntity<Page<ProductListingResponse>> getMyListings(Authentication authentication,
                                                                       @PageableDefault(size = 10) Pageable pageable) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         String email = authentication.getName();
         Page<ProductListingResponse> responses = productListingService.getMyListings(email, pageable);
         return ResponseEntity.ok(responses);

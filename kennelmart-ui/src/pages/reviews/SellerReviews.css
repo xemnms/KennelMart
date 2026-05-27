@@ -1,0 +1,24 @@
+.seller-reviews-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.seller-reviews-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.average-rating {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.empty-reviews {
+  text-align: center;
+  padding: 3rem;
+  background: white;
+  border-radius: 12px;
+}

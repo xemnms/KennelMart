@@ -9,5 +9,6 @@ public enum ProductStatus {
     ACTIVE,
     INACTIVE,
     SOLD_OUT,
-    PENDING_APPROVAL
+    PENDING_APPROVAL,
+    DELETED   // soft‑deleted listings (still in DB but hidden)
 }

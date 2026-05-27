@@ -12,7 +12,7 @@ public class ReportRequest {
     @NotBlank
     private String reason;
 
-    // getters/setters
+    // getters and setters
     public String getTargetType() { return targetType; }
     public void setTargetType(String targetType) { this.targetType = targetType; }
     public UUID getTargetId() { return targetId; }

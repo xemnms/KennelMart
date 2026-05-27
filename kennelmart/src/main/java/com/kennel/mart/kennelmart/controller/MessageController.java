@@ -1,5 +1,6 @@
 package com.kennel.mart.kennelmart.controller;
 
+import com.kennel.mart.kennelmart.dto.ConversationDTO;
 import com.kennel.mart.kennelmart.dto.MessageRequest;
 import com.kennel.mart.kennelmart.dto.MessageResponse;
 import com.kennel.mart.kennelmart.service.MessageService;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -38,6 +40,13 @@ public class MessageController {
         String currentUserEmail = authentication.getName();
         Page<MessageResponse> messages = messageService.getConversation(currentUserEmail, userId, pageable);
         return ResponseEntity.ok(messages);
+    }
+
+    @GetMapping("/conversations")
+    public ResponseEntity<List<ConversationDTO>> getConversations(Authentication authentication) {
+        String userEmail = authentication.getName();
+        List<ConversationDTO> conversations = messageService.getConversations(userEmail);
+        return ResponseEntity.ok(conversations);
     }
 
     @GetMapping("/unread-count")

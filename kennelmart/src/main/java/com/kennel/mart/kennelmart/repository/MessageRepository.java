@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import java.util.List;
 import java.util.UUID;
 
 public interface MessageRepository extends JpaRepository<Message, UUID> {
@@ -16,7 +17,10 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
     Page<Message> findBySenderAndReceiverOrReceiverAndSenderOrderByCreatedAtDesc(
             User sender1, User receiver1, User sender2, User receiver2, Pageable pageable);
 
-    // Count unread messages for a user (field name is 'read', not 'isRead')
+    // Find all messages where the user is either sender or receiver (for inbox)
+    List<Message> findAllBySenderOrReceiver(User sender, User receiver);
+
+    // Count unread messages for a user
     int countByReceiverAndReadFalse(User receiver);
 
     // Mark messages as read (for a specific sender)

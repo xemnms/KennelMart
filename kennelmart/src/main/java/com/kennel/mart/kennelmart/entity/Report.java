@@ -6,7 +6,11 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.UUID;
 
 @Entity
-@Table(name = "reports")
+@Table(name = "reports", indexes = {
+    @Index(name = "idx_reporter", columnList = "reporter_id"),
+    @Index(name = "idx_status", columnList = "status"),
+    @Index(name = "idx_target", columnList = "target_type, target_id")
+})
 public class Report extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -14,7 +18,7 @@ public class Report extends BaseEntity {
     private User reporter;
 
     @Column(name = "target_type", nullable = false)
-    private String targetType; // "LISTING" or "USER"
+    private String targetType;  // "LISTING" or "USER"
 
     @Column(name = "target_id", nullable = false)
     private UUID targetId;
@@ -36,7 +40,7 @@ public class Report extends BaseEntity {
         this.reason = reason;
     }
 
-    // getters and setters
+    // Getters and setters
     public User getReporter() { return reporter; }
     public void setReporter(User reporter) { this.reporter = reporter; }
 

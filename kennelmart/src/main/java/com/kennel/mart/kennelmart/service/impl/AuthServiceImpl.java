@@ -8,10 +8,12 @@ import com.kennel.mart.kennelmart.dto.AuthResponse;
 import com.kennel.mart.kennelmart.dto.LoginRequest;
 import com.kennel.mart.kennelmart.dto.RegisterRequest;
 import com.kennel.mart.kennelmart.entity.User;
+import com.kennel.mart.kennelmart.entity.VerifiedIdentity;
 import com.kennel.mart.kennelmart.enums.AccountStatus;
 import com.kennel.mart.kennelmart.enums.UserRole;
 import com.kennel.mart.kennelmart.enums.VerificationStatus;
 import com.kennel.mart.kennelmart.repository.UserRepository;
+import com.kennel.mart.kennelmart.repository.VerifiedIdentityRepository;
 import com.kennel.mart.kennelmart.security.JwtProvider;
 import com.kennel.mart.kennelmart.service.AuthService;
 
@@ -20,13 +22,18 @@ import com.kennel.mart.kennelmart.service.AuthService;
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
+    private final VerifiedIdentityRepository verifiedIdentityRepository;
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
 
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AuthServiceImpl.class);
 
-    public AuthServiceImpl(UserRepository userRepository, JwtProvider jwtProvider, PasswordEncoder passwordEncoder) {
+    public AuthServiceImpl(UserRepository userRepository,
+                           VerifiedIdentityRepository verifiedIdentityRepository,
+                           JwtProvider jwtProvider,
+                           PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.verifiedIdentityRepository = verifiedIdentityRepository;
         this.jwtProvider = jwtProvider;
         this.passwordEncoder = passwordEncoder;
     }
@@ -47,6 +54,18 @@ public class AuthServiceImpl implements AuthService {
             throw new IllegalArgumentException("Passwords do not match");
         }
 
+        // Auto-verify if email and student ID exist in verified_identities
+        VerificationStatus verificationStatus = VerificationStatus.PENDING;
+        if (verifiedIdentityRepository.existsByEmail(normalizedEmail)) {
+            // Optional: also check that the studentOrFacultyId matches the schoolId
+            // For stricter check, find the record and compare IDs:
+            var optIdentity = verifiedIdentityRepository.findBySchoolId(request.getStudentOrFacultyId());
+            if (optIdentity.isPresent() && optIdentity.get().getEmail().equalsIgnoreCase(normalizedEmail)) {
+                verificationStatus = VerificationStatus.VERIFIED;
+                log.info("User {} auto-verified via verified_identities", normalizedEmail);
+            }
+        }
+
         UserRole role = normalizedEmail.equals("bagayam@students.nu-laguna.edu.ph") ? UserRole.ADMIN : UserRole.USER;
         String encodedPassword = passwordEncoder.encode(request.getPassword());
 
@@ -57,9 +76,10 @@ public class AuthServiceImpl implements AuthService {
             request.getStudentOrFacultyId(),
             role
         );
+        user.setVerificationStatus(verificationStatus); // set auto-verified or pending
 
         User savedUser = userRepository.save(user);
-        log.info("User registered successfully with ID: {}", savedUser.getId());
+        log.info("User registered successfully with ID: {}, verification status: {}", savedUser.getId(), verificationStatus);
 
         String token = generateJwtToken(savedUser);
         return buildAuthResponse(savedUser, token);

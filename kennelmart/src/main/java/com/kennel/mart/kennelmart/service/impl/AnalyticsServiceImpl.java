@@ -13,6 +13,7 @@ import com.kennel.mart.kennelmart.service.AnalyticsService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -49,9 +50,9 @@ public class AnalyticsServiceImpl implements AnalyticsService {
                 .map(Order::getTotalPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        // Average order value (over delivered orders)
+        // Average order value (over delivered orders) – using RoundingMode.HALF_UP
         BigDecimal averageOrderValue = completedOrders.isEmpty() ? BigDecimal.ZERO
-                : totalRevenue.divide(BigDecimal.valueOf(completedOrders.size()), 2, BigDecimal.ROUND_HALF_UP);
+                : totalRevenue.divide(BigDecimal.valueOf(completedOrders.size()), 2, RoundingMode.HALF_UP);
 
         // Total items sold (sum of quantities from order items of delivered orders)
         int totalItemsSold = completedOrders.stream()
@@ -65,7 +66,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
                 .distinct()
                 .count();
 
-        // Listings stats
+        // Listings stats – now uses the new `findBySeller` method
         List<ProductListing> sellerListings = productListingRepository.findBySeller(seller);
         int totalListings = sellerListings.size();
         long activeListings = sellerListings.stream()

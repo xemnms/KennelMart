@@ -1,9 +1,8 @@
 package com.kennel.mart.kennelmart.controller;
 
 import com.kennel.mart.kennelmart.dto.ReportResponse;
-import com.kennel.mart.kennelmart.entity.Report;
 import com.kennel.mart.kennelmart.enums.ReportStatus;
-import com.kennel.mart.kennelmart.repository.ReportRepository;
+import com.kennel.mart.kennelmart.service.ReportService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -17,59 +16,46 @@ import java.util.UUID;
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminReportController {
 
-    private final ReportRepository reportRepository;
+    private final ReportService reportService;
 
-    public AdminReportController(ReportRepository reportRepository) {
-        this.reportRepository = reportRepository;
+    public AdminReportController(ReportService reportService) {
+        this.reportService = reportService;
     }
 
     @GetMapping
     public ResponseEntity<Page<ReportResponse>> getReports(
             @RequestParam(required = false) ReportStatus status,
             Pageable pageable) {
-        Page<Report> reports = (status != null) 
-                ? reportRepository.findByStatus(status, pageable)
-                : reportRepository.findAll(pageable);
-        return ResponseEntity.ok(reports.map(this::convertToResponse));
+        return ResponseEntity.ok(reportService.getReports(status, pageable));
     }
 
     @PutMapping("/{reportId}/resolve")
     public ResponseEntity<Void> resolveReport(@PathVariable UUID reportId) {
-        Report report = reportRepository.findById(reportId)
-                .orElseThrow(() -> new IllegalArgumentException("Report not found"));
-        report.setStatus(ReportStatus.RESOLVED);
-        reportRepository.save(report);
+        reportService.resolveReport(reportId);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{reportId}/dismiss")
     public ResponseEntity<Void> dismissReport(@PathVariable UUID reportId) {
-        Report report = reportRepository.findById(reportId)
-                .orElseThrow(() -> new IllegalArgumentException("Report not found"));
-        report.setStatus(ReportStatus.DISMISSED);
-        reportRepository.save(report);
+        reportService.dismissReport(reportId);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{reportId}/review")
     public ResponseEntity<Void> markAsReviewing(@PathVariable UUID reportId) {
-        Report report = reportRepository.findById(reportId)
-                .orElseThrow(() -> new IllegalArgumentException("Report not found"));
-        report.setStatus(ReportStatus.REVIEWING);
-        reportRepository.save(report);
+        reportService.markAsReviewing(reportId);
         return ResponseEntity.ok().build();
     }
 
-    private ReportResponse convertToResponse(Report report) {
-        return ReportResponse.builder()
-                .id(report.getId())
-                .reporterId(report.getReporter().getId())
-                .reporterEmail(report.getReporter().getEmail())
-                .targetType(report.getTargetType())
-                .targetId(report.getTargetId())
-                .reason(report.getReason())
-                .status(report.getStatus())
-                .createdAt(report.getCreatedAt())
-                .build();
+    @PutMapping("/{reportId}/suspend-user/{userId}")
+    public ResponseEntity<Void> suspendUserFromReport(@PathVariable UUID reportId, @PathVariable UUID userId) {
+        reportService.suspendReportedUser(userId, reportId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{reportId}/delete-listing/{listingId}")
+    public ResponseEntity<Void> deleteListingFromReport(@PathVariable UUID reportId, @PathVariable UUID listingId) {
+        reportService.deleteReportedListing(listingId, reportId);
+        return ResponseEntity.ok().build();
     }
 }

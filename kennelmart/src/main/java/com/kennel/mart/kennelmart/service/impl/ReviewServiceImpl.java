@@ -6,7 +6,6 @@ import com.kennel.mart.kennelmart.entity.Order;
 import com.kennel.mart.kennelmart.entity.Review;
 import com.kennel.mart.kennelmart.entity.User;
 import com.kennel.mart.kennelmart.enums.OrderStatus;
-import com.kennel.mart.kennelmart.enums.ReviewStatus;
 import com.kennel.mart.kennelmart.repository.OrderRepository;
 import com.kennel.mart.kennelmart.repository.ReviewRepository;
 import com.kennel.mart.kennelmart.repository.UserRepository;
@@ -58,10 +57,16 @@ public class ReviewServiceImpl implements ReviewService {
         User seller = order.getSeller();
 
         Review review = new Review(seller, buyer, order, request.getRating(), request.getComment());
-        review.setStatus(ReviewStatus.PENDING);  // requires admin approval
         Review saved = reviewRepository.save(review);
 
-        log.info("New review submitted (pending) for seller {} by buyer {}", seller.getEmail(), buyer.getEmail());
+        // Update seller's average rating
+        Double avg = reviewRepository.calculateAverageRatingForSeller(seller);
+        if (avg != null) {
+            seller.setAverageRating(avg);
+            userRepository.save(seller);
+        }
+
+        log.info("New review added for seller {} by buyer {}", seller.getEmail(), buyer.getEmail());
         return convertToResponse(saved);
     }
 
@@ -69,7 +74,7 @@ public class ReviewServiceImpl implements ReviewService {
     public Page<ReviewResponse> getReviewsForSeller(UUID sellerId, Pageable pageable) {
         User seller = userRepository.findById(sellerId)
                 .orElseThrow(() -> new IllegalArgumentException("Seller not found"));
-        return reviewRepository.findBySellerAndStatus(seller, ReviewStatus.APPROVED, pageable)
+        return reviewRepository.findBySeller(seller, pageable)
                 .map(this::convertToResponse);
     }
 
@@ -79,39 +84,6 @@ public class ReviewServiceImpl implements ReviewService {
                 .orElseThrow(() -> new IllegalArgumentException("Seller not found"));
         Double avg = reviewRepository.calculateAverageRatingForSeller(seller);
         return avg != null ? avg : 0.0;
-    }
-
-    @Override
-    public Page<ReviewResponse> getPendingReviews(Pageable pageable) {
-        return reviewRepository.findByStatus(ReviewStatus.PENDING, pageable)
-                .map(this::convertToResponse);
-    }
-
-    @Override
-    public ReviewResponse approveReview(UUID reviewId) {
-        Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new IllegalArgumentException("Review not found"));
-        review.setStatus(ReviewStatus.APPROVED);
-        reviewRepository.save(review);
-
-        // Update seller's average rating
-        User seller = review.getSeller();
-        Double avg = reviewRepository.calculateAverageRatingForSeller(seller);
-        seller.setAverageRating(avg != null ? avg : 0.0);
-        userRepository.save(seller);
-
-        log.info("Review {} approved for seller {}", reviewId, seller.getEmail());
-        return convertToResponse(review);
-    }
-
-    @Override
-    public ReviewResponse rejectReview(UUID reviewId) {
-        Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new IllegalArgumentException("Review not found"));
-        review.setStatus(ReviewStatus.REJECTED);
-        reviewRepository.save(review);
-        log.info("Review {} rejected", reviewId);
-        return convertToResponse(review);
     }
 
     private ReviewResponse convertToResponse(Review review) {

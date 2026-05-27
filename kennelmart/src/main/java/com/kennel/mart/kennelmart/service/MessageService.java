@@ -1,9 +1,11 @@
 package com.kennel.mart.kennelmart.service;
 
+import com.kennel.mart.kennelmart.dto.ConversationDTO;
 import com.kennel.mart.kennelmart.dto.MessageRequest;
 import com.kennel.mart.kennelmart.dto.MessageResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import java.util.List;
 import java.util.UUID;
 
 public interface MessageService {
@@ -11,4 +13,5 @@ public interface MessageService {
     Page<MessageResponse> getConversation(String userEmail, UUID otherUserId, Pageable pageable);
     int getUnreadCount(String userEmail);
     void markMessagesAsRead(String userEmail, UUID otherUserId);
+    List<ConversationDTO> getConversations(String userEmail);
 }

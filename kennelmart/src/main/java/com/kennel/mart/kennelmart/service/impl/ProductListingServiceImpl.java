@@ -56,11 +56,10 @@ public class ProductListingServiceImpl implements ProductListingService {
                 request.getCategory(),
                 seller
         );
-        listing.setStatus(ProductStatus.PENDING_APPROVAL); // or ACTIVE if you skip admin approval
+        listing.setStatus(ProductStatus.PENDING_APPROVAL);
 
         ProductListing savedListing = productListingRepository.save(listing);
 
-        // Add images
         if (request.getImageUrls() != null && !request.getImageUrls().isEmpty()) {
             for (int i = 0; i < request.getImageUrls().size(); i++) {
                 ProductImage image = new ProductImage(request.getImageUrls().get(i), i);
@@ -91,7 +90,6 @@ public class ProductListingServiceImpl implements ProductListingService {
         listing.setStockQuantity(request.getStockQuantity());
         listing.setCategory(request.getCategory());
 
-        // Update images (replace existing)
         if (request.getImageUrls() != null) {
             productImageRepository.deleteByListing(listing);
             listing.getImages().clear();
@@ -118,8 +116,10 @@ public class ProductListingServiceImpl implements ProductListingService {
             throw new SecurityException("You can only delete your own listings");
         }
 
-        productListingRepository.delete(listing);
-        log.info("Listing deleted: {}", listing.getTitle());
+        // Soft delete: set status to DELETED
+        listing.setStatus(ProductStatus.DELETED);
+        productListingRepository.save(listing);
+        log.info("Listing soft-deleted: {}", listing.getTitle());
     }
 
     @Override
@@ -133,8 +133,9 @@ public class ProductListingServiceImpl implements ProductListingService {
     public Page<ProductListingResponse> getMyListings(String sellerEmail, Pageable pageable) {
         User seller = userRepository.findByEmail(sellerEmail)
                 .orElseThrow(() -> new IllegalArgumentException("Seller not found"));
-        return productListingRepository.findBySeller(seller, pageable)
-                .map(this::convertToResponse);
+        // Exclude soft‑deleted listings
+        Page<ProductListing> listings = productListingRepository.findBySellerAndStatusNot(seller, ProductStatus.DELETED, pageable);
+        return listings.map(this::convertToResponse);
     }
 
     @Override

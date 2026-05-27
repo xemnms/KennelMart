@@ -16,13 +16,16 @@ import java.util.UUID;
 @Repository
 public interface ProductListingRepository extends JpaRepository<ProductListing, UUID> {
 
-    // Find all listings by seller (for seller dashboard)
-    Page<ProductListing> findBySeller(User seller, Pageable pageable);
-    
-    // Non-paginated list of all seller's listings (for analytics)
+    // All listings by seller (without pagination) – used for analytics
     List<ProductListing> findBySeller(User seller);
 
-    // Find active listings (visible to buyers) – with pagination
+    // Seller listings (paginated) – exclude soft‑deleted
+    Page<ProductListing> findBySellerAndStatusNot(User seller, ProductStatus status, Pageable pageable);
+
+    // Non-paginated list of all seller's listings (for analytics) – exclude soft‑deleted
+    List<ProductListing> findBySellerAndStatusNot(User seller, ProductStatus status);
+
+    // Active listings (visible to buyers)
     Page<ProductListing> findByStatus(ProductStatus status, Pageable pageable);
 
     // Filter by category and status

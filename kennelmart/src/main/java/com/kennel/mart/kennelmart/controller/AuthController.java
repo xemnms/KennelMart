@@ -3,71 +3,30 @@ package com.kennel.mart.kennelmart.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.kennel.mart.kennelmart.dto.AuthResponse;
 import com.kennel.mart.kennelmart.dto.LoginRequest;
 import com.kennel.mart.kennelmart.dto.RegisterRequest;
+import com.kennel.mart.kennelmart.entity.User;
+import com.kennel.mart.kennelmart.repository.UserRepository;
 import com.kennel.mart.kennelmart.service.AuthService;
 
 import jakarta.validation.Valid;
 
-/**
- * REST Controller for authentication endpoints.
- * 
- * Handles user registration and login operations.
- * 
- * Endpoints:
- * - POST /api/auth/register - Register new user
- * - POST /api/auth/login - Login with credentials
- * - GET /api/auth/me - Get current authenticated user
- * 
- * OOP Principles:
- * - Single Responsibility: Authentication endpoints only
- * - Validation: Request body validation
- * - Error Handling: Proper HTTP status codes
- */
 @RestController
 @RequestMapping("/api/auth")
-// Lombok removed
 public class AuthController {
 
-    private AuthService authService;
+    private final AuthService authService;
+    private final UserRepository userRepository;
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AuthController.class);
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, UserRepository userRepository) {
         this.authService = authService;
+        this.userRepository = userRepository;
     }
 
-    /**
-     * Register a new user.
-     * 
-     * POST /api/auth/register
-     * 
-     * Request body:
-     * {
-     *   "firstName": "Axel",
-     *   "lastName": "Bagay",
-     *   "email": "bagayam@students.nu-laguna.edu.ph",
-     *   "password": "SecurePass123",
-     *   "confirmPassword": "SecurePass123",
-     *   "studentOrFacultyId": "2025-1020735"
-     * }
-     * 
-     * Validation Rules:
-     * - Email must be NU Laguna email (@students.nu-laguna.edu.ph)
-     * - Password minimum 8 characters
-     * - Passwords must match
-     * - Email must be unique
-     * 
-     * @param request registration request data
-     * @return 201 Created with authentication response and JWT token
-     */
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
         log.info("Registration request received for email: {}", request.getEmail());
@@ -81,20 +40,6 @@ public class AuthController {
         }
     }
 
-    /**
-     * Login user with credentials.
-     * 
-     * POST /api/auth/login
-     * 
-     * Request body:
-     * {
-     *   "email": "bagayam@students.nu-laguna.edu.ph",
-     *   "password": "SecurePass123"
-     * }
-     * 
-     * @param request login request data
-     * @return 200 OK with authentication response and JWT token
-     */
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         log.info("Login request received for email: {}", request.getEmail());
@@ -108,23 +53,19 @@ public class AuthController {
         }
     }
 
-    /**
-     * Get current authenticated user information.
-     * 
-     * GET /api/auth/me
-     * 
-     * Requires: Valid JWT token in Authorization header
-     * 
-     * @return 200 OK with current user information
-     */
     @GetMapping("/me")
-    public ResponseEntity<String> getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            String username = authentication.getName();
-            log.info("Retrieved current user: {}", username);
-            return ResponseEntity.ok("Current user: " + username);
+    public ResponseEntity<User> getCurrentUser(Authentication authentication) {
+        String email = authentication.getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/me/authorities")
+    public ResponseEntity<?> getCurrentUserAuthorities(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not authenticated");
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No authenticated user found");
+        return ResponseEntity.ok(authentication.getAuthorities());
     }
 }

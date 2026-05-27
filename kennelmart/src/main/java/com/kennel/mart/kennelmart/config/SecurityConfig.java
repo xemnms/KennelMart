@@ -54,12 +54,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:5173",
-                "http://localhost:3000",
-                "http://127.0.0.1:5173",
-                "http://127.0.0.1:3000"
-        ));
+        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
@@ -102,9 +97,12 @@ public class SecurityConfig {
                                 .requestMatchers("/api/cart/**").authenticated()
                                 .requestMatchers("/api/orders/**").authenticated()
                                 
-                                // Reviews - submit requires authentication, admin only for admin endpoints
+                                // Reviews - submit requires authentication
                                 .requestMatchers(HttpMethod.POST, "/api/reviews").authenticated()
                                 .requestMatchers("/api/reviews/admin/**").hasRole("ADMIN")
+                                
+                                // Reports - submit requires authentication
+                                .requestMatchers(HttpMethod.POST, "/api/reports").authenticated()
                                 
                                 // Messaging endpoints - all require authentication
                                 .requestMatchers(HttpMethod.POST, "/api/messages").authenticated()
@@ -116,6 +114,9 @@ public class SecurityConfig {
                                 
                                 // Analytics - require authentication
                                 .requestMatchers("/api/analytics/**").authenticated()
+                                
+                                // User profile endpoints
+                                .requestMatchers("/api/users/**").authenticated()
                                 
                                 // Admin endpoints - only ADMIN role
                                 .requestMatchers("/api/admin/**").hasRole("ADMIN")

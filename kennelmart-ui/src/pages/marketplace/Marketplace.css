@@ -1,0 +1,380 @@
+/* Global reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: #f0f2f5;
+}
+
+.marketplace {
+  min-height: 100vh;
+  background-color: #f0f2f5;
+}
+
+/* Header */
+.marketplace-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: white;
+  border-bottom: 1px solid #ddd;
+  padding: 0.75rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.logo a {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1877f2;
+  text-decoration: none;
+}
+
+.search-bar {
+  flex: 1;
+  max-width: 500px;
+  display: flex;
+  background: #f0f2f5;
+  border-radius: 40px;
+  overflow: hidden;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: transparent;
+  font-size: 1rem;
+  outline: none;
+}
+
+.search-bar button {
+  background: transparent;
+  border: none;
+  padding: 0 1rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.user-menu, .auth-buttons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.sell-btn {
+  background: #e4e6eb;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  text-decoration: none;
+  color: #050505;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.sell-btn:hover {
+  background: #d8dadf;
+}
+
+.avatar {
+  background: #e4e6eb;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #050505;
+}
+
+.login-btn, .signup-btn {
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.login-btn {
+  color: #1877f2;
+}
+
+.signup-btn {
+  background: #1877f2;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+}
+
+.signup-btn:hover {
+  background: #166fe5;
+}
+
+/* Categories */
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  background: white;
+  border-bottom: 1px solid #ddd;
+}
+
+.category-chip {
+  background: #f0f2f5;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.category-chip.active {
+  background: #1877f2;
+  color: white;
+}
+
+.category-chip:hover {
+  background: #e4e6eb;
+}
+
+/* Product grid */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.product-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.product-card a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.product-image {
+  height: 220px;
+  overflow: hidden;
+  background: #f0f2f5;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.product-card:hover .product-image img {
+  transform: scale(1.02);
+}
+
+.product-info {
+  padding: 1rem;
+}
+
+.product-info h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.price {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #050505;
+  margin: 0.25rem 0;
+}
+
+.seller {
+  font-size: 0.75rem;
+  color: #65676b;
+  margin: 0.25rem 0;
+}
+
+.category-badge {
+  display: inline-block;
+  background: #e4e6eb;
+  padding: 0.25rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #050505;
+  margin-top: 0.5rem;
+}
+
+/* Loading & empty */
+.loading, .empty-state {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.1rem;
+  color: #65676b;
+}
+
+.empty-state a {
+  color: #1877f2;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 2rem;
+}
+
+.pagination button {
+  background: white;
+  border: 1px solid #ddd;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pagination button.active {
+  background: #1877f2;
+  color: white;
+  border-color: #1877f2;
+}
+
+.pagination button:hover:not(.active) {
+  background: #e4e6eb;
+}
+
+/* Additional header items */
+.admin-link {
+  background: #1877f2;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.admin-link:hover {
+  background: #0d5bb5;
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  color: #65676b;
+  font-size: 1rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 20px;
+  transition: background 0.2s;
+}
+
+.logout-btn:hover {
+  background: #f0f2f5;
+  color: #050505;
+}
+
+/* Cart and Messages links */
+.cart-link,
+.messages-link,
+.my-listings-link,
+.my-orders-link,
+.my-sales-link {
+  background: none;
+  border: none;
+  font-weight: 600;
+  text-decoration: none;
+  color: #050505;
+  padding: 0.5rem 0.75rem;
+  border-radius: 20px;
+  transition: background 0.2s;
+}
+
+.cart-link:hover,
+.messages-link:hover,
+.my-listings-link:hover,
+.my-orders-link:hover,
+.my-sales-link:hover {
+  background: #f0f2f5;
+}
+
+.messages-link {
+  position: relative;
+}
+
+.badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #c62828;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 50%;
+  min-width: 18px;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .marketplace-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .search-bar {
+    max-width: none;
+  }
+  .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+  }
+  .categories {
+    padding: 0.75rem 1rem;
+    justify-content: center;
+  }
+}
+
+/* Notifications link */
+.notifications-link {
+  position: relative;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  text-decoration: none;
+  color: #050505;
+  padding: 0.5rem 0.75rem;
+  border-radius: 20px;
+  transition: background 0.2s;
+}
+
+.notifications-link:hover {
+  background: #f0f2f5;
+}
