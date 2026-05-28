@@ -13,7 +13,8 @@
     "ghcr.io/devcontainers/features/docker-in-docker:2": {
       "version": "latest",
       "enableNonRootAccess": true
-    }
+    },
+    "ghcr.io/devcontainers/features/postgres-client:1": {}
   },
   "customizations": {
     "vscode": {
