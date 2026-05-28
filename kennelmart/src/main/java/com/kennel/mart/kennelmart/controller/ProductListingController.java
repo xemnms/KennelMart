@@ -106,4 +106,13 @@ public class ProductListingController {
         Page<ProductListingResponse> responses = productListingService.getActiveListings(keyword, category, pageable);
         return ResponseEntity.ok(responses);
     }
+
+    // NEW: Get all active listings of a specific seller (public)
+    @GetMapping("/users/{userId}/listings")
+    public ResponseEntity<Page<ProductListingResponse>> getUserListings(
+            @PathVariable UUID userId,
+            @PageableDefault(size = 12) Pageable pageable) {
+        Page<ProductListingResponse> responses = productListingService.getActiveListingsBySellerId(userId, pageable);
+        return ResponseEntity.ok(responses);
+    }
 }

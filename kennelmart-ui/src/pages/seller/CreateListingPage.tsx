@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { listingService } from '../../services/listingService';
+import { uploadImage } from '../../services/uploadService';
 import type { CreateListingRequest } from '../../types/marketplace';
 import './CreateListing.css';
 
@@ -9,7 +10,9 @@ export const CreateListingPage = () => {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [imageUrls, setImageUrls] = useState<string[]>(['']);
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [uploadingImages, setUploadingImages] = useState(false);
 
   const { register, handleSubmit, formState: { errors } } = useForm<CreateListingRequest>({
     defaultValues: {
@@ -18,31 +21,49 @@ export const CreateListingPage = () => {
       price: 0,
       stockQuantity: 1,
       category: 'ELECTRONICS',
-      imageUrls: [''],
+      imageUrls: [],
     },
   });
 
-  const addImageUrl = () => {
-    setImageUrls([...imageUrls, '']);
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const files = Array.from(e.target.files);
+      setImageFiles(prev => [...prev, ...files]);
+      
+      // Create previews
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          setImagePreviews(prev => [...prev, event.target?.result as string]);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
   };
 
-  const removeImageUrl = (index: number) => {
-    const newUrls = [...imageUrls];
-    newUrls.splice(index, 1);
-    setImageUrls(newUrls);
-  };
-
-  const updateImageUrl = (index: number, value: string) => {
-    const newUrls = [...imageUrls];
-    newUrls[index] = value;
-    setImageUrls(newUrls);
+  const removeImage = (index: number) => {
+    setImageFiles(prev => prev.filter((_, i) => i !== index));
+    setImagePreviews(prev => prev.filter((_, i) => i !== index));
   };
 
   const onSubmit = async (data: CreateListingRequest) => {
+    if (imageFiles.length === 0) {
+      setError('Please upload at least one image');
+      return;
+    }
+
     setIsSubmitting(true);
+    setUploadingImages(true);
     setError(null);
-    data.imageUrls = imageUrls.filter(url => url.trim() !== '');
+
     try {
+      // Upload all images
+      const uploadedUrls = await Promise.all(
+        imageFiles.map(file => uploadImage(file))
+      );
+      
+      // Create listing with uploaded image URLs
+      data.imageUrls = uploadedUrls;
       await listingService.createListing(data);
       navigate('/my-listings');
     } catch (err: unknown) {
@@ -53,6 +74,7 @@ export const CreateListingPage = () => {
       setError(errorMessage);
     } finally {
       setIsSubmitting(false);
+      setUploadingImages(false);
     }
   };
 
@@ -62,6 +84,7 @@ export const CreateListingPage = () => {
         <h1>Create New Listing</h1>
         {error && <div className="error-message">{error}</div>}
         <form onSubmit={handleSubmit(onSubmit)}>
+          {/* existing form fields remain the same */}
           <div className="form-group">
             <label>Title *</label>
             <input {...register('title', { required: 'Title is required' })} />
@@ -109,27 +132,29 @@ export const CreateListingPage = () => {
           </div>
 
           <div className="form-group">
-            <label>Image URLs (optional)</label>
-            {imageUrls.map((url, index) => (
-              <div key={index} className="image-url-row">
-                <input
-                  type="text"
-                  value={url}
-                  onChange={(e) => updateImageUrl(index, e.target.value)}
-                  placeholder="https://example.com/image.jpg"
-                />
-                <button type="button" onClick={() => removeImageUrl(index)}>Remove</button>
-              </div>
-            ))}
-            <button type="button" onClick={addImageUrl} className="add-url-btn">
-              + Add another image URL
-            </button>
+            <label>Product Images * (Max 5 images)</label>
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleImageChange}
+              disabled={imageFiles.length >= 5}
+            />
+            <div className="image-previews">
+              {imagePreviews.map((preview, index) => (
+                <div key={index} className="image-preview">
+                  <img src={preview} alt={`Preview ${index + 1}`} />
+                  <button type="button" onClick={() => removeImage(index)}>Remove</button>
+                </div>
+              ))}
+            </div>
+            {imageFiles.length === 0 && <span className="error">Please upload at least one image</span>}
           </div>
 
           <div className="form-actions">
             <button type="button" onClick={() => navigate(-1)}>Cancel</button>
-            <button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Creating...' : 'Create Listing'}
+            <button type="submit" disabled={isSubmitting || uploadingImages || imageFiles.length === 0}>
+              {uploadingImages ? 'Uploading images...' : isSubmitting ? 'Creating...' : 'Create Listing'}
             </button>
           </div>
         </form>

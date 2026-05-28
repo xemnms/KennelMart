@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+/* eslint-disable react-hooks/set-state-in-effect */
+import { useEffect, useState, useCallback } from 'react';
 import { adminService } from '../../services/adminService';
 import { reportService } from '../../services/reportService';
 import type { User } from '../../types/auth';
@@ -6,19 +7,20 @@ import type { ProductListing } from '../../types/marketplace';
 import type { ReportResponse } from '../../types/report';
 import './AdminDashboard.css';
 
-type Tab = 'users' | 'listings' | 'reports';
+type Tab = 'users' | 'listings' | 'reports' | 'verifications';
 
 export const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState<Tab>('users');
   const [users, setUsers] = useState<User[]>([]);
   const [listings, setListings] = useState<ProductListing[]>([]);
   const [reports, setReports] = useState<ReportResponse[]>([]);
+  const [pendingVerifications, setPendingVerifications] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [userFilter, setUserFilter] = useState({ verificationStatus: '', accountStatus: '' });
   const [listingFilter, setListingFilter] = useState({ status: '' });
   const [reportFilter, setReportFilter] = useState({ status: '' });
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
       const data = await adminService.getUsers({ ...userFilter, page: 0, size: 50 });
@@ -28,9 +30,9 @@ export const AdminDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userFilter]);
 
-  const fetchListings = async () => {
+  const fetchListings = useCallback(async () => {
     setLoading(true);
     try {
       const data = await adminService.getListings({ ...listingFilter, page: 0, size: 50 });
@@ -40,9 +42,9 @@ export const AdminDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [listingFilter]);
 
-  const fetchReports = async () => {
+  const fetchReports = useCallback(async () => {
     setLoading(true);
     try {
       const data = await adminService.getReports({ ...reportFilter, page: 0, size: 50 });
@@ -52,17 +54,26 @@ export const AdminDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [reportFilter]);
+
+  const fetchPendingVerifications = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await adminService.getUsers({ verificationStatus: 'PENDING', page: 0, size: 50 });
+      setPendingVerifications(data.content);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (activeTab === 'users') fetchUsers();
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (activeTab === 'listings') fetchListings();
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (activeTab === 'reports') fetchReports();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeTab, userFilter, listingFilter, reportFilter]);
+    if (activeTab === 'verifications') fetchPendingVerifications();
+  }, [activeTab, fetchUsers, fetchListings, fetchReports, fetchPendingVerifications]);
 
   const handleSuspend = async (userId: string) => {
     if (confirm('Suspend this user?')) {
@@ -126,6 +137,20 @@ export const AdminDashboard = () => {
     }
   };
 
+  const handleApproveVerification = async (userId: string) => {
+    if (confirm('Approve this user’s verification?')) {
+      await adminService.verifyUser(userId);
+      fetchPendingVerifications();
+    }
+  };
+
+  const handleRejectVerification = async (userId: string) => {
+    if (confirm('Reject this user’s verification?')) {
+      await adminService.rejectUserVerification(userId);
+      fetchPendingVerifications();
+    }
+  };
+
   return (
     <div className="admin-dashboard">
       <h1>Admin Dashboard</h1>
@@ -133,6 +158,7 @@ export const AdminDashboard = () => {
         <button className={activeTab === 'users' ? 'active' : ''} onClick={() => setActiveTab('users')}>Users</button>
         <button className={activeTab === 'listings' ? 'active' : ''} onClick={() => setActiveTab('listings')}>Listings</button>
         <button className={activeTab === 'reports' ? 'active' : ''} onClick={() => setActiveTab('reports')}>Reports</button>
+        <button className={activeTab === 'verifications' ? 'active' : ''} onClick={() => setActiveTab('verifications')}>Verifications</button>
       </div>
 
       {activeTab === 'users' && (
@@ -150,11 +176,19 @@ export const AdminDashboard = () => {
               <option value="SUSPENDED">Suspended</option>
             </select>
           </div>
-          {loading ? <div>Loading...</div> : (
+          {loading ? (
+            <div>Loading...</div>
+          ) : (
             <div className="table-wrapper">
               <table className="data-table">
                 <thead>
-                  <tr><th>Name</th><th>Email</th><th>Verification</th><th>Account</th><th>Actions</th></tr>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Verification</th>
+                    <th>Account</th>
+                    <th>Actions</th>
+                  </tr>
                 </thead>
                 <tbody>
                   {users.map(user => (
@@ -191,11 +225,19 @@ export const AdminDashboard = () => {
               <option value="DELETED">Deleted</option>
             </select>
           </div>
-          {loading ? <div>Loading...</div> : (
+          {loading ? (
+            <div>Loading...</div>
+          ) : (
             <div className="table-wrapper">
               <table className="data-table">
                 <thead>
-                  <tr><th>Title</th><th>Seller</th><th>Price</th><th>Status</th><th>Actions</th></tr>
+                  <tr>
+                    <th>Title</th>
+                    <th>Seller</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
                 </thead>
                 <tbody>
                   {listings.map(listing => (
@@ -236,11 +278,20 @@ export const AdminDashboard = () => {
               <option value="DISMISSED">Dismissed</option>
             </select>
           </div>
-          {loading ? <div>Loading...</div> : (
+          {loading ? (
+            <div>Loading...</div>
+          ) : (
             <div className="table-wrapper">
               <table className="data-table">
                 <thead>
-                  <tr><th>Reporter</th><th>Target Type</th><th>Target ID</th><th>Reason</th><th>Status</th><th>Actions</th></tr>
+                  <tr>
+                    <th>Reporter</th>
+                    <th>Target Type</th>
+                    <th>Target ID</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
                 </thead>
                 <tbody>
                   {reports.map(report => (
@@ -264,6 +315,47 @@ export const AdminDashboard = () => {
                             <button onClick={() => handleDismissReport(report.id)}>Dismiss</button>
                           </div>
                         )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      )}
+
+      {activeTab === 'verifications' && (
+        <div className="tab-content">
+          <div className="filters">
+            <button onClick={fetchPendingVerifications}>Refresh</button>
+          </div>
+          {loading ? (
+            <div>Loading...</div>
+          ) : (
+            <div className="table-wrapper">
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Student ID</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pendingVerifications.map(user => (
+                    <tr key={user.id}>
+                      <td>{user.name}</td>
+                      <td>{user.email}</td>
+                      <td>{user.studentOrFacultyId}</td>
+                      <td><span className={`status ${user.verificationStatus.toLowerCase()}`}>{user.verificationStatus}</span></td>
+                      <td>
+                        <div className="button-group">
+                          <button onClick={() => handleApproveVerification(user.id)} className="approve-btn">Approve</button>
+                          <button onClick={() => handleRejectVerification(user.id)} className="reject-btn">Reject</button>
+                        </div>
                       </td>
                     </tr>
                   ))}

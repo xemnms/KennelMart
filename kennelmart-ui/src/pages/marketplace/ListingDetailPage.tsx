@@ -7,6 +7,7 @@ import { useCartStore } from '../../store/cartStore';
 import { ReportModal } from '../../components/ReportModal';
 import type { ProductListing } from '../../types/marketplace';
 import type { Review } from '../../types/review';
+import { getImageUrl } from '../../utils/imageUtils';
 import './ListingDetail.css';
 
 export const ListingDetailPage = () => {
@@ -91,7 +92,7 @@ export const ListingDetailPage = () => {
   return (
     <div className="detail-container">
       <div className="detail-images">
-        <img src={listing.imageUrls[0] || '/placeholder.png'} alt={listing.title} />
+        <img src={getImageUrl(listing.imageUrls[0])} alt={listing.title} />
       </div>
       <div className="detail-info">
         <h1>{listing.title}</h1>

@@ -80,12 +80,27 @@ public class SecurityConfig {
                                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                 .requestMatchers("/api/verification/status").permitAll()
                                 
+                                // Serve uploaded images (static files)
+                                .requestMatchers("/uploads/**").permitAll()
+                                
                                 // Public GET endpoints for browsing listings
                                 .requestMatchers(HttpMethod.GET, "/api/listings", "/api/listings/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/categories").permitAll()
                                 
+                                // Public GET for user search (marketplace)
+                                .requestMatchers(HttpMethod.GET, "/api/users/search").permitAll()
+                                
+                                // Public GET for user public profile
+                                .requestMatchers(HttpMethod.GET, "/api/users/{userId}/public").permitAll()
+                                
+                                // Public GET for seller listings (used in user profile page)
+                                .requestMatchers(HttpMethod.GET, "/api/listings/users/{userId}/listings").permitAll()
+                                
                                 // Public GET for reviews (average and list)
                                 .requestMatchers(HttpMethod.GET, "/api/reviews/sellers/**").permitAll()
+                                
+                                // Image upload - requires authentication
+                                .requestMatchers(HttpMethod.POST, "/api/uploads/image").authenticated()
                                 
                                 // Listing management - require authentication
                                 .requestMatchers(HttpMethod.POST, "/api/listings").authenticated()
@@ -115,7 +130,10 @@ public class SecurityConfig {
                                 // Analytics - require authentication
                                 .requestMatchers("/api/analytics/**").authenticated()
                                 
-                                // User profile endpoints
+                                // User profile endpoints (except public search and public profile)
+                                .requestMatchers(HttpMethod.GET, "/api/users/me", "/api/users/me/authorities").authenticated()
+                                .requestMatchers("/api/users/me/**").authenticated()
+                                // Other /api/users/** endpoints (except those already permitted) require authentication
                                 .requestMatchers("/api/users/**").authenticated()
                                 
                                 // Admin endpoints - only ADMIN role

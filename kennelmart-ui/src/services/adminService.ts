@@ -19,6 +19,13 @@ export const adminService = {
   async activateUser(userId: string): Promise<void> {
     await api.put(`/api/admin/users/${userId}/activate`);
   },
+  // New methods for verification management
+  async verifyUser(userId: string): Promise<void> {
+    await api.put(`/api/admin/users/${userId}/verify`);
+  },
+  async rejectUserVerification(userId: string): Promise<void> {
+    await api.put(`/api/admin/users/${userId}/reject-verification`);
+  },
 
   // Listings
   async getListings(params?: { status?: string; page?: number; size?: number }): Promise<{

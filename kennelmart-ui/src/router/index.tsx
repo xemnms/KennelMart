@@ -19,6 +19,7 @@ import { ChatPage } from '../pages/messages/ChatPage';
 import { EditListingPage } from '../pages/seller/EditListingPage';
 import { NotificationsPage } from '../pages/notifications/NotificationsPage';
 import { SellerReviewsPage } from '../pages/reviews/SellerReviewsPage';
+import { UserProfilePage } from '../pages/user/UserProfilePage';  // fixed path
 
 export const router = createBrowserRouter([
   {
@@ -129,4 +130,8 @@ export const router = createBrowserRouter([
     path: '/reviews/seller/:sellerId',
     element: <SellerReviewsPage />,
   },
+  {
+    path: '/user/:userId',
+    element: <PrivateRoute><UserProfilePage /></PrivateRoute>,
+  }
 ]);

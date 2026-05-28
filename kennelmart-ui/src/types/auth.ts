@@ -46,3 +46,12 @@ export interface ChangePasswordRequest {
   newPassword: string;
   confirmPassword: string;
 }
+
+export interface UserPublicProfile {
+  id: string;
+  name: string;
+  profileImage?: string;
+  averageRating?: number;
+  role: 'ADMIN' | 'USER';
+  joinedAt: string;
+}

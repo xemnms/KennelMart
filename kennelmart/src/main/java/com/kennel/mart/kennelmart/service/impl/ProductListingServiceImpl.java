@@ -152,6 +152,13 @@ public class ProductListingServiceImpl implements ProductListingService {
         return listings.map(this::convertToResponse);
     }
 
+    @Override
+    public Page<ProductListingResponse> getActiveListingsBySellerId(UUID sellerId, Pageable pageable) {
+        // Only return listings with status ACTIVE
+        Page<ProductListing> listings = productListingRepository.findBySellerIdAndStatus(sellerId, ProductStatus.ACTIVE, pageable);
+        return listings.map(this::convertToResponse);
+    }
+
     private ProductListingResponse convertToResponse(ProductListing listing) {
         List<String> imageUrls = listing.getImages().stream()
                 .sorted((i1, i2) -> i1.getDisplayOrder().compareTo(i2.getDisplayOrder()))

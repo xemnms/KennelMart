@@ -16,25 +16,28 @@ import java.util.UUID;
 @Repository
 public interface ProductListingRepository extends JpaRepository<ProductListing, UUID> {
 
-    // All listings by seller (without pagination) – used for analytics
-    List<ProductListing> findBySeller(User seller);
-
-    // Seller listings (paginated) – exclude soft‑deleted
-    Page<ProductListing> findBySellerAndStatusNot(User seller, ProductStatus status, Pageable pageable);
-
-    // Non-paginated list of all seller's listings (for analytics) – exclude soft‑deleted
-    List<ProductListing> findBySellerAndStatusNot(User seller, ProductStatus status);
-
-    // Active listings (visible to buyers)
+    // Find by status (active, pending_approval, etc.)
     Page<ProductListing> findByStatus(ProductStatus status, Pageable pageable);
 
-    // Filter by category and status
+    // Find by category and status
     Page<ProductListing> findByCategoryAndStatus(ListingCategory category, ProductStatus status, Pageable pageable);
 
-    // Search by title or description (case‑insensitive) and status
+    // Search by title or description (case-insensitive) and status
     Page<ProductListing> findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndStatus(
-            String titleKeyword, String descriptionKeyword, ProductStatus status, Pageable pageable);
+            String titleKeyword, String descKeyword, ProductStatus status, Pageable pageable);
 
-    // Find a single listing by ID and status (e.g., check if active before adding to cart)
+    // Find by seller and exclude a specific status (e.g., not DELETED)
+    Page<ProductListing> findBySellerAndStatusNot(User seller, ProductStatus status, Pageable pageable);
+
+    // Find by seller ID and status (used in user profile page)
+    Page<ProductListing> findBySellerIdAndStatus(UUID sellerId, ProductStatus status, Pageable pageable);
+
+    // Find by ID and status (used in CartServiceImpl)
     Optional<ProductListing> findByIdAndStatus(UUID id, ProductStatus status);
+
+    // For analytics: get all listings of a seller (no pagination)
+    List<ProductListing> findBySeller(User seller);
+
+    // Paginated version (if needed elsewhere)
+    Page<ProductListing> findBySeller(User seller, Pageable pageable);
 }

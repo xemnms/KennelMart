@@ -16,4 +16,7 @@ public interface ProductListingService {
     ProductListingResponse getListingById(UUID listingId);
     Page<ProductListingResponse> getMyListings(String sellerEmail, Pageable pageable);
     Page<ProductListingResponse> getActiveListings(String keyword, ListingCategory category, Pageable pageable);
+    
+    // New method: get all active listings of a specific seller (public)
+    Page<ProductListingResponse> getActiveListingsBySellerId(UUID sellerId, Pageable pageable);
 }

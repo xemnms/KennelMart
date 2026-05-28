@@ -56,4 +56,22 @@ public class AdminUserController {
         userRepository.save(user);
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping("/{userId}/verify")
+    public ResponseEntity<Void> verifyUser(@PathVariable UUID userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        user.setVerificationStatus(VerificationStatus.VERIFIED);
+        userRepository.save(user);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{userId}/reject-verification")
+    public ResponseEntity<Void> rejectVerification(@PathVariable UUID userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        user.setVerificationStatus(VerificationStatus.REJECTED);
+        userRepository.save(user);
+        return ResponseEntity.ok().build();
+    }
 }
