@@ -1,6 +1,8 @@
 {
   "name": "Java + Node + Docker",
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
   "features": {
     "ghcr.io/devcontainers/features/java:1": {
       "version": "21",
@@ -24,6 +26,8 @@
       ]
     }
   },
+
   "forwardPorts": [8080, 5432],
-  "postCreateCommand": "docker --version && java -version && node -v"
+  "postCreateCommand": "docker --version && java -version && node -v",
+  "shutdownAction": "stopCompose"
 }
