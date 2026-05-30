@@ -1,83 +1,199 @@
+/* ============================================================
+   KENNELMART INBOX — Instagram DM style
+   ============================================================ */
+
 .inbox-container {
-  width: min(100%, 860px);
-  margin: 0 auto;
-  padding: 1.5rem clamp(1rem, 2vw, 2rem) 3rem;
+  width: 100%;
+  padding: 0 0 5rem;
+  animation: panelRise 0.3s var(--ease-out) both;
 }
 
-.inbox-container h1 {
-  margin-bottom: 1rem;
-  color: #f5f7fb;
-  font-size: clamp(1.7rem, 3vw, 2.3rem);
-}
-
-.conversations-list {
-  display: grid;
-  gap: 0.8rem;
-}
-
-.conversation-item {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  gap: 0.9rem;
+/* ── Header row ── */
+.inbox-header {
+  display: flex;
   align-items: center;
-  padding: 1rem 1.1rem;
-  border: 1px solid rgba(148, 163, 184, 0.12);
-  border-radius: 22px;
+  justify-content: space-between;
+  padding: 0.9rem 1rem 0.55rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.inbox-header h1 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+/* Compose button (pencil icon) */
+.compose-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.compose-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+/* ── List ── */
+.conversations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ── Single DM row ── */
+.dm-item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.65rem 1rem;
+  text-decoration: none;
+  color: inherit;
+  background: transparent;
+  transition: background 0.15s ease;
+}
+
+.dm-item:hover {
   background: rgba(255, 255, 255, 0.04);
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.18);
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    border-color 0.2s ease;
 }
 
-.conversation-item:hover {
-  transform: translateY(-2px);
-  border-color: rgba(245, 96, 172, 0.2);
-  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.22);
+.dm-item.unread .dm-name {
+  font-weight: 700;
+  color: var(--text-primary);
 }
 
-.conversation-avatar {
-  display: inline-grid;
+.dm-item.unread .dm-preview {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* ── Avatar circle ── */
+.dm-avatar {
+  flex: 0 0 auto;
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(37,99,235,0.55), rgba(232,160,32,0.45));
+  display: grid;
   place-items: center;
-  width: 52px;
-  height: 52px;
-  border-radius: 18px;
-  background: linear-gradient(135deg, rgba(245, 96, 172, 0.16), rgba(56, 189, 248, 0.14));
-  font-size: 1.4rem;
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 700;
+  /* subtle story-ring glow for unread */
 }
 
-.conversation-name {
-  color: #f5f7fb;
-  font-weight: 800;
+.dm-item.unread .dm-avatar {
+  box-shadow:
+    0 0 0 2px var(--bg),
+    0 0 0 4px var(--blue);
 }
 
-.conversation-last-message {
-  max-width: 36rem;
-  overflow: hidden;
-  color: var(--text-muted);
+.dm-avatar-dot {
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--blue);
+  border: 2px solid var(--bg);
+}
+
+/* ── Text block ── */
+.dm-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+}
+
+.dm-name {
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.3;
   white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.unread-badge {
-  color: #fff;
-  background: linear-gradient(135deg, #2563eb, #d4a62a);
-  box-shadow: 0 12px 20px rgba(245, 96, 172, 0.22);
+.dm-preview {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+}
+
+/* ── Right meta (time + unread dot) ── */
+.dm-meta {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.35rem;
+}
+
+.dm-time {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.dm-unread-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--blue);
+}
+
+/* ── Loading / Empty ── */
+.dm-loading {
+  display: grid;
+  place-items: center;
+  min-height: 50vh;
+  color: var(--text-muted);
+  font-size: 0.875rem;
 }
 
 .empty-inbox {
-  padding: 2rem;
-  border: 1px solid rgba(148, 163, 184, 0.12);
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.04);
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.18);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 55vh;
   text-align: center;
+  padding: 2rem 1.5rem;
+  color: var(--text-muted);
 }
 
-@media (max-width: 640px) {
-  .conversation-item {
-    grid-template-columns: 1fr;
-    justify-items: start;
-  }
+.empty-inbox-icon {
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.12);
+  color: var(--text-muted);
+}
+
+.empty-inbox p {
+  font-size: 0.875rem;
+  margin: 0;
 }

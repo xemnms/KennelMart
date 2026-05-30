@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { messageService } from '../../services/messageService';
 import { reportService } from '../../services/reportService';
+import { userService } from '../../services/userService';
 import { useAuthStore } from '../../store/authStore';
 import { ReportModal } from '../../components/ReportModal';
 import type { Conversation, Message } from '../../types/message';
@@ -15,6 +16,7 @@ export const MessagesWorkspacePage = () => {
   const [selectedUserId, setSelectedUserId] = useState<string | null>(userId ?? null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [otherUserName, setOtherUserName] = useState<string>('');
+  const [targetUserName, setTargetUserName] = useState<string>('');
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(true);
   const [messagesLoading, setMessagesLoading] = useState(false);
@@ -31,15 +33,12 @@ export const MessagesWorkspacePage = () => {
     try {
       const data = await messageService.getConversations();
       setConversations(data);
-      if (!selectedUserId && data[0]) {
-        setSelectedUserId(data[0].userId);
-      }
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
     }
-  }, [selectedUserId]);
+  }, []);
 
   const fetchMessages = useCallback(async () => {
     if (!selectedUserId) {
@@ -57,8 +56,17 @@ export const MessagesWorkspacePage = () => {
       if (sortedMessages.length > 0) {
         const first = sortedMessages[0];
         setOtherUserName(first.senderId === selectedUserId ? first.senderName : first.receiverName);
+      } else if (selectedConversation?.name) {
+        setOtherUserName(selectedConversation.name);
       } else {
-        setOtherUserName(selectedConversation?.name ?? 'Conversation');
+        // New conversation — fetch target user's name from public profile
+        try {
+          const profile = await userService.getUserPublicProfile(selectedUserId);
+          setTargetUserName(profile.name);
+          setOtherUserName(profile.name);
+        } catch {
+          setOtherUserName('User');
+        }
       }
       await messageService.markAsRead(selectedUserId);
       await fetchConversations();
@@ -159,14 +167,14 @@ export const MessagesWorkspacePage = () => {
       </aside>
 
       <section className="messages-panel chat-panel">
-        {selectedConversation ? (
+        {selectedUserId ? (
           <>
             <div className="chat-topbar">
               <div className="chat-recipient">
-                <div className="conversation-avatar compact">{selectedConversation.name.charAt(0)}</div>
+                <div className="conversation-avatar compact">{(otherUserName || targetUserName || 'U').charAt(0)}</div>
                 <div>
-                  <h2>{otherUserName || selectedConversation.name}</h2>
-                  <span>Active conversation</span>
+                  <h2>{otherUserName || targetUserName || selectedConversation?.name || 'Conversation'}</h2>
+                  <span>{selectedConversation ? 'Active conversation' : 'New conversation'}</span>
                 </div>
               </div>
               <button type="button" className="report-btn compact" onClick={() => setShowReportModal(true)}>Report</button>
@@ -214,30 +222,30 @@ export const MessagesWorkspacePage = () => {
       </section>
 
       <aside className="messages-panel profile-panel">
-        {selectedConversation ? (
+        {selectedUserId ? (
           <>
             <div className="profile-panel-header">
-              <div className="conversation-avatar profile-large">{selectedConversation.name.charAt(0)}</div>
+              <div className="conversation-avatar profile-large">{(otherUserName || targetUserName || 'U').charAt(0)}</div>
               <div>
                 <p className="eyebrow">Profile</p>
-                <h2>{selectedConversation.name}</h2>
-                <span>{selectedConversation.unreadCount} unread</span>
+                <h2>{otherUserName || targetUserName || selectedConversation?.name || 'User'}</h2>
+                <span>{selectedConversation ? `${selectedConversation.unreadCount} unread` : 'New conversation'}</span>
               </div>
             </div>
 
             <div className="profile-card-block">
               <div>
                 <strong>Last message</strong>
-                <p>{selectedConversation.lastMessage || 'No message preview available.'}</p>
+                <p>{selectedConversation?.lastMessage || 'No messages yet. Say hello!'}</p>
               </div>
               <div className="profile-meta-row">
-                <span>Conversation ID</span>
-                <strong>{selectedConversation.userId}</strong>
+                <span>User ID</span>
+                <strong>{selectedUserId}</strong>
               </div>
             </div>
 
             <div className="profile-panel-actions">
-              <Link to={`/user/${selectedConversation.userId}`} className="profile-action-link">Open profile</Link>
+              <Link to={`/user/${selectedUserId}`} className="profile-action-link">Open profile</Link>
               <button type="button" className="profile-action-link secondary" onClick={() => setShowReportModal(true)}>
                 Report user
               </button>

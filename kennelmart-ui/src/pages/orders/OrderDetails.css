@@ -2,14 +2,14 @@
   width: min(100%, 1080px);
   margin: 0 auto;
   padding: 1rem clamp(1rem, 2vw, 1.6rem) 3rem;
-  color: #f5f7fb;
+  color: var(--text-primary);
 }
 
 .order-meta {
-  background: rgba(17, 19, 24, 0.96);
+  background: var(--bg-elevated);
   padding: 1rem;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--r-xl);
+  border: 1px solid var(--border-subtle);
   margin: 1rem 0;
 }
 
@@ -30,9 +30,9 @@
 .order-status.cancelled { background: rgba(239, 68, 68, 0.14); color: #fca5a5; }
 
 .order-seller {
-  background: rgba(17, 19, 24, 0.96);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 20px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--r-xl);
   padding: 1rem;
   margin: 1rem 0;
   display: flex;
@@ -43,22 +43,22 @@
 .items-table {
   width: 100%;
   border-collapse: collapse;
-  background: rgba(17, 19, 24, 0.96);
-  border-radius: 20px;
+  background: var(--bg-elevated);
+  border-radius: var(--r-xl);
   overflow: hidden;
-  box-shadow: 0 14px 32px rgba(0,0,0,0.18);
+  box-shadow: var(--shadow-md);
 }
 
 .items-table th,
 .items-table td {
   padding: 0.9rem 1rem;
   text-align: left;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  color: #f5f7fb;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-primary);
 }
 
 .items-table th {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-glass);
   font-weight: 600;
 }
 
@@ -79,10 +79,10 @@
 
 .order-actions a {
   display: inline-block;
-  background: linear-gradient(135deg, #2563eb, #1746d1);
+  background: linear-gradient(135deg, var(--blue-vivid), #1746d1);
   color: white;
   padding: 0.45rem 0.85rem;
-  border-radius: 999px;
+  border-radius: var(--r-full);
   text-decoration: none;
 }
 
@@ -92,11 +92,11 @@
 }
 
 .write-review-btn {
-  background: linear-gradient(135deg, #2563eb, #1746d1);
+  background: linear-gradient(135deg, var(--blue-vivid), #1746d1);
   color: white;
   padding: 0.5rem 0.85rem;
   border: none;
-  border-radius: 999px;
+  border-radius: var(--r-full);
   cursor: pointer;
   font-size: 0.82rem;
 }

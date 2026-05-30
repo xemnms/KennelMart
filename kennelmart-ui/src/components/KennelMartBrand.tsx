@@ -6,7 +6,7 @@ type KennelMartLogoProps = {
   className?: string;
 };
 
-export type KennelMartIconName = 'home' | 'search' | 'messages' | 'notifications' | 'create' | 'cart' | 'orders' | 'profile';
+export type KennelMartIconName = 'home' | 'search' | 'messages' | 'notifications' | 'create' | 'cart' | 'orders' | 'profile' | 'heart' | 'comment' | 'send' | 'bookmark';
 
 type KennelMartIconProps = {
   name: KennelMartIconName;
@@ -22,6 +22,10 @@ const iconPaths: Record<KennelMartIconName, string> = {
   cart: 'M9 10h1.5l1.15 10h11.1l1.6-7.5H12.2M14 26.25a1.25 1.25 0 1 0 0 .01Zm9 0a1.25 1.25 0 1 0 0 .01Z',
   orders: 'M10 8.5h12v19H10zm2.5 4.5h7M12.5 18h7M12.5 22h4.5',
   profile: 'M16 15.5a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Zm-8 11.5c0-4.4 3.6-8 8-8s8 3.6 8 8',
+  heart: 'M16 27C15.6 26.75 14.7 26.1 12.5 24 9 20.8 6 17.6 6 14a6 6 0 0 1 10-4.47A6 6 0 0 1 26 14c0 3.6-3 6.8-6.5 10-2.2 2.1-3.1 2.75-3.5 3Z',
+  comment: 'M8 9.5h16v11H13l-5 4v-4Z',
+  send: 'M8 16L24 8l-4 8 4 8L8 16Zm10-1.5-6.5 3',
+  bookmark: 'M9.5 8h13v17l-6.5-4-6.5 4V8Z',
 };
 
 export const KennelMartLogo = ({ compact = false, showTagline = true, className = '' }: KennelMartLogoProps) => {
@@ -57,7 +61,6 @@ export const KennelMartLogo = ({ compact = false, showTagline = true, className 
       {showTagline && (
         <span className="kennelmart-logo-copy">
           <strong>KennelMart</strong>
-          <span>Pets-first campus market</span>
         </span>
       )}
     </div>

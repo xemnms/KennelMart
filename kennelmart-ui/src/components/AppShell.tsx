@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { NavLink, Outlet, useLocation, useSearchParams } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { useMessageStore } from '../store/messageStore';
 import { useNotificationStore } from '../store/notificationStore';
@@ -9,8 +9,6 @@ import './AppShell.css';
 
 const navItems: Array<{ to: string; label: string; icon: KennelMartIconName; end?: boolean }> = [
   { to: '/', label: 'Home', icon: 'home', end: true },
-  { to: '/messages/inbox', label: 'Messages', icon: 'messages' },
-  { to: '/notifications', label: 'Notifications', icon: 'notifications' },
   { to: '/seller/listings/new', label: 'Create', icon: 'create' },
   { to: '/cart', label: 'Cart', icon: 'cart' },
   { to: '/orders', label: 'Orders', icon: 'orders' },
@@ -22,6 +20,14 @@ export const AppShell = () => {
   const { unreadCount: messageUnreadCount, fetchUnreadCount: fetchMessageUnreadCount } = useMessageStore();
   const { unreadCount: notificationUnreadCount, fetchUnreadCount: fetchNotificationUnreadCount } = useNotificationStore();
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [sidebarSearch, setSidebarSearch] = useState(searchParams.get('q') ?? '');
+  const sidebarMode = searchParams.get('mode') === 'users' ? 'users' : 'products';
+  const showSidebarSearch = location.pathname === '/';
+
+  useEffect(() => {
+    setSidebarSearch(searchParams.get('q') ?? '');
+  }, [location.pathname, searchParams]);
 
   useEffect(() => {
     if (user) {
@@ -30,47 +36,99 @@ export const AppShell = () => {
     }
   }, [user, fetchMessageUnreadCount, fetchNotificationUnreadCount, location.pathname]);
 
+  const updateMarketplaceSearch = (nextMode: 'products' | 'users', nextQuery: string) => {
+    const trimmedQuery = nextQuery.trim();
+
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+
+      if (trimmedQuery) {
+        next.set('q', trimmedQuery);
+      } else {
+        next.delete('q');
+      }
+
+      next.set('mode', nextMode);
+      next.delete('page');
+      next.delete('userPage');
+      return next;
+    });
+  };
+
+  const handleSidebarSearchSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    updateMarketplaceSearch(sidebarMode, sidebarSearch);
+  };
+
   return (
-    <div className="app-shell instagram-shell-shell">
-      <aside className="shell-rail">
-        <div className="shell-brand">
-          <KennelMartLogo className="shell-brand-lockup" />
-        </div>
+    <div className="app-shell mobile-app-shell">
 
-        <nav className="shell-nav">
-          {navItems.map((item) => (
-            <NavLink key={item.to} to={item.to} end={item.end} className="shell-nav-item">
-              <KennelMartIcon name={item.icon} className="shell-icon" />
-              <span className="shell-label">{item.label}</span>
-              {item.label === 'Messages' && messageUnreadCount > 0 && <em>{messageUnreadCount}</em>}
-              {item.label === 'Notifications' && notificationUnreadCount > 0 && <em>{notificationUnreadCount}</em>}
-            </NavLink>
-          ))}
-        </nav>
-
-        <div className="shell-footer">
+      {/* ── Top status bar ── */}
+      <header className="mobile-topbar">
+        <NavLink to="/seller/listings/new" className="mobile-topbar-icon-btn" aria-label="Create listing">
+          <KennelMartIcon name="create" className="shell-icon" />
+        </NavLink>
+        <KennelMartLogo className="mobile-brand-lockup" />
+        <div className="mobile-topbar-actions">
           {user ? (
-            <div className="shell-profile">
-              <div className="shell-avatar">
-                {user.profileImage ? <img src={getImageUrl(user.profileImage)} alt={user.name} /> : <span>{user.name.charAt(0)}</span>}
-              </div>
-              <div className="shell-profile-meta">
-                <strong>{user.name}</strong>
-                <span>{user.role}</span>
-              </div>
-            </div>
+            <>
+              <NavLink to="/notifications" className="mobile-topbar-icon-btn" aria-label="Notifications">
+                <KennelMartIcon name="notifications" className="shell-icon" />
+                {notificationUnreadCount > 0 && <em className="topbar-badge">{notificationUnreadCount}</em>}
+              </NavLink>
+              <NavLink to="/messages/inbox" className="mobile-topbar-icon-btn" aria-label="Messages">
+                <KennelMartIcon name="messages" className="shell-icon" />
+                {messageUnreadCount > 0 && <em className="topbar-badge">{messageUnreadCount}</em>}
+              </NavLink>
+            </>
           ) : (
-            <div className="shell-profile shell-guest">
-              <strong>Guest mode</strong>
-              <span>Log in for messages, cart, and seller tools.</span>
-            </div>
+            <NavLink to="/auth/login" className="mobile-topbar-login">Log in</NavLink>
           )}
         </div>
-      </aside>
+      </header>
 
+      {/* ── Search bar — marketplace page only ── */}
+      {showSidebarSearch && (
+        <div className="mobile-search-section">
+          <div className="shell-search-toggle">
+            <button type="button" className={sidebarMode === 'products' ? 'active' : ''} onClick={() => updateMarketplaceSearch('products', sidebarSearch)}>Products</button>
+            <button type="button" className={sidebarMode === 'users' ? 'active' : ''} onClick={() => updateMarketplaceSearch('users', sidebarSearch)}>People</button>
+          </div>
+          <form className="mobile-search-form" onSubmit={handleSidebarSearchSubmit}>
+            <label className="shell-search-field">
+              <KennelMartIcon name="search" className="shell-search-icon" />
+              <input
+                type="text"
+                value={sidebarSearch}
+                onChange={(event) => setSidebarSearch(event.target.value)}
+                placeholder={sidebarMode === 'users' ? 'Search people' : 'Search products'}
+              />
+            </label>
+          </form>
+        </div>
+      )}
+
+      {/* ── Page content ── */}
       <main className="shell-content">
-        <Outlet />
+        <div className="shell-stage">
+          <div className="shell-page-card">
+            <Outlet />
+          </div>
+        </div>
       </main>
+
+      {/* ── Bottom tab navigation ── */}
+      <nav className="mobile-tabbar">
+        {navItems.map((item) => (
+          <NavLink key={item.to} to={item.to} end={item.end} className="mobile-tab-item">
+            <div className="mobile-tab-icon-wrap">
+              <KennelMartIcon name={item.icon} className="shell-icon" />
+            </div>
+            <span className="mobile-tab-label">{item.label}</span>
+          </NavLink>
+        ))}
+      </nav>
+
     </div>
   );
 };

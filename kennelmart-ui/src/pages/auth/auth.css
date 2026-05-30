@@ -1,7 +1,7 @@
 .auth-container {
   position: relative;
   isolation: isolate;
-  min-height: 100vh;
+  min-height: 100%;
   display: grid;
   place-items: center;
   padding: 2rem;
@@ -14,17 +14,18 @@
   position: absolute;
   inset: auto;
   border-radius: 50%;
-  filter: blur(10px);
-  opacity: 0.75;
+  filter: blur(60px);
+  opacity: 0.6;
   z-index: -1;
+  pointer-events: none;
 }
 
 .auth-container::before {
   top: 8%;
   left: 8%;
-  width: 22rem;
-  height: 22rem;
-  background: radial-gradient(circle, rgba(37, 99, 235, 0.24), transparent 68%);
+  width: 24rem;
+  height: 24rem;
+  background: radial-gradient(circle, rgba(79, 142, 247, 0.2), transparent 68%);
 }
 
 .auth-container::after {
@@ -32,18 +33,20 @@
   bottom: 8%;
   width: 18rem;
   height: 18rem;
-  background: radial-gradient(circle, rgba(212, 166, 42, 0.18), transparent 68%);
+  background: radial-gradient(circle, rgba(232, 160, 32, 0.15), transparent 68%);
 }
 
 .auth-card {
   width: min(100%, 460px);
   padding: 2rem;
-  border: 1px solid rgba(148, 163, 184, 0.16);
-  border-radius: 28px;
-  background: rgba(16, 19, 26, 0.96);
-  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.32);
-  backdrop-filter: blur(18px);
-  animation: panelRise 0.34s ease both;
+  border: 1px solid var(--border-default);
+  border-radius: var(--r-2xl);
+  background:
+    radial-gradient(circle at top, rgba(79, 142, 247, 0.08), transparent 32%),
+    var(--bg-elevated);
+  box-shadow: var(--shadow-xl);
+  backdrop-filter: blur(20px);
+  animation: panelRise 0.34s var(--ease-out) both;
 }
 
 .auth-brand {
@@ -60,7 +63,7 @@
 .auth-brand .kennelmart-logo-mark {
   width: 4rem;
   height: 4rem;
-  border-radius: 20px;
+  border-radius: var(--r-lg);
 }
 
 .auth-brand .kennelmart-logo-copy {
@@ -78,16 +81,16 @@
 
 .auth-card h1 {
   margin-bottom: 0.4rem;
-  color: #f5f7fb;
+  color: var(--text-muted);
   text-align: center;
-  font-size: 0.82rem;
+  font-size: 0.75rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
 }
 
 .auth-card h2 {
   margin-bottom: 1.5rem;
-  color: #f5f7fb;
+  color: var(--text-primary);
   text-align: center;
   font-size: clamp(1.7rem, 3vw, 2.2rem);
   line-height: 1.05;
@@ -95,7 +98,7 @@
 
 .auth-card p {
   margin-bottom: 0;
-  color: #a7b4c8;
+  color: var(--text-secondary);
   text-align: center;
 }
 
@@ -104,36 +107,65 @@
 }
 
 .auth-card .form-group label {
-  color: #c7d0df;
+  color: var(--text-secondary);
 }
 
 .auth-card .form-group input {
-  background: rgba(12, 14, 20, 0.94);
+  background: var(--bg-tertiary);
+  border-color: var(--border-default);
+  color: var(--text-primary);
+}
+
+.auth-card .form-group input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px var(--blue-dim);
 }
 
 .auth-card .error {
-  color: #dc2626;
+  color: var(--red);
   font-size: 0.82rem;
 }
 
 .auth-card button {
   width: 100%;
   min-height: 48px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #2563eb, #1746d1);
+  border-radius: var(--r-lg);
+  background: linear-gradient(135deg, var(--blue-vivid), var(--blue));
   color: #fff;
-  font-weight: 800;
-  box-shadow: 0 18px 34px rgba(37, 99, 235, 0.24);
+  font-weight: 700;
+  box-shadow: 0 16px 32px rgba(79, 142, 247, 0.22);
+  transition: transform 0.2s var(--ease-out), box-shadow 0.2s ease;
+}
+
+.auth-card button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 40px rgba(79, 142, 247, 0.32);
 }
 
 .auth-card button:disabled {
-  opacity: 0.65;
+  opacity: 0.55;
   cursor: not-allowed;
 }
 
 .auth-card a {
-  color: #d4a62a;
-  font-weight: 700;
+  color: var(--gold-lt);
+  font-weight: 600;
+  transition: color 0.15s ease;
+}
+
+.auth-card a:hover {
+  color: var(--gold);
+}
+
+@media (max-width: 520px) {
+  .auth-container {
+    padding: 1rem;
+  }
+
+  .auth-card {
+    padding: 1.5rem;
+    border-radius: var(--r-xl);
+  }
 }
 
 @media (max-width: 520px) {

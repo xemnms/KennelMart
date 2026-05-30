@@ -1,20 +1,20 @@
 .seller-orders-container {
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 0 1rem;
+  width: min(100%, 1200px);
+  margin: 0 auto;
+  padding: 1.5rem clamp(1rem, 2vw, 2rem) 3rem;
 }
 
 .seller-orders-container h1 {
   margin-bottom: 1.5rem;
-  color: #f5f7fb;
+  color: var(--text-primary);
 }
 
 .orders-table-wrapper {
   overflow-x: auto;
-  border: 1px solid rgba(148, 163, 184, 0.12);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.04);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.16);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--r-lg);
+  background: var(--bg-glass);
+  box-shadow: var(--shadow-md);
 }
 
 .orders-table {
@@ -26,12 +26,12 @@
 .orders-table td {
   padding: 1rem;
   text-align: left;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
-  color: #f5f7fb;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-primary);
 }
 
 .orders-table th {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-glass);
   font-weight: 600;
 }
 
@@ -53,10 +53,10 @@
 
 select {
   padding: 0.5rem;
-  border-radius: 6px;
-  border: 1px solid rgba(148, 163, 184, 0.16);
-  background: rgba(255, 255, 255, 0.04);
-  color: #f5f7fb;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border-default);
+  background: var(--bg-glass);
+  color: var(--text-primary);
   cursor: pointer;
 }
 

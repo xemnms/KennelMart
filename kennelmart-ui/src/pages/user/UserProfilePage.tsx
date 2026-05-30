@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useState, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useAuthStore } from '../../store/authStore';
 import { userService } from '../../services/userService';
 import { listingService } from '../../services/listingService';
 import type { UserPublicProfile } from '../../types/auth';
@@ -10,6 +11,7 @@ import './UserProfile.css';
 
 export const UserProfilePage = () => {
   const { userId } = useParams<{ userId: string }>();
+  const currentUser = useAuthStore((state) => state.user);
   const [profile, setProfile] = useState<UserPublicProfile | null>(null);
   const [listings, setListings] = useState<ProductListing[]>([]);
   const [loading, setLoading] = useState(true);
@@ -69,6 +71,11 @@ export const UserProfilePage = () => {
             <p className="rating">⭐ {profile.averageRating.toFixed(1)}</p>
           )}
           <p className="joined">Member since {new Date(profile.joinedAt).toLocaleDateString()}</p>
+          {currentUser?.id !== profile.id && (
+            <div className="profile-actions">
+              <Link to={`/messages/${profile.id}`} className="message-user-btn">Message</Link>
+            </div>
+          )}
         </div>
       </div>
 

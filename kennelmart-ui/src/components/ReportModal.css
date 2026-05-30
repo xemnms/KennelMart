@@ -1,6 +1,6 @@
 .modal-content h2 {
   margin-bottom: 1rem;
-  color: #102033;
+  color: var(--text-primary);
   font-size: 1.45rem;
 }
 
@@ -10,7 +10,7 @@
 }
 
 .modal-actions button[type='button'] {
-  color: #102033;
+  color: var(--text-primary);
 }
 
 .modal-actions button[type='submit'] {
@@ -18,5 +18,5 @@
 }
 
 .error-message {
-  color: #b91c1c;
+  color: var(--red);
 }

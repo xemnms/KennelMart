@@ -1,7 +1,7 @@
 .seller-reviews-container {
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 0 1rem;
+  width: min(100%, 800px);
+  margin: 0 auto;
+  padding: 1.5rem clamp(1rem, 2vw, 2rem) 3rem;
 }
 
 .seller-reviews-header {
@@ -19,7 +19,8 @@
 .empty-reviews {
   text-align: center;
   padding: 3rem;
-  border: 1px solid rgba(148, 163, 184, 0.12);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--r-lg);
+  background: var(--bg-glass);
+  color: var(--text-secondary);
 }

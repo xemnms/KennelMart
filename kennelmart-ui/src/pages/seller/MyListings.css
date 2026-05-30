@@ -13,24 +13,24 @@
 }
 
 .my-listings-header h1 {
-  color: #f5f7fb;
+  color: var(--text-primary);
   font-size: 1.4rem;
 }
 
 .create-btn {
-  background: linear-gradient(135deg, #2563eb, #1746d1);
+  background: linear-gradient(135deg, var(--blue-vivid), #1746d1);
   color: white;
   padding: 0.45rem 0.8rem;
-  border-radius: 999px;
+  border-radius: var(--r-full);
   text-decoration: none;
 }
 
 .listings-table {
   overflow-x: auto;
-  background: rgba(17, 19, 24, 0.96);
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 14px 32px rgba(0,0,0,0.18);
+  background: var(--bg-elevated);
+  border-radius: var(--r-xl);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-md);
 }
 
 table {
@@ -41,12 +41,12 @@ table {
 th, td {
   padding: 0.9rem;
   text-align: left;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  color: #f5f7fb;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-primary);
 }
 
 th {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-glass);
   font-weight: 600;
 }
 
@@ -95,25 +95,25 @@ th {
 }
 
 .view-btn {
-  background: rgba(255, 255, 255, 0.08);
-  color: #f5f7fb;
+  background: var(--bg-glass-heavy);
+  color: var(--text-primary);
 }
 
 .edit-btn {
-  background: linear-gradient(135deg, #2563eb, #1746d1);
+  background: linear-gradient(135deg, var(--blue-vivid), #1746d1);
   color: white;
 }
 
 .delete-btn {
-  background: rgba(239, 68, 68, 0.9);
+  background: rgba(220, 38, 38, 0.9);
   color: white;
 }
 
 .empty-state {
   text-align: center;
   padding: 2rem;
-  background: rgba(17, 19, 24, 0.96);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 20px;
-  color: #f5f7fb;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--r-xl);
+  color: var(--text-primary);
 }

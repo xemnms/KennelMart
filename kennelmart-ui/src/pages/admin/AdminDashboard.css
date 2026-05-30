@@ -1,14 +1,214 @@
+/* ============================================================
+   ADMIN DASHBOARD — Mobile-first dark
+   ============================================================ */
+
 .admin-dashboard {
-  width: min(100%, 1440px);
-  margin: 0 auto;
-  padding: 1rem clamp(1rem, 2vw, 1.6rem) 3rem;
-  color: #f5f7fb;
+  width: 100%;
+  padding: 0 0 5rem;
+  color: var(--text-primary);
+  animation: panelRise 0.3s var(--ease-out) both;
 }
+
+/* ── Page header ── */
+.admin-dashboard > h1 {
+  margin: 0;
+  padding: 0.85rem 1rem 0.5rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+/* ── Tab strip ── */
+.tabs {
+  display: flex;
+  overflow-x: auto;
+  gap: 0;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  padding: 0 0.5rem;
+}
+
+.tabs button {
+  flex: 0 0 auto;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 0.7rem 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--text-muted);
+  white-space: nowrap;
+  transition: color 0.15s, border-color 0.15s;
+  margin-right: 0;
+}
+
+.tabs button.active {
+  color: var(--text-primary);
+  border-bottom-color: var(--gold-lt);
+}
+
+/* ── Tab content ── */
+.tab-content {
+  padding: 0.75rem 0;
+}
+
+/* ── Filter row ── */
+.filters {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0 1rem 0.75rem;
+  overflow-x: auto;
+}
+
+.filters select,
+.filters button {
+  flex: 0 0 auto;
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--r-full);
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.05);
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  cursor: pointer;
+  min-height: unset;
+  margin-right: 0;
+}
+
+/* ── Card list (replaces table) ── */
+.table-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow-x: unset;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.data-table thead { display: none; }
+
+.data-table tbody tr {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  background: transparent;
+  transition: background 0.15s;
+}
+
+.data-table tbody tr:hover {
+  background: rgba(255,255,255,0.03);
+}
+
+.data-table td {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  line-height: 1.4;
+  text-align: left;
+  background: transparent;
+}
+
+.data-table td:first-child {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+.data-table td.actions {
+  margin-top: 0.35rem;
+  flex-wrap: wrap;
+}
+
+/* ── Status pills ── */
+.status {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.status.pending,
+.status.pending_approval { background: rgba(245,158,11,0.14); color: #fbbf24; }
+.status.verified         { background: rgba(34,197,94,0.14);  color: #86efac; }
+.status.rejected         { background: rgba(239,68,68,0.14);  color: #fca5a5; }
+.status.active           { background: rgba(34,197,94,0.14);  color: #86efac; }
+.status.suspended        { background: rgba(239,68,68,0.14);  color: #fca5a5; }
+.status.inactive,
+.status.sold_out         { background: rgba(255,255,255,0.06); color: var(--text-tertiary); }
+.status.resolved,
+.status.dismissed        { background: rgba(255,255,255,0.06); color: var(--text-tertiary); }
+.status.deleted          { background: rgba(239,68,68,0.08);  color: #f87171; }
+.status.reviewing        { background: rgba(79,142,247,0.14); color: #93c5fd; }
+
+/* ── Button groups ── */
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+button {
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--r-full);
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.06);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  min-height: unset;
+  margin-right: 0;
+}
+
+button:hover { background: rgba(255,255,255,0.12); color: var(--text-primary); }
+
+.approve-btn {
+  background: rgba(34,197,94,0.12);
+  color: #86efac;
+  border-color: rgba(34,197,94,0.2);
+}
+.approve-btn:hover { background: rgba(34,197,94,0.2); }
+
+.reject-btn,
+button.delete {
+  background: rgba(239,68,68,0.1);
+  color: #fca5a5;
+  border-color: rgba(239,68,68,0.2);
+}
+.reject-btn:hover,
+button.delete:hover { background: rgba(239,68,68,0.18); }
+
+.deleted-badge {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
+.actions {
+  white-space: normal;
+}
+
 
 .tabs {
   display: flex;
   gap: 0.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--border-subtle);
   margin-bottom: 1rem;
 }
 
@@ -18,13 +218,13 @@
   padding: 0.45rem 0.8rem;
   font-size: 0.85rem;
   cursor: pointer;
-  color: rgba(245, 247, 251, 0.62);
-  border-radius: 999px 999px 0 0;
+  color: var(--text-tertiary);
+  border-radius: var(--r-full) var(--r-full) 0 0;
 }
 
 .tabs button.active {
-  color: #fff;
-  border-bottom: 2px solid #f9ce34;
+  color: var(--text-primary);
+  border-bottom: 2px solid var(--gold-lt);
 }
 
 .filters {
@@ -35,31 +235,31 @@
 
 .filters select {
   padding: 0.45rem 0.7rem;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
-  color: #f5f7fb;
+  border-radius: var(--r-full);
+  border: 1px solid var(--border-default);
+  background: var(--bg-glass);
+  color: var(--text-primary);
 }
 
 .data-table {
   width: 100%;
   border-collapse: collapse;
-  background: rgba(17, 19, 24, 0.96);
-  border-radius: 20px;
+  background: var(--bg-elevated);
+  border-radius: var(--r-xl);
   overflow: hidden;
-  box-shadow: 0 14px 32px rgba(0,0,0,0.18);
+  box-shadow: var(--shadow-md);
 }
 
 .data-table th,
 .data-table td {
   padding: 0.75rem;
   text-align: left;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  color: #f5f7fb;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-primary);
 }
 
 .data-table th {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-glass);
 }
 
 .status {
@@ -75,35 +275,35 @@
 .status.rejected { background: rgba(239, 68, 68, 0.14); color: #fca5a5; }
 .status.active { background: rgba(34, 197, 94, 0.14); color: #86efac; }
 .status.suspended { background: rgba(239, 68, 68, 0.14); color: #fca5a5; }
-.status.inactive { background: rgba(255, 255, 255, 0.08); color: rgba(245, 247, 251, 0.72); }
-.status.sold_out { background: rgba(255, 255, 255, 0.08); color: rgba(245, 247, 251, 0.72); }
-.status.resolved, .status.dismissed { background: rgba(255, 255, 255, 0.08); color: rgba(245, 247, 251, 0.72); }
+.status.inactive { background: var(--bg-glass-heavy); color: var(--text-tertiary); }
+.status.sold_out { background: var(--bg-glass-heavy); color: var(--text-tertiary); }
+.status.resolved, .status.dismissed { background: var(--bg-glass-heavy); color: var(--text-tertiary); }
 .status.reviewing { background: rgba(59, 130, 246, 0.14); color: #93c5fd; }
 
 button {
   margin-right: 0.5rem;
   padding: 0.35rem 0.7rem;
   border: none;
-  border-radius: 999px;
+  border-radius: var(--r-full);
   cursor: pointer;
-  background: rgba(255, 255, 255, 0.08);
-  color: #f5f7fb;
+  background: var(--bg-glass-heavy);
+  color: var(--text-primary);
   font-size: 0.8rem;
 }
 
 button.delete {
-  background: rgba(239, 68, 68, 0.9);
+  background: rgba(220, 38, 38, 0.9);
   color: white;
 }
 
 .deleted-badge {
   display: inline-block;
   padding: 0.22rem 0.55rem;
-  border-radius: 999px;
+  border-radius: var(--r-full);
   font-size: 0.7rem;
   font-weight: bold;
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(245, 247, 251, 0.72);
+  background: var(--bg-glass-heavy);
+  color: var(--text-tertiary);
 }
 
 .actions {
@@ -131,6 +331,6 @@ button.delete {
 }
 
 .delete {
-  background-color: rgba(239, 68, 68, 0.9);
+  background-color: rgba(220, 38, 38, 0.9);
   color: white;
 }

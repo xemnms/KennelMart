@@ -1,13 +1,124 @@
 .my-orders-container {
-  width: min(100%, 1080px);
-  margin: 0 auto;
-  padding: 1rem clamp(1rem, 2vw, 1.6rem) 3rem;
+  width: 100%;
+  padding: 0 0 5rem;
+}
+
+.my-orders-container > h1 {
+  padding: 0.9rem 1rem 0.5rem;
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.order-card {
+  background: transparent;
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  box-shadow: none;
+  transition: background 0.15s ease;
+}
+
+.order-card:hover {
+  background: rgba(255,255,255,0.03);
+  transform: none;
+  box-shadow: none;
+}
+
+.order-card a {
+  text-decoration: none;
+  color: var(--text-primary);
+  display: block;
+  padding: 0.85rem 1rem;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.order-number {
+  color: var(--blue);
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  font-weight: 700;
+}
+
+.order-status {
+  display: inline-block;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.order-status.order_received { background: rgba(59, 130, 246, 0.14); color: #93c5fd; }
+.order-status.accepted { background: rgba(34, 197, 94, 0.14); color: #86efac; }
+.order-status.preparing { background: rgba(245, 158, 11, 0.14); color: #fbbf24; }
+.order-status.shipped { background: rgba(59, 130, 246, 0.14); color: #93c5fd; }
+.order-status.delivered { background: rgba(34, 197, 94, 0.14); color: #86efac; }
+.order-status.cancelled { background: rgba(239, 68, 68, 0.14); color: #fca5a5; }
+
+.order-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.order-info p {
+  margin: 0;
+}
+
+.empty-orders {
+  display: grid;
+  place-items: center;
+  min-height: 60vh;
+  text-align: center;
+  padding: 2rem 1.5rem;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+.shop-link {
+  display: inline-block;
+  margin-top: 1rem;
+  background: linear-gradient(135deg, var(--blue-vivid), var(--blue));
+  color: white;
+  padding: 0.45rem 1.1rem;
+  border-radius: var(--r-full);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  font-size: 0.875rem;
+  color: var(--text-muted);
 }
 
 .my-orders-container h1 {
   margin-bottom: 1rem;
   font-size: 1.4rem;
-  color: #f5f7fb;
+  color: var(--text-primary);
 }
 
 .orders-list {
@@ -17,21 +128,21 @@
 }
 
 .order-card {
-  background: rgba(17, 19, 24, 0.96);
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 14px 32px rgba(0,0,0,0.18);
-  transition: transform 0.2s, box-shadow 0.2s;
+  background: var(--bg-elevated);
+  border-radius: var(--r-xl);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-md);
+  transition: transform 0.2s var(--ease-out), box-shadow 0.2s;
 }
 
 .order-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 18px 36px rgba(0,0,0,0.22);
+  box-shadow: var(--shadow-lg);
 }
 
 .order-card a {
   text-decoration: none;
-  color: #f5f7fb;
+  color: var(--text-primary);
   display: block;
   padding: 1rem;
 }
@@ -45,7 +156,7 @@
 }
 
 .order-number {
-  color: #93c5fd;
+  color: var(--blue);
 }
 
 .order-status {
@@ -69,7 +180,7 @@
   flex-wrap: wrap;
   gap: 0.85rem;
   font-size: 0.82rem;
-  color: rgba(245, 247, 251, 0.64);
+  color: var(--text-tertiary);
 }
 
 .order-info p {
@@ -79,19 +190,19 @@
 .empty-orders {
   text-align: center;
   padding: 2rem;
-  background: rgba(17, 19, 24, 0.96);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 20px;
-  color: #f5f7fb;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--r-xl);
+  color: var(--text-primary);
 }
 
 .shop-link {
   display: inline-block;
   margin-top: 1rem;
-  background: linear-gradient(135deg, #2563eb, #1746d1);
+  background: linear-gradient(135deg, var(--blue-vivid), #1746d1);
   color: white;
   padding: 0.45rem 0.8rem;
-  border-radius: 999px;
+  border-radius: var(--r-full);
   text-decoration: none;
 }
 
@@ -99,5 +210,5 @@
   text-align: center;
   padding: 2rem;
   font-size: 1rem;
-  color: rgba(245, 247, 251, 0.62);
+  color: var(--text-tertiary);
 }
