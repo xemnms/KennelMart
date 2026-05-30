@@ -21,8 +21,20 @@ public class FileUploadServiceImpl implements FileUploadService {
     @Value("${file.upload-dir:uploads/products}")
     private String uploadDir;
 
+    @Value("${file.avatar-dir:uploads/avatars}")
+    private String avatarDir; // new
+
     @Override
     public String uploadImage(MultipartFile file) {
+        return uploadImageToDirectory(file, uploadDir, "/uploads/products/");
+    }
+
+    @Override
+    public String uploadProfileImage(MultipartFile file) {
+        return uploadImageToDirectory(file, avatarDir, "/uploads/avatars/");
+    }
+
+    private String uploadImageToDirectory(MultipartFile file, String directory, String urlPrefix) {
         try {
             // Validate file type
             String contentType = file.getContentType();
@@ -31,12 +43,12 @@ public class FileUploadServiceImpl implements FileUploadService {
             }
 
             // Create directory if not exists
-            Path uploadPath = Paths.get(uploadDir);
+            Path uploadPath = Paths.get(directory);
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
 
-            // Determine file extension from content type or original filename
+            // Determine file extension
             String extension = getFileExtension(file);
             String filename = UUID.randomUUID().toString() + extension;
             Path filePath = uploadPath.resolve(filename);
@@ -46,8 +58,7 @@ public class FileUploadServiceImpl implements FileUploadService {
             log.info("Saved image to: {} (original name: {}, size: {} bytes)", 
                 filePath.toAbsolutePath(), file.getOriginalFilename(), file.getSize());
 
-            // Return URL path (relative, will be served by backend)
-            return "/uploads/products/" + filename;
+            return urlPrefix + filename;
         } catch (IOException e) {
             log.error("Failed to upload image", e);
             throw new RuntimeException("Failed to upload image: " + e.getMessage());
@@ -55,17 +66,14 @@ public class FileUploadServiceImpl implements FileUploadService {
     }
 
     private String getFileExtension(MultipartFile file) {
-        // First, try to get extension from original filename
+        // same as before
         String originalFilename = file.getOriginalFilename();
         if (originalFilename != null && originalFilename.contains(".")) {
             String ext = originalFilename.substring(originalFilename.lastIndexOf("."));
-            // Accept common image extensions
             if (ext.matches("\\.(jpg|jpeg|png|gif|webp|bmp|svg)")) {
                 return ext.toLowerCase();
             }
         }
-
-        // Fallback: map MIME type to extension
         String contentType = file.getContentType();
         if (contentType != null) {
             switch (contentType) {
@@ -78,7 +86,6 @@ public class FileUploadServiceImpl implements FileUploadService {
                 default: return ".jpg";
             }
         }
-
-        return ".jpg"; // default
+        return ".jpg";
     }
 }

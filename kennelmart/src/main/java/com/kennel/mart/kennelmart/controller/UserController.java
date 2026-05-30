@@ -7,6 +7,7 @@ import com.kennel.mart.kennelmart.dto.UserPublicProfileResponse;
 import com.kennel.mart.kennelmart.entity.User;
 import com.kennel.mart.kennelmart.enums.AccountStatus;
 import com.kennel.mart.kennelmart.service.UserService;
+import com.kennel.mart.kennelmart.service.FileUploadService;
 import com.kennel.mart.kennelmart.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -15,7 +16,9 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -24,10 +27,12 @@ public class UserController {
 
     private final UserService userService;
     private final UserRepository userRepository;
+    private final FileUploadService fileUploadService;
 
-    public UserController(UserService userService, UserRepository userRepository) {
+    public UserController(UserService userService, UserRepository userRepository, FileUploadService fileUploadService) {
         this.userService = userService;
         this.userRepository = userRepository;
+        this.fileUploadService = fileUploadService;
     }
 
     @PutMapping("/me")
@@ -44,6 +49,16 @@ public class UserController {
         String email = authentication.getName();
         userService.changePassword(email, request);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/me/profile-image")
+    public ResponseEntity<Map<String, String>> uploadProfileImage(
+            @RequestParam("file") MultipartFile file,
+            Authentication authentication) {
+        String email = authentication.getName();
+        String imageUrl = fileUploadService.uploadProfileImage(file);
+        User updatedUser = userService.updateProfileImage(email, imageUrl);
+        return ResponseEntity.ok(Map.of("profileImage", updatedUser.getProfileImage()));
     }
 
     @GetMapping("/search")

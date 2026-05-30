@@ -79,66 +79,66 @@ public class SecurityConfig {
                                 .requestMatchers("/h2-console/**").permitAll()
                                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                 .requestMatchers("/api/verification/status").permitAll()
-                                
+
                                 // Serve uploaded images (static files)
                                 .requestMatchers("/uploads/**").permitAll()
-                                
+
                                 // Public GET endpoints for browsing listings
                                 .requestMatchers(HttpMethod.GET, "/api/listings", "/api/listings/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/categories").permitAll()
-                                
+
                                 // Public GET for user search (marketplace)
                                 .requestMatchers(HttpMethod.GET, "/api/users/search").permitAll()
-                                
+
                                 // Public GET for user public profile
                                 .requestMatchers(HttpMethod.GET, "/api/users/{userId}/public").permitAll()
-                                
+
                                 // Public GET for seller listings (used in user profile page)
                                 .requestMatchers(HttpMethod.GET, "/api/listings/users/{userId}/listings").permitAll()
-                                
+
                                 // Public GET for reviews (average and list)
                                 .requestMatchers(HttpMethod.GET, "/api/reviews/sellers/**").permitAll()
-                                
+
                                 // Image upload - requires authentication
                                 .requestMatchers(HttpMethod.POST, "/api/uploads/image").authenticated()
-                                
+
                                 // Listing management - require authentication
                                 .requestMatchers(HttpMethod.POST, "/api/listings").authenticated()
                                 .requestMatchers(HttpMethod.PUT, "/api/listings/**").authenticated()
                                 .requestMatchers(HttpMethod.DELETE, "/api/listings/**").authenticated()
                                 .requestMatchers(HttpMethod.GET, "/api/listings/my-listings").authenticated()
-                                
+
                                 // Cart and Orders - require authentication
                                 .requestMatchers("/api/cart/**").authenticated()
                                 .requestMatchers("/api/orders/**").authenticated()
-                                
+
                                 // Reviews - submit requires authentication
                                 .requestMatchers(HttpMethod.POST, "/api/reviews").authenticated()
                                 .requestMatchers("/api/reviews/admin/**").hasRole("ADMIN")
-                                
+
                                 // Reports - submit requires authentication
                                 .requestMatchers(HttpMethod.POST, "/api/reports").authenticated()
-                                
+
                                 // Messaging endpoints - all require authentication
                                 .requestMatchers(HttpMethod.POST, "/api/messages").authenticated()
                                 .requestMatchers(HttpMethod.GET, "/api/messages/**").authenticated()
                                 .requestMatchers(HttpMethod.PUT, "/api/messages/**").authenticated()
-                                
+
                                 // Notifications - require authentication
                                 .requestMatchers("/api/notifications/**").authenticated()
-                                
+
                                 // Analytics - require authentication
                                 .requestMatchers("/api/analytics/**").authenticated()
-                                
+
                                 // User profile endpoints (except public search and public profile)
                                 .requestMatchers(HttpMethod.GET, "/api/users/me", "/api/users/me/authorities").authenticated()
                                 .requestMatchers("/api/users/me/**").authenticated()
                                 // Other /api/users/** endpoints (except those already permitted) require authentication
                                 .requestMatchers("/api/users/**").authenticated()
-                                
+
                                 // Admin endpoints - only ADMIN role
                                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                                
+
                                 // Any other request requires authentication
                                 .anyRequest().authenticated()
                 )

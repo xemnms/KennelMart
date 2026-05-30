@@ -1,13 +1,12 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: '',   // use relative URLs, so the browser talks to the same origin
+  baseURL: '',
   headers: { 'Content-Type': 'application/json' },
 });
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('accessToken');
-  console.log('Admin delete token present:', !!token);
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -17,7 +16,7 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 || error.response?.status === 403) {
       localStorage.removeItem('accessToken');
       window.location.href = '/login';
     }

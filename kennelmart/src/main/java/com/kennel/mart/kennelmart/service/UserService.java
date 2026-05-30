@@ -7,4 +7,5 @@ import com.kennel.mart.kennelmart.entity.User;
 public interface UserService {
     User updateProfile(String email, UpdateProfileRequest request);
     void changePassword(String email, ChangePasswordRequest request);
+    User updateProfileImage(String email, String imageUrl);
 }

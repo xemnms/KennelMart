@@ -22,4 +22,12 @@ export const authService = {
   async changePassword(data: ChangePasswordRequest): Promise<void> {
     await api.put('/api/users/me/password', data);
   },
+  async uploadProfileImage(file: File): Promise<string> {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await api.post<{ profileImage: string }>('/api/users/me/profile-image', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response.data.profileImage;
+  }
 };

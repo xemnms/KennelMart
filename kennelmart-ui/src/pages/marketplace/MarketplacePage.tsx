@@ -213,7 +213,13 @@ export const MarketplacePage = () => {
             {user?.role === 'ADMIN' && (
               <Link to="/admin" className="admin-link">Admin Panel</Link>
             )}
-            <Link to="/profile" className="avatar">👤</Link>
+            <Link to="/profile" className="avatar">
+              {user?.profileImage ? (
+                <img src={getImageUrl(user.profileImage)} alt="Profile" className="avatar-img" />
+              ) : (
+                "👤"
+              )}
+            </Link>
             <button onClick={handleLogout} className="logout-btn">Logout</button>
           </div>
         ) : (

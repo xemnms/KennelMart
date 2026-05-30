@@ -19,6 +19,7 @@
 }
 
 .avatar-large {
+  position: relative;
   width: 120px;
   height: 120px;
   margin: 0 auto 1rem;
@@ -26,12 +27,40 @@
   overflow: hidden;
   border: 4px solid white;
   background: #f0f2f5;
+  display: inline-block;
 }
 
 .avatar-large img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.upload-avatar-btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: #007bff;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+.upload-avatar-btn:hover:not(:disabled) {
+  background: #0056b3;
+}
+
+.upload-avatar-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .profile-header h1 {
@@ -94,6 +123,14 @@
   color: #1877f2;
   cursor: pointer;
   font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.edit-btn:hover {
+  background: rgba(24, 119, 242, 0.1);
 }
 
 .profile-info p {
@@ -119,6 +156,13 @@
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 6px;
+  font-size: 1rem;
+}
+
+.profile-form input:focus {
+  outline: none;
+  border-color: #1877f2;
+  box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
 }
 
 .form-actions {
@@ -133,10 +177,17 @@
   border-radius: 6px;
   border: none;
   cursor: pointer;
+  font-size: 0.9rem;
+  transition: opacity 0.2s;
 }
 
 .form-actions button[type="button"] {
   background: #e4e6eb;
+  color: #050505;
+}
+
+.form-actions button[type="button"]:hover {
+  background: #d0d3d8;
 }
 
 .form-actions button[type="submit"] {
@@ -144,11 +195,16 @@
   color: white;
 }
 
+.form-actions button[type="submit"]:hover {
+  background: #0d5bb5;
+}
+
 .profile-message {
   padding: 0.75rem;
   margin: 0 2rem 1rem;
   border-radius: 8px;
   text-align: center;
+  font-size: 0.9rem;
 }
 
 .profile-message.success {
@@ -166,4 +222,10 @@
   font-size: 0.75rem;
   display: block;
   margin-top: 0.25rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #65676b;
 }

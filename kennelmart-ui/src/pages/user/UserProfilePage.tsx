@@ -5,6 +5,7 @@ import { userService } from '../../services/userService';
 import { listingService } from '../../services/listingService';
 import type { UserPublicProfile } from '../../types/auth';
 import type { ProductListing } from '../../types/marketplace';
+import { getImageUrl } from '../../utils/imageUtils';
 import './UserProfile.css';
 
 export const UserProfilePage = () => {
@@ -56,7 +57,7 @@ export const UserProfilePage = () => {
       <div className="profile-header">
         <div className="profile-avatar">
           {profile.profileImage ? (
-            <img src={profile.profileImage} alt={profile.name} />
+            <img src={getImageUrl(profile.profileImage)} alt={profile.name} />
           ) : (
             <div className="avatar-placeholder-large">👤</div>
           )}
