@@ -213,6 +213,43 @@ export const MessagesWorkspacePage = () => {
         )}
       </section>
 
+      <aside className="messages-panel profile-panel">
+        {selectedConversation ? (
+          <>
+            <div className="profile-panel-header">
+              <div className="conversation-avatar profile-large">{selectedConversation.name.charAt(0)}</div>
+              <div>
+                <p className="eyebrow">Profile</p>
+                <h2>{selectedConversation.name}</h2>
+                <span>{selectedConversation.unreadCount} unread</span>
+              </div>
+            </div>
+
+            <div className="profile-card-block">
+              <div>
+                <strong>Last message</strong>
+                <p>{selectedConversation.lastMessage || 'No message preview available.'}</p>
+              </div>
+              <div className="profile-meta-row">
+                <span>Conversation ID</span>
+                <strong>{selectedConversation.userId}</strong>
+              </div>
+            </div>
+
+            <div className="profile-panel-actions">
+              <Link to={`/user/${selectedConversation.userId}`} className="profile-action-link">Open profile</Link>
+              <button type="button" className="profile-action-link secondary" onClick={() => setShowReportModal(true)}>
+                Report user
+              </button>
+            </div>
+          </>
+        ) : (
+          <div className="chat-empty-state compact">
+            <p>Pick a conversation to see the profile details here.</p>
+          </div>
+        )}
+      </aside>
+
       <ReportModal
         isOpen={showReportModal}
         onClose={() => setShowReportModal(false)}

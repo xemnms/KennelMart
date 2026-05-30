@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 180" width="240" height="180" fill="none">
+  <defs>
+    <linearGradient id="placeholder-grad" x1="24" y1="20" x2="216" y2="160" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1f2937" />
+      <stop offset="50%" stop-color="#111827" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="236" height="176" rx="28" fill="url(#placeholder-grad)" stroke="rgba(255,255,255,0.08)" />
+  <path d="M60 114c0-20 16-36 36-36h48c20 0 36 16 36 36v8H60v-8Z" fill="rgba(255,255,255,0.08)" />
+  <circle cx="92" cy="76" r="18" fill="rgba(245,96,172,0.16)" />
+  <path d="M152 72c0-8.3 6.7-15 15-15 8.3 0 15 6.7 15 15s-6.7 15-15 15c-8.3 0-15-6.7-15-15Z" fill="rgba(249,206,52,0.18)" />
+  <path d="M96 124c8-8 17-12 28-12s20 4 28 12" stroke="rgba(255,255,255,0.38)" stroke-linecap="round" stroke-width="6" />
+  <path d="M56 144h128" stroke="rgba(255,255,255,0.12)" stroke-linecap="round" stroke-width="4" />
+  <text x="120" y="54" fill="rgba(255,255,255,0.78)" font-family="Arial, sans-serif" font-size="18" text-anchor="middle">KennelMart</text>
+  <text x="120" y="168" fill="rgba(255,255,255,0.42)" font-family="Arial, sans-serif" font-size="12" text-anchor="middle">Image unavailable</text>
+</svg>

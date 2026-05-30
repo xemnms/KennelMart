@@ -4,16 +4,17 @@ import { useAuthStore } from '../store/authStore';
 import { useMessageStore } from '../store/messageStore';
 import { useNotificationStore } from '../store/notificationStore';
 import { getImageUrl } from '../utils/imageUtils';
+import { KennelMartIcon, KennelMartLogo, type KennelMartIconName } from './KennelMartBrand';
 import './AppShell.css';
 
-const navItems = [
-  { to: '/', label: 'Home', icon: '⌂', end: true },
-  { to: '/messages/inbox', label: 'Messages', icon: '✉' },
-  { to: '/notifications', label: 'Notifications', icon: '♡' },
-  { to: '/seller/listings/new', label: 'Create', icon: '＋' },
-  { to: '/cart', label: 'Cart', icon: '◫' },
-  { to: '/orders', label: 'Orders', icon: '☰' },
-  { to: '/profile', label: 'Profile', icon: '◉' },
+const navItems: Array<{ to: string; label: string; icon: KennelMartIconName; end?: boolean }> = [
+  { to: '/', label: 'Home', icon: 'home', end: true },
+  { to: '/messages/inbox', label: 'Messages', icon: 'messages' },
+  { to: '/notifications', label: 'Notifications', icon: 'notifications' },
+  { to: '/seller/listings/new', label: 'Create', icon: 'create' },
+  { to: '/cart', label: 'Cart', icon: 'cart' },
+  { to: '/orders', label: 'Orders', icon: 'orders' },
+  { to: '/profile', label: 'Profile', icon: 'profile' },
 ];
 
 export const AppShell = () => {
@@ -33,14 +34,13 @@ export const AppShell = () => {
     <div className="app-shell instagram-shell-shell">
       <aside className="shell-rail">
         <div className="shell-brand">
-          <span className="shell-mark">K</span>
-          <span className="shell-brand-label">KennelMart</span>
+          <KennelMartLogo className="shell-brand-lockup" />
         </div>
 
         <nav className="shell-nav">
           {navItems.map((item) => (
             <NavLink key={item.to} to={item.to} end={item.end} className="shell-nav-item">
-              <span className="shell-icon">{item.icon}</span>
+              <KennelMartIcon name={item.icon} className="shell-icon" />
               <span className="shell-label">{item.label}</span>
               {item.label === 'Messages' && messageUnreadCount > 0 && <em>{messageUnreadCount}</em>}
               {item.label === 'Notifications' && notificationUnreadCount > 0 && <em>{notificationUnreadCount}</em>}

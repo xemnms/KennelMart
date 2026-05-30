@@ -4,8 +4,8 @@
   font-family: 'Manrope', 'Segoe UI', sans-serif;
   color: #f5f7fb;
   background:
-    radial-gradient(circle at top left, rgba(245, 96, 172, 0.12), transparent 24%),
-    radial-gradient(circle at top right, rgba(37, 99, 235, 0.12), transparent 30%),
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.14), transparent 24%),
+    radial-gradient(circle at top right, rgba(212, 166, 42, 0.12), transparent 30%),
     linear-gradient(180deg, #0b0d12 0%, #10131a 45%, #11151d 100%);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -22,11 +22,11 @@
   --text: #f5f7fb;
   --text-muted: #a7b4c8;
   --text-soft: #7f8da4;
-  --primary: #f560ac;
-  --primary-strong: #ee2a7b;
-  --primary-soft: rgba(245, 96, 172, 0.16);
-  --accent: #38bdf8;
-  --accent-soft: rgba(56, 189, 248, 0.16);
+  --primary: #2563eb;
+  --primary-strong: #d4a62a;
+  --primary-soft: rgba(37, 99, 235, 0.16);
+  --accent: #d4a62a;
+  --accent-soft: rgba(212, 166, 42, 0.16);
   --warning: #d97706;
   --danger: #dc2626;
   --success: #059669;
@@ -60,11 +60,12 @@ body::before {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(circle at 20% 20%, rgba(245, 96, 172, 0.08), transparent 22%),
-    radial-gradient(circle at 80% 0%, rgba(37, 99, 235, 0.1), transparent 20%),
+    radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.12), transparent 22%),
+    radial-gradient(circle at 80% 0%, rgba(212, 166, 42, 0.1), transparent 20%),
     linear-gradient(180deg, rgba(10, 13, 18, 0.95), rgba(10, 13, 18, 0) 22%, rgba(10, 13, 18, 0) 22%);
   opacity: 0.9;
   z-index: -1;
+  animation: ambientDrift 18s ease-in-out infinite alternate;
 }
 
 #root {
@@ -98,7 +99,7 @@ a:focus-visible,
 input:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.3);
+  outline: 3px solid rgba(212, 166, 42, 0.3);
   outline-offset: 2px;
 }
 
@@ -211,6 +212,7 @@ p {
   background: rgba(5, 12, 24, 0.62);
   backdrop-filter: blur(16px);
   z-index: 1000;
+  animation: overlayFade 0.18s ease both;
 }
 
 .modal-content {
@@ -220,6 +222,7 @@ p {
   border-radius: var(--radius-xl);
   background: rgba(16, 19, 26, 0.96);
   box-shadow: var(--shadow-lg);
+  animation: panelRise 0.22s ease both;
 }
 
 .modal-actions {
@@ -256,6 +259,52 @@ p {
     background 0.2s ease,
     border-color 0.2s ease,
     color 0.2s ease;
+}
+
+.primary-action:hover,
+.secondary-action:hover,
+.signup-btn:hover,
+.login-btn:hover,
+.sell-btn:hover,
+.admin-link:hover,
+.contact-btn:hover,
+.logout-btn:hover,
+.pagination button:hover,
+.search-mode-toggle button:hover,
+.modal-actions button:hover {
+  transform: translateY(-1px);
+}
+
+@keyframes panelRise {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes overlayFade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ambientDrift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  to {
+    transform: translate3d(0, -10px, 0) scale(1.02);
+  }
 }
 
 .primary-action,

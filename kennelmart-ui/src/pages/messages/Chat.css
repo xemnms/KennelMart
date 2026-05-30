@@ -59,7 +59,7 @@
 .message.outgoing .message-bubble {
   border-radius: 20px 20px 8px 20px;
   color: #fff;
-  background: linear-gradient(135deg, #f560ac, #ee2a7b);
+  background: linear-gradient(135deg, #2563eb, #d4a62a);
   box-shadow: 0 16px 30px rgba(245, 96, 172, 0.2);
 }
 
@@ -100,7 +100,7 @@
   padding: 0.55rem 0.85rem;
   border-radius: 999px;
   color: #fff;
-  background: linear-gradient(135deg, #f560ac, #ee2a7b);
+  background: linear-gradient(135deg, #2563eb, #d4a62a);
   box-shadow: 0 14px 30px rgba(245, 96, 172, 0.22);
 }
 

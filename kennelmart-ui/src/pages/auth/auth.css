@@ -32,7 +32,7 @@
   bottom: 8%;
   width: 18rem;
   height: 18rem;
-  background: radial-gradient(circle, rgba(15, 118, 110, 0.18), transparent 68%);
+  background: radial-gradient(circle, rgba(212, 166, 42, 0.18), transparent 68%);
 }
 
 .auth-card {
@@ -43,6 +43,37 @@
   background: rgba(16, 19, 26, 0.96);
   box-shadow: 0 28px 80px rgba(0, 0, 0, 0.32);
   backdrop-filter: blur(18px);
+  animation: panelRise 0.34s ease both;
+}
+
+.auth-brand {
+  display: grid;
+  place-items: center;
+  margin-bottom: 1rem;
+}
+
+.auth-brand .kennelmart-logo {
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.auth-brand .kennelmart-logo-mark {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 20px;
+}
+
+.auth-brand .kennelmart-logo-copy {
+  place-items: center;
+  text-align: center;
+}
+
+.auth-brand .kennelmart-logo-copy strong {
+  font-size: 1.1rem;
+}
+
+.auth-brand .kennelmart-logo-copy span {
+  font-size: 0.78rem;
 }
 
 .auth-card h1 {
@@ -101,7 +132,7 @@
 }
 
 .auth-card a {
-  color: #f560ac;
+  color: #d4a62a;
   font-weight: 700;
 }
 

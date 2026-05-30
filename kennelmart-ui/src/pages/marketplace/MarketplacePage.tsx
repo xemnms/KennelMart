@@ -9,6 +9,7 @@ import { useCartStore } from '../../store/cartStore';
 import { useAuthStore } from '../../store/authStore';
 import { useMessageStore } from '../../store/messageStore';
 import { useNotificationStore } from '../../store/notificationStore';
+import { KennelMartLogo } from '../../components/KennelMartBrand';
 import type { Conversation } from '../../types/message';
 import type { Notification } from '../../types/notification';
 import type { ProductListing, ListingFilters } from '../../types/marketplace';
@@ -60,7 +61,6 @@ export const MarketplacePage = () => {
   ];
 
   const selectedCategory = filters.category ?? 'All';
-  const storyListings = listings.slice(0, 5);
   const suggestionListings = listings.slice(0, 4);
   const suggestionUsers = users.slice(0, 4);
 
@@ -280,8 +280,7 @@ export const MarketplacePage = () => {
     <div className="marketplace instagram-shell">
       <aside className="ig-sidebar">
         <Link to="/" className="ig-brand">
-          <span className="ig-brand-mark">K</span>
-          <span>KennelMart</span>
+          <KennelMartLogo />
         </Link>
 
         <nav className="ig-nav">
@@ -367,21 +366,6 @@ export const MarketplacePage = () => {
                 ))}
               </select>
             </div>
-          )}
-        </section>
-
-        <section className="story-rail">
-          {storyListings.length === 0 ? (
-            <div className="story-empty">Featured listings will appear here.</div>
-          ) : (
-            storyListings.map((listing) => (
-              <Link key={listing.id} to={`/listings/${listing.id}`} className="story-pill">
-                <span className="story-ring">
-                  {listing.imageUrls[0] ? <img src={getImageUrl(listing.imageUrls[0])} alt={listing.title} /> : <span>•</span>}
-                </span>
-                <strong>{listing.sellerName.split(' ')[0]}</strong>
-              </Link>
-            ))
           )}
         </section>
 

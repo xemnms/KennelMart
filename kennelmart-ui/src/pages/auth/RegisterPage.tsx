@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
+import { KennelMartLogo } from '../../components/KennelMartBrand';
 import './auth.css';
 
 interface RegisterFormData {
@@ -37,7 +38,9 @@ export const RegisterPage = () => {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h1>KennelMart</h1>
+        <div className="auth-brand">
+          <KennelMartLogo />
+        </div>
         <h2>Register</h2>
         {error && <div className="error-message">{error}</div>}
         <form onSubmit={handleSubmit(onSubmit)}>

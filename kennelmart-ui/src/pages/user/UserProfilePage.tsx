@@ -84,7 +84,7 @@ export const UserProfilePage = () => {
               <div key={listing.id} className="product-card">
                 <Link to={`/listings/${listing.id}`}>
                   <div className="product-image">
-                    <img src={listing.imageUrls[0] || '/placeholder.png'} alt={listing.title} />
+                      <img src={getImageUrl(listing.imageUrls[0])} alt={listing.title} />
                   </div>
                   <div className="product-info">
                     <h3>{listing.title}</h3>

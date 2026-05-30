@@ -1,8 +1,11 @@
 .app-shell.instagram-shell-shell {
   min-height: 100vh;
   display: grid;
-  grid-template-columns: 72px minmax(0, 1fr);
-  background: #0b0d12;
+  grid-template-columns: 228px minmax(0, 1fr);
+  background:
+    radial-gradient(circle at top left, rgba(245, 96, 172, 0.08), transparent 24%),
+    radial-gradient(circle at top right, rgba(37, 99, 235, 0.1), transparent 30%),
+    #0b0d12;
 }
 
 .shell-rail {
@@ -14,21 +17,22 @@
   height: 100vh;
   padding: 0.85rem 0.55rem;
   border-right: 1px solid rgba(148, 163, 184, 0.12);
-  background: rgba(12, 14, 18, 0.98);
+  background:
+    linear-gradient(180deg, rgba(13, 16, 22, 0.99), rgba(12, 14, 18, 0.96)),
+    rgba(12, 14, 18, 0.98);
   overflow: hidden;
   transition:
-    width 0.22s ease,
     padding 0.22s ease,
     box-shadow 0.22s ease;
 }
 
-.app-shell.instagram-shell-shell:hover {
-  grid-template-columns: 228px minmax(0, 1fr);
-}
-
-.app-shell.instagram-shell-shell:hover .shell-rail {
-  padding: 0.85rem 0.8rem;
-  box-shadow: 12px 0 34px rgba(0, 0, 0, 0.18);
+.shell-rail::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: linear-gradient(180deg, #2563eb, #d4a62a 55%, #0f172a 100%);
+  opacity: 0.9;
 }
 
 .shell-brand,
@@ -43,16 +47,60 @@
   padding: 0.35rem 0.45rem 0.75rem;
 }
 
-.shell-mark {
+.shell-brand-lockup {
+  width: 100%;
+}
+
+.kennelmart-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.kennelmart-logo.compact {
+  gap: 0.65rem;
+}
+
+.kennelmart-logo-mark {
+  display: inline-grid;
+  flex: 0 0 auto;
+  width: 2.45rem;
+  height: 2.45rem;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.24);
+  animation: kennelFloat 6s ease-in-out infinite;
+}
+
+.kennelmart-logo-mark svg {
+  width: 100%;
+  height: 100%;
+}
+
+.kennelmart-logo-copy {
+  display: grid;
+  gap: 0.05rem;
+}
+
+.kennelmart-logo-copy strong {
+  color: #f5f7fb;
+  font-size: 0.98rem;
+  font-weight: 900;
+  letter-spacing: 0.01em;
+}
+
+.kennelmart-logo-copy span {
+  color: rgba(245, 247, 251, 0.58);
+  font-size: 0.76rem;
+}
+
+.kennelmart-icon {
   display: inline-grid;
   place-items: center;
-  width: 2rem;
-  height: 2rem;
-  border: 1px solid rgba(148, 163, 184, 0.16);
-  border-radius: 8px;
-  color: #f5f7fb;
-  font-size: 0.85rem;
-  font-weight: 900;
+  width: 1.45rem;
+  height: 1.45rem;
+  color: currentColor;
+  flex: 0 0 auto;
 }
 
 .shell-brand-label,
@@ -79,23 +127,26 @@
 
 .shell-nav-item {
   position: relative;
-  min-height: 42px;
-  padding: 0.6rem 0.7rem;
+  min-height: 48px;
+  padding: 0.72rem 0.8rem;
   border-radius: 14px;
   color: rgba(245, 247, 251, 0.78);
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 .shell-nav-item .shell-icon {
-  width: 1.25rem;
-  text-align: center;
-  font-size: 1.05rem;
+  color: currentColor;
+  transform: scale(1.12);
 }
 
 .shell-nav-item em {
   margin-left: auto;
   padding: 0.08rem 0.42rem;
   border-radius: 999px;
-  background: linear-gradient(135deg, #f9ce34, #ee2a7b);
+  background: linear-gradient(135deg, #2563eb, #d4a62a);
   color: #fff;
   font-style: normal;
   font-size: 0.72rem;
@@ -103,24 +154,16 @@
 
 .shell-nav-item.active,
 .shell-nav-item:hover {
-  background: rgba(245, 96, 172, 0.12);
+  background: rgba(37, 99, 235, 0.14);
   color: #fff;
+  transform: translateX(2px);
 }
 
 .shell-label,
 .shell-profile-meta,
 .shell-guest {
-  opacity: 0;
-  max-width: 0;
-  transition: opacity 0.18s ease, max-width 0.18s ease;
-}
-
-.app-shell.instagram-shell-shell:hover .shell-label,
-.app-shell.instagram-shell-shell:hover .shell-brand-label,
-.app-shell.instagram-shell-shell:hover .shell-profile-meta,
-.app-shell.instagram-shell-shell:hover .shell-guest {
   opacity: 1;
-  max-width: 180px;
+  max-width: none;
 }
 
 .shell-footer {
@@ -141,7 +184,7 @@
   height: 2.35rem;
   border-radius: 50%;
   overflow: hidden;
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.35), rgba(245, 96, 172, 0.35));
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.35), rgba(212, 166, 42, 0.35));
   color: #fff;
   font-size: 0.85rem;
   font-weight: 800;
@@ -151,6 +194,13 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.shell-footer,
+.shell-nav,
+.shell-brand {
+  position: relative;
+  z-index: 1;
 }
 
 .shell-profile-meta {
@@ -167,21 +217,27 @@
   min-width: 0;
 }
 
+@keyframes kennelFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
 @media (max-width: 980px) {
   .app-shell.instagram-shell-shell {
-    grid-template-columns: 64px minmax(0, 1fr);
+    grid-template-columns: 88px minmax(0, 1fr);
   }
 
-  .app-shell.instagram-shell-shell:hover {
-    grid-template-columns: 64px minmax(0, 1fr);
-  }
-
-  .app-shell.instagram-shell-shell:hover .shell-label,
-  .app-shell.instagram-shell-shell:hover .shell-brand-label,
-  .app-shell.instagram-shell-shell:hover .shell-profile-meta,
-  .app-shell.instagram-shell-shell:hover .shell-guest {
-    opacity: 0;
-    max-width: 0;
+  .shell-brand-lockup .kennelmart-logo-copy,
+  .shell-label,
+  .shell-profile-meta span,
+  .shell-guest span {
+    font-size: 0.7rem;
   }
 }
 

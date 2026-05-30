@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useAuthStore } from '../../store/authStore';
 import { authService } from '../../services/authService';
+import { getImageUrl } from '../../utils/imageUtils';
 import type { UpdateProfileRequest, ChangePasswordRequest } from '../../types/auth';
 import './Profile.css';
 
@@ -115,22 +116,12 @@ export const ProfilePage = () => {
   const roleClass = user.role ? user.role.toLowerCase() : '';
   const verificationClass = user.verificationStatus ? user.verificationStatus.toLowerCase() : '';
 
-  // Helper to get full image URL (backend on port 8080)
-  const getFullImageUrl = (path: string | undefined) => {
-    if (!path) return 'https://via.placeholder.com/120?text=Avatar';
-    if (path.startsWith('http')) return path;
-    // Replace the frontend port (5173) with 8080 in the hostname
-    const backendHostname = window.location.hostname.replace('-5173', '-8080');
-    const backendOrigin = `${window.location.protocol}//${backendHostname}`;
-    const relativePath = path.startsWith('/') ? path : `/${path}`;
-    return `${backendOrigin}${relativePath}`;
-  };
   return (
     <div className="profile-container">
       <div className="profile-card">
         <div className="profile-header">
           <div className="avatar-large">
-            <img src={getFullImageUrl(user.profileImage)} alt={user.name} />
+            <img src={getImageUrl(user.profileImage)} alt={user.name} />
             <button
               type="button"
               className="upload-avatar-btn"

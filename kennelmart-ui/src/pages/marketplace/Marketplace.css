@@ -91,15 +91,14 @@
   outline: none;
   font-size: 0.92rem;
 }
-
 .search-bar button {
   min-height: 34px;
   min-width: 34px;
   padding: 0 0.75rem;
   border-radius: 999px;
-  background: linear-gradient(135deg, #f560ac, #ee2a7b);
+  background: linear-gradient(135deg, #2563eb, #d4a62a);
   color: #fff;
-  box-shadow: 0 10px 20px rgba(245, 96, 172, 0.18);
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.18);
 }
 
 .user-menu,
@@ -179,13 +178,13 @@
 }
 
 .category-chip:hover {
-  background: rgba(245, 96, 172, 0.12);
+  background: rgba(37, 99, 235, 0.12);
 }
 
 .category-chip.active {
   color: #fff;
-  background: linear-gradient(135deg, #f560ac, #ee2a7b);
-  box-shadow: 0 12px 28px rgba(245, 96, 172, 0.22);
+  background: linear-gradient(135deg, #2563eb, #d4a62a);
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.22);
 }
 
 .loading,
@@ -199,7 +198,7 @@
 }
 
 .empty-state a {
-  color: #f560ac;
+  color: #d4a62a;
   font-weight: 800;
 }
 
@@ -225,7 +224,7 @@
 
 .product-card:hover {
   transform: translateY(-3px);
-  border-color: rgba(245, 96, 172, 0.22);
+  border-color: rgba(37, 99, 235, 0.22);
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.16);
 }
 
@@ -238,7 +237,7 @@
   aspect-ratio: 4 / 3;
   overflow: hidden;
   background:
-    linear-gradient(135deg, rgba(245, 96, 172, 0.12), rgba(56, 189, 248, 0.12)),
+    linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(212, 166, 42, 0.12)),
     #10131a;
 }
 
@@ -460,8 +459,16 @@
   border: 1px solid rgba(148, 163, 184, 0.16);
   border-radius: 14px;
   padding: 0.55rem 0.8rem;
-  background: rgba(12, 14, 20, 0.94);
+  background:
+    linear-gradient(180deg, rgba(16, 19, 26, 0.98), rgba(12, 14, 20, 0.94));
   color: var(--text);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  appearance: none;
+}
+
+.category-filter select option {
+  background: #0f1116;
+  color: #f5f7fb;
 }
 
 .widget-overlay {
@@ -997,7 +1004,7 @@
   height: 3.9rem;
   padding: 2px;
   border: 2px solid transparent;
-  background: linear-gradient(#0f1116, #0f1116) padding-box, linear-gradient(135deg, #f9ce34, #ee2a7b, #6228d7) border-box;
+  background: linear-gradient(#0f1116, #0f1116) padding-box, linear-gradient(135deg, #2563eb, #d4a62a, #0f172a) border-box;
 }
 
 .story-ring span {
@@ -1033,7 +1040,14 @@
 
 .feed-post {
   overflow: hidden;
-  border-radius: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 24px;
+  background: rgba(16, 19, 26, 0.98);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.22);
+}
+
+.feed-user-card {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(212, 166, 42, 0.08));
 }
 
 .feed-post-header {
@@ -1041,7 +1055,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  padding: 0.8rem 0.9rem;
+  padding: 0.95rem 1rem 0.4rem;
 }
 
 .post-user {
@@ -1052,9 +1066,10 @@
 }
 
 .post-avatar {
-  width: 2.2rem;
-  height: 2.2rem;
+  width: 3rem;
+  height: 3rem;
   border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
 }
 
 .post-user strong,
@@ -1071,13 +1086,75 @@
 
 .feed-media {
   display: block;
+  margin: 0.7rem 0.9rem 0;
+  border-radius: 18px;
+  overflow: hidden;
   background: #050608;
 }
 
 .feed-media img {
   width: 100%;
-  max-height: 760px;
+  max-height: 440px;
   object-fit: cover;
+}
+
+.feed-caption {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.7rem 0.95rem 1rem;
+}
+
+.feed-caption.compact {
+  padding-top: 0.3rem;
+}
+
+.feed-caption p {
+  margin-bottom: 0;
+  line-height: 1.6;
+}
+
+.feed-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.feed-price {
+  color: #d4a62a;
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.feed-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.12);
+  color: var(--text-muted);
+  font-size: 0.76rem;
+}
+
+.feed-actions-row {
+  padding-top: 0.15rem;
+}
+
+.feed-icon-group button,
+.feed-save-btn {
+  min-width: 36px;
+  min-height: 36px;
+  padding: 0.25rem 0.55rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #f5f7fb;
+}
+
+.feed-icon-group button:hover,
+.feed-save-btn:hover,
+.ghost-action:hover {
+  background: rgba(37, 99, 235, 0.14);
 }
 
 .feed-actions-row {
@@ -1326,5 +1403,39 @@
 
   .feed-media img {
     max-height: 520px;
+  }
+}
+
+@keyframes panelRise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes widgetSlide {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes kennelOrbit {
+  from {
+    filter: hue-rotate(0deg);
+  }
+
+  to {
+    filter: hue-rotate(20deg);
   }
 }
