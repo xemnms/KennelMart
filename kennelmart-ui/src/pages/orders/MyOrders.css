@@ -1,13 +1,13 @@
 .my-orders-container {
-  max-width: 1000px;
-  margin: 2rem auto;
-  padding: 0 1rem;
+  width: min(100%, 1080px);
+  margin: 0 auto;
+  padding: 1rem clamp(1rem, 2vw, 1.6rem) 3rem;
 }
 
 .my-orders-container h1 {
-  margin-bottom: 1.5rem;
-  font-size: 1.8rem;
-  color: #050505;
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+  color: #f5f7fb;
 }
 
 .orders-list {
@@ -17,20 +17,21 @@
 }
 
 .order-card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  background: rgba(17, 19, 24, 0.96);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 14px 32px rgba(0,0,0,0.18);
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .order-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 18px 36px rgba(0,0,0,0.22);
 }
 
 .order-card a {
   text-decoration: none;
-  color: inherit;
+  color: #f5f7fb;
   display: block;
   padding: 1rem;
 }
@@ -44,31 +45,31 @@
 }
 
 .order-number {
-  color: #1877f2;
+  color: #93c5fd;
 }
 
 .order-status {
   display: inline-block;
-  padding: 0.25rem 0.5rem;
-  border-radius: 20px;
-  font-size: 0.75rem;
+  padding: 0.22rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
   font-weight: bold;
   text-transform: uppercase;
 }
 
-.order-status.order_received { background: #e3f2fd; color: #1565c0; }
-.order-status.accepted { background: #e8f5e9; color: #2e7d32; }
-.order-status.preparing { background: #fff3e0; color: #ed6c02; }
-.order-status.shipped { background: #e3f2fd; color: #0d47a1; }
-.order-status.delivered { background: #c8e6c9; color: #1b5e20; }
-.order-status.cancelled { background: #ffebee; color: #c62828; }
+.order-status.order_received { background: rgba(59, 130, 246, 0.14); color: #93c5fd; }
+.order-status.accepted { background: rgba(34, 197, 94, 0.14); color: #86efac; }
+.order-status.preparing { background: rgba(245, 158, 11, 0.14); color: #fbbf24; }
+.order-status.shipped { background: rgba(59, 130, 246, 0.14); color: #93c5fd; }
+.order-status.delivered { background: rgba(34, 197, 94, 0.14); color: #86efac; }
+.order-status.cancelled { background: rgba(239, 68, 68, 0.14); color: #fca5a5; }
 
 .order-info {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
-  font-size: 0.9rem;
-  color: #65676b;
+  gap: 0.85rem;
+  font-size: 0.82rem;
+  color: rgba(245, 247, 251, 0.64);
 }
 
 .order-info p {
@@ -77,24 +78,26 @@
 
 .empty-orders {
   text-align: center;
-  padding: 3rem;
-  background: white;
-  border-radius: 12px;
+  padding: 2rem;
+  background: rgba(17, 19, 24, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  color: #f5f7fb;
 }
 
 .shop-link {
   display: inline-block;
   margin-top: 1rem;
-  background: #1877f2;
+  background: linear-gradient(135deg, #2563eb, #1746d1);
   color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
   text-decoration: none;
 }
 
 .loading {
   text-align: center;
-  padding: 3rem;
-  font-size: 1.2rem;
-  color: #65676b;
+  padding: 2rem;
+  font-size: 1rem;
+  color: rgba(245, 247, 251, 0.62);
 }

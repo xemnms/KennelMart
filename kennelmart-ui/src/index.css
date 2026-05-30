@@ -1,12 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+
 :root {
-  font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  color: #1b1f2a;
-  background: #eef2f7;
+  font-family: 'Manrope', 'Segoe UI', sans-serif;
+  color: #f5f7fb;
+  background:
+    radial-gradient(circle at top left, rgba(245, 96, 172, 0.12), transparent 24%),
+    radial-gradient(circle at top right, rgba(37, 99, 235, 0.12), transparent 30%),
+    linear-gradient(180deg, #0b0d12 0%, #10131a 45%, #11151d 100%);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --bg: #edf2f8;
+  --bg-elevated: rgba(255, 255, 255, 0.82);
+  --bg-surface: rgba(255, 255, 255, 0.94);
+  --surface-strong: #ffffff;
+  --surface-muted: #eef4fb;
+  --surface-dark: #0f172a;
+  --border: rgba(15, 23, 42, 0.08);
+  --border-strong: rgba(15, 23, 42, 0.14);
+  --text: #102033;
+  --text-muted: #5d6c82;
+  --text-soft: #7f8da4;
+  --primary: #2563eb;
+  --primary-strong: #1746d1;
+  --primary-soft: rgba(37, 99, 235, 0.12);
+  --accent: #0f766e;
+  --accent-soft: rgba(15, 118, 110, 0.12);
+  --warning: #d97706;
+  --danger: #dc2626;
+  --success: #059669;
+  --shadow-lg: 0 28px 80px rgba(15, 23, 42, 0.16);
+  --shadow-md: 0 20px 48px rgba(15, 23, 42, 0.12);
+  --shadow-sm: 0 8px 24px rgba(15, 23, 42, 0.08);
+  --radius-xl: 30px;
+  --radius-lg: 22px;
+  --radius-md: 16px;
+  --radius-sm: 12px;
 }
 
 * {
@@ -18,17 +48,277 @@ html {
 }
 
 body {
+  min-height: 100vh;
   margin: 0;
+  color: #f5f7fb;
+  background: #0b0d12;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(245, 96, 172, 0.08), transparent 22%),
+    radial-gradient(circle at 80% 0%, rgba(37, 99, 235, 0.1), transparent 20%),
+    linear-gradient(180deg, rgba(10, 13, 18, 0.95), rgba(10, 13, 18, 0) 22%, rgba(10, 13, 18, 0) 22%);
+  opacity: 0.9;
+  z-index: -1;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
 }
 
 button,
-input {
+input,
+textarea,
+select {
   font: inherit;
+}
+
+button {
+  border: 0;
+  cursor: pointer;
 }
 
 button:focus-visible,
 a:focus-visible,
-input:focus-visible {
-  outline: 3px solid rgba(23, 78, 166, 0.35);
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.3);
   outline-offset: 2px;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin-top: 0;
+}
+
+.loading,
+.error,
+.empty-state {
+  display: grid;
+  place-items: center;
+  min-height: 220px;
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.error {
+  color: var(--danger);
+}
+
+.error-message {
+  margin-bottom: 1rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(220, 38, 38, 0.14);
+  border-radius: var(--radius-sm);
+  color: #991b1b;
+  background: rgba(254, 226, 226, 0.88);
+}
+
+.form-group {
+  display: grid;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 0.9rem 1rem;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--text-soft);
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: rgba(37, 99, 235, 0.55);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.pill,
+.badge,
+.category-badge,
+.status-chip,
+.data-pill,
+.unread-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  min-height: 32px;
+  padding: 0.32rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.pill,
+.badge,
+.category-badge,
+.data-pill {
+  color: var(--text);
+  background: rgba(15, 23, 42, 0.06);
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1.2rem;
+  background: rgba(5, 12, 24, 0.62);
+  backdrop-filter: blur(16px);
+  z-index: 1000;
+}
+
+.modal-content {
+  width: min(520px, 100%);
+  padding: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-xl);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: var(--shadow-lg);
+}
+
+.modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.8rem;
+  margin-top: 1.15rem;
+}
+
+.modal-actions button,
+.primary-action,
+.secondary-action,
+.signup-btn,
+.login-btn,
+.sell-btn,
+.admin-link,
+.contact-btn,
+.logout-btn,
+.pagination button,
+.search-mode-toggle button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 38px;
+  padding: 0.5rem 0.85rem;
+  border-radius: 999px;
+  font-weight: 800;
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.primary-action,
+.signup-btn,
+.admin-link,
+.sell-btn,
+.pagination button.active,
+.search-mode-toggle button.active,
+.modal-actions button[type='submit'] {
+  color: #fff;
+  background: linear-gradient(135deg, var(--primary), var(--primary-strong));
+  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.26);
+}
+
+.secondary-action,
+.login-btn,
+.contact-btn,
+.logout-btn,
+.modal-actions button[type='button'],
+.pagination button {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid var(--border);
+}
+
+.primary-action:hover,
+.secondary-action:hover,
+.signup-btn:hover,
+.login-btn:hover,
+.sell-btn:hover,
+.admin-link:hover,
+.contact-btn:hover,
+.logout-btn:hover,
+.pagination button:hover,
+.search-mode-toggle button:hover,
+.modal-actions button:hover {
+  transform: translateY(-1px);
+}
+
+.badge.success,
+.status-chip.success,
+.data-pill.backend,
+.good {
+  color: #0f5132;
+  background: rgba(34, 197, 94, 0.15);
+}
+
+.badge.warning,
+.status-chip.warning,
+.data-pill.preview,
+.watch {
+  color: #8a4d0f;
+  background: rgba(245, 158, 11, 0.16);
+}
+
+.badge.info,
+.status-chip.info {
+  color: #1d4ed8;
+  background: rgba(59, 130, 246, 0.14);
+}
+
+.badge.danger,
+.status-chip.danger {
+  color: #991b1b;
+  background: rgba(239, 68, 68, 0.14);
 }
