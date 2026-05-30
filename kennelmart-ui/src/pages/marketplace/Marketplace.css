@@ -13,10 +13,10 @@
   align-items: center;
   margin-bottom: 0.85rem;
   padding: 0.75rem 0.9rem;
-  border: 1px solid rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(148, 163, 184, 0.12);
   border-radius: 22px;
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
   backdrop-filter: blur(14px);
 }
 
@@ -24,7 +24,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: #0f172a;
+  color: #f5f7fb;
   font-size: 1rem;
   font-weight: 900;
   letter-spacing: 0.02em;
@@ -53,9 +53,9 @@
   align-items: center;
   gap: 0.3rem;
   padding: 0.25rem;
-  border: 1px solid var(--border);
+  border: 1px solid rgba(148, 163, 184, 0.16);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.04);
   width: fit-content;
 }
 
@@ -74,10 +74,10 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.3rem 0.3rem 0.3rem 0.85rem;
-  border: 1px solid rgba(15, 23, 42, 0.1);
+  border: 1px solid rgba(148, 163, 184, 0.16);
   border-radius: 999px;
-  background: rgba(247, 250, 255, 0.98);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  background: rgba(12, 14, 20, 0.94);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
   min-width: 0;
 }
 
@@ -97,9 +97,9 @@
   min-width: 34px;
   padding: 0 0.75rem;
   border-radius: 999px;
-  background: linear-gradient(135deg, #2563eb, #1746d1);
+  background: linear-gradient(135deg, #f560ac, #ee2a7b);
   color: #fff;
-  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.18);
+  box-shadow: 0 10px 20px rgba(245, 96, 172, 0.18);
 }
 
 .user-menu,
@@ -132,9 +132,9 @@
 .avatar,
 .logout-btn,
 .login-btn {
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.05);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
 }
 
 .avatar {
@@ -161,11 +161,11 @@
   gap: 0.45rem;
   margin-bottom: 0.85rem;
   padding: 0.85rem;
-  border: 1px solid rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(148, 163, 184, 0.12);
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(12px);
-  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
 }
 
 .category-chip {
@@ -174,32 +174,32 @@
   border: 1px solid transparent;
   border-radius: 999px;
   color: var(--text-muted);
-  background: rgba(15, 23, 42, 0.05);
+  background: rgba(255, 255, 255, 0.05);
   font-size: 0.82rem;
 }
 
 .category-chip:hover {
-  background: rgba(37, 99, 235, 0.08);
+  background: rgba(245, 96, 172, 0.12);
 }
 
 .category-chip.active {
   color: #fff;
-  background: linear-gradient(135deg, #2563eb, #0f766e);
-  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.22);
+  background: linear-gradient(135deg, #f560ac, #ee2a7b);
+  box-shadow: 0 12px 28px rgba(245, 96, 172, 0.22);
 }
 
 .loading,
 .empty-state {
   margin-top: 0.85rem;
-  border: 1px solid rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(148, 163, 184, 0.12);
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(12px);
-  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
 }
 
 .empty-state a {
-  color: #1746d1;
+  color: #f560ac;
   font-weight: 800;
 }
 
@@ -213,10 +213,10 @@
 
 .product-card {
   overflow: hidden;
-  border: 1px solid rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(148, 163, 184, 0.12);
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
   transition:
     transform 0.22s ease,
     box-shadow 0.22s ease,
@@ -225,8 +225,8 @@
 
 .product-card:hover {
   transform: translateY(-3px);
-  border-color: rgba(37, 99, 235, 0.22);
-  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.1);
+  border-color: rgba(245, 96, 172, 0.22);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.16);
 }
 
 .product-card a {
@@ -238,8 +238,8 @@
   aspect-ratio: 4 / 3;
   overflow: hidden;
   background:
-    linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(15, 118, 110, 0.12)),
-    #dfe8f5;
+    linear-gradient(135deg, rgba(245, 96, 172, 0.12), rgba(56, 189, 248, 0.12)),
+    #10131a;
 }
 
 .product-image img {
@@ -426,10 +426,10 @@
   gap: 1rem;
   margin-bottom: 1rem;
   padding: 0.9rem 1rem;
-  border: 1px solid rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(148, 163, 184, 0.12);
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
   backdrop-filter: blur(12px);
 }
 
@@ -440,7 +440,7 @@
 
 .results-summary h3 {
   margin-bottom: 0;
-  color: #102033;
+  color: #f5f7fb;
   font-size: 1.05rem;
 }
 
@@ -457,10 +457,10 @@
 
 .category-filter select {
   min-height: 40px;
-  border: 1px solid rgba(15, 23, 42, 0.1);
+  border: 1px solid rgba(148, 163, 184, 0.16);
   border-radius: 14px;
   padding: 0.55rem 0.8rem;
-  background: rgba(255, 255, 255, 0.94);
+  background: rgba(12, 14, 20, 0.94);
   color: var(--text);
 }
 
@@ -480,10 +480,10 @@
   max-height: min(84vh, 860px);
   display: grid;
   grid-template-rows: auto 1fr;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(148, 163, 184, 0.16);
   border-radius: 22px;
-  background: rgba(255, 255, 255, 0.96);
-  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.18);
+  background: rgba(16, 19, 26, 0.98);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.24);
   overflow: hidden;
 }
 
@@ -497,12 +497,12 @@
   justify-content: space-between;
   gap: 1rem;
   padding: 0.9rem 1rem;
-  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
 }
 
 .widget-panel-header h3 {
   margin-bottom: 0;
-  color: #102033;
+  color: #f5f7fb;
   font-size: 1rem;
 }
 
@@ -511,7 +511,7 @@
   padding: 0.3rem 0.65rem;
   border-radius: 999px;
   color: var(--text-muted);
-  background: rgba(15, 23, 42, 0.05);
+  background: rgba(255, 255, 255, 0.05);
   font-size: 0.8rem;
 }
 

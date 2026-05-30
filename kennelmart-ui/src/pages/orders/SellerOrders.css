@@ -6,13 +6,15 @@
 
 .seller-orders-container h1 {
   margin-bottom: 1.5rem;
+  color: #f5f7fb;
 }
 
 .orders-table-wrapper {
   overflow-x: auto;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.16);
 }
 
 .orders-table {
@@ -24,11 +26,12 @@
 .orders-table td {
   padding: 1rem;
   text-align: left;
-  border-bottom: 1px solid #e4e6eb;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+  color: #f5f7fb;
 }
 
 .orders-table th {
-  background: #f0f2f5;
+  background: rgba(255, 255, 255, 0.04);
   font-weight: 600;
 }
 
@@ -41,18 +44,19 @@
   text-transform: uppercase;
 }
 
-.order-status.order_received { background: #e3f2fd; color: #1565c0; }
-.order-status.accepted { background: #e8f5e9; color: #2e7d32; }
-.order-status.preparing { background: #fff3e0; color: #ed6c02; }
-.order-status.shipped { background: #e3f2fd; color: #0d47a1; }
-.order-status.delivered { background: #c8e6c9; color: #1b5e20; }
-.order-status.cancelled { background: #ffebee; color: #c62828; }
+.order-status.order_received { background: rgba(59, 130, 246, 0.16); color: #93c5fd; }
+.order-status.accepted { background: rgba(34, 197, 94, 0.16); color: #86efac; }
+.order-status.preparing { background: rgba(245, 158, 11, 0.16); color: #fdba74; }
+.order-status.shipped { background: rgba(14, 165, 233, 0.16); color: #7dd3fc; }
+.order-status.delivered { background: rgba(34, 197, 94, 0.16); color: #86efac; }
+.order-status.cancelled { background: rgba(239, 68, 68, 0.16); color: #fca5a5; }
 
 select {
   padding: 0.5rem;
   border-radius: 6px;
-  border: 1px solid #ccc;
-  background: white;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(255, 255, 255, 0.04);
+  color: #f5f7fb;
   cursor: pointer;
 }
 

@@ -38,16 +38,16 @@
 .auth-card {
   width: min(100%, 460px);
   padding: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(148, 163, 184, 0.16);
   border-radius: 28px;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 28px 80px rgba(15, 23, 42, 0.18);
+  background: rgba(16, 19, 26, 0.96);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.32);
   backdrop-filter: blur(18px);
 }
 
 .auth-card h1 {
   margin-bottom: 0.4rem;
-  color: #0f172a;
+  color: #f5f7fb;
   text-align: center;
   font-size: 0.82rem;
   letter-spacing: 0.22em;
@@ -56,7 +56,7 @@
 
 .auth-card h2 {
   margin-bottom: 1.5rem;
-  color: #102033;
+  color: #f5f7fb;
   text-align: center;
   font-size: clamp(1.7rem, 3vw, 2.2rem);
   line-height: 1.05;
@@ -64,7 +64,7 @@
 
 .auth-card p {
   margin-bottom: 0;
-  color: #5d6c82;
+  color: #a7b4c8;
   text-align: center;
 }
 
@@ -73,11 +73,11 @@
 }
 
 .auth-card .form-group label {
-  color: #31445d;
+  color: #c7d0df;
 }
 
 .auth-card .form-group input {
-  background: rgba(247, 250, 255, 0.94);
+  background: rgba(12, 14, 20, 0.94);
 }
 
 .auth-card .error {
@@ -101,7 +101,7 @@
 }
 
 .auth-card a {
-  color: #1746d1;
+  color: #f560ac;
   font-weight: 700;
 }
 

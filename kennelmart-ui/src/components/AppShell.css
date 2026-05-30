@@ -1,7 +1,7 @@
 .app-shell.instagram-shell-shell {
   min-height: 100vh;
   display: grid;
-  grid-template-columns: 76px minmax(0, 1fr);
+  grid-template-columns: 72px minmax(0, 1fr);
   background: #0b0d12;
 }
 
@@ -13,18 +13,22 @@
   gap: 1rem;
   height: 100vh;
   padding: 0.85rem 0.55rem;
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(12, 14, 18, 0.95);
+  border-right: 1px solid rgba(148, 163, 184, 0.12);
+  background: rgba(12, 14, 18, 0.98);
   overflow: hidden;
-  transition: width 0.22s ease, padding 0.22s ease;
+  transition:
+    width 0.22s ease,
+    padding 0.22s ease,
+    box-shadow 0.22s ease;
 }
 
 .app-shell.instagram-shell-shell:hover {
-  grid-template-columns: 232px minmax(0, 1fr);
+  grid-template-columns: 228px minmax(0, 1fr);
 }
 
 .app-shell.instagram-shell-shell:hover .shell-rail {
   padding: 0.85rem 0.8rem;
+  box-shadow: 12px 0 34px rgba(0, 0, 0, 0.18);
 }
 
 .shell-brand,
@@ -44,7 +48,7 @@
   place-items: center;
   width: 2rem;
   height: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(148, 163, 184, 0.16);
   border-radius: 8px;
   color: #f5f7fb;
   font-size: 0.85rem;
@@ -99,7 +103,7 @@
 
 .shell-nav-item.active,
 .shell-nav-item:hover {
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(245, 96, 172, 0.12);
   color: #fff;
 }
 
@@ -127,7 +131,7 @@
 .shell-profile {
   padding: 0.6rem 0.65rem;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .shell-avatar {
@@ -191,7 +195,7 @@
     grid-template-rows: auto auto auto;
     height: auto;
     border-right: 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
   }
 
   .shell-label,

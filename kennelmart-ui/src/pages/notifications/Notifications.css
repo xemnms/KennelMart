@@ -14,7 +14,7 @@
 
 .notifications-header h1 {
   margin-bottom: 0;
-  color: #102033;
+  color: #f5f7fb;
   font-size: clamp(1.7rem, 3vw, 2.3rem);
 }
 
@@ -36,15 +36,15 @@
   gap: 0.9rem;
   align-items: center;
   padding: 1rem 1.1rem;
-  border: 1px solid rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(148, 163, 184, 0.12);
   border-radius: 22px;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.18);
 }
 
 .notification-item.unread {
-  border-color: rgba(37, 99, 235, 0.22);
-  background: rgba(37, 99, 235, 0.08);
+  border-color: rgba(245, 96, 172, 0.24);
+  background: rgba(245, 96, 172, 0.08);
 }
 
 .notification-icon {
@@ -53,13 +53,13 @@
   width: 48px;
   height: 48px;
   border-radius: 16px;
-  background: rgba(15, 23, 42, 0.05);
+  background: rgba(255, 255, 255, 0.05);
   font-size: 1.2rem;
 }
 
 .notification-title {
   margin-bottom: 0.25rem;
-  color: #102033;
+  color: #f5f7fb;
   font-weight: 800;
 }
 
@@ -82,16 +82,16 @@
   height: 0.75rem;
   margin-left: 0;
   border-radius: 999px;
-  background: linear-gradient(135deg, #2563eb, #0f766e);
-  box-shadow: 0 0 0 6px rgba(37, 99, 235, 0.12);
+  background: linear-gradient(135deg, #f560ac, #ee2a7b);
+  box-shadow: 0 0 0 6px rgba(245, 96, 172, 0.12);
 }
 
 .empty-notifications {
   padding: 2rem;
-  border: 1px solid rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(148, 163, 184, 0.12);
   border-radius: 24px;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.18);
   text-align: center;
 }
 
