@@ -1,6 +1,7 @@
 package com.kennel.mart.kennelmart.config;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +23,7 @@ import com.kennel.mart.kennelmart.repository.UserRepository;
  * Now includes:
  * - Password retrieval (stored BCrypt hash)
  * - Account status check (ACTIVE / SUSPENDED)
- * - Verification status check (VERIFIED only)
+ * - Verification-based authority assignment for feature gating
  */
 @Configuration
 public class UserDetailsConfig {
@@ -40,7 +41,7 @@ public class UserDetailsConfig {
      * 
      * @param email user's email address
      * @return UserDetails object with authorities
-     * @throws UsernameNotFoundException if user not found, account not active, or not verified
+     * @throws UsernameNotFoundException if user not found or account not active
      */
     @Bean
     public UserDetailsService userDetailsService() {
@@ -53,15 +54,18 @@ public class UserDetailsConfig {
                 throw new UsernameNotFoundException("Account is suspended. Please contact support.");
             }
 
-            // Check if user is verified (Phase 2 requirement)
-            if (user.getVerificationStatus() != VerificationStatus.VERIFIED) {
-                throw new UsernameNotFoundException("Account not verified. Please submit your ID for verification.");
+            List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
+
+            // Verified users receive extra authority used by security rules.
+            if (user.getVerificationStatus() == VerificationStatus.VERIFIED) {
+                authorities.add(new SimpleGrantedAuthority("VERIFIED_USER"));
             }
 
             return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
                 user.getPassword(),  // now returns the stored BCrypt hash
-                Collections.singleton(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()))
+                authorities
             );
         };
     }

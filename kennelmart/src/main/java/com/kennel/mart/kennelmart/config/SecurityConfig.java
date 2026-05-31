@@ -81,6 +81,9 @@ public class SecurityConfig {
                                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                 .requestMatchers("/api/verification/status").permitAll()
 
+                                // Verification endpoints are available to authenticated users (including unverified)
+                                .requestMatchers("/api/verification/**").authenticated()
+
                                 // Serve uploaded images (static files)
                                 .requestMatchers("/uploads/**").permitAll()
 
@@ -100,36 +103,36 @@ public class SecurityConfig {
                                 // Public GET for reviews (average and list)
                                 .requestMatchers(HttpMethod.GET, "/api/reviews/sellers/**").permitAll()
 
-                                // Image upload - requires authentication
-                                .requestMatchers(HttpMethod.POST, "/api/uploads/image").authenticated()
+                                // Verified users (or admins) can access core transactional features
+                                .requestMatchers(HttpMethod.POST, "/api/uploads/image").hasAnyAuthority("ROLE_ADMIN", "VERIFIED_USER")
 
-                                // Listing management - require authentication
-                                .requestMatchers(HttpMethod.POST, "/api/listings").authenticated()
-                                .requestMatchers(HttpMethod.PUT, "/api/listings/**").authenticated()
-                                .requestMatchers(HttpMethod.DELETE, "/api/listings/**").authenticated()
-                                .requestMatchers(HttpMethod.GET, "/api/listings/my-listings").authenticated()
+                                // Listing management - verified users/admins only
+                                .requestMatchers(HttpMethod.POST, "/api/listings").hasAnyAuthority("ROLE_ADMIN", "VERIFIED_USER")
+                                .requestMatchers(HttpMethod.PUT, "/api/listings/**").hasAnyAuthority("ROLE_ADMIN", "VERIFIED_USER")
+                                .requestMatchers(HttpMethod.DELETE, "/api/listings/**").hasAnyAuthority("ROLE_ADMIN", "VERIFIED_USER")
+                                .requestMatchers(HttpMethod.GET, "/api/listings/my-listings").hasAnyAuthority("ROLE_ADMIN", "VERIFIED_USER")
 
-                                // Cart and Orders - require authentication
-                                .requestMatchers("/api/cart/**").authenticated()
-                                .requestMatchers("/api/orders/**").authenticated()
+                                // Cart and orders - verified users/admins only
+                                .requestMatchers("/api/cart/**").hasAnyAuthority("ROLE_ADMIN", "VERIFIED_USER")
+                                .requestMatchers("/api/orders/**").hasAnyAuthority("ROLE_ADMIN", "VERIFIED_USER")
 
-                                // Reviews - submit requires authentication
-                                .requestMatchers(HttpMethod.POST, "/api/reviews").authenticated()
+                                // Reviews - submit requires verified account/admin
+                                .requestMatchers(HttpMethod.POST, "/api/reviews").hasAnyAuthority("ROLE_ADMIN", "VERIFIED_USER")
                                 .requestMatchers("/api/reviews/admin/**").hasRole("ADMIN")
 
-                                // Reports - submit requires authentication
-                                .requestMatchers(HttpMethod.POST, "/api/reports").authenticated()
+                                // Reports - submit requires verified account/admin
+                                .requestMatchers(HttpMethod.POST, "/api/reports").hasAnyAuthority("ROLE_ADMIN", "VERIFIED_USER")
 
-                                // Messaging endpoints - all require authentication
-                                .requestMatchers(HttpMethod.POST, "/api/messages").authenticated()
-                                .requestMatchers(HttpMethod.GET, "/api/messages/**").authenticated()
-                                .requestMatchers(HttpMethod.PUT, "/api/messages/**").authenticated()
+                                // Messaging endpoints - verified users/admins only
+                                .requestMatchers(HttpMethod.POST, "/api/messages").hasAnyAuthority("ROLE_ADMIN", "VERIFIED_USER")
+                                .requestMatchers(HttpMethod.GET, "/api/messages/**").hasAnyAuthority("ROLE_ADMIN", "VERIFIED_USER")
+                                .requestMatchers(HttpMethod.PUT, "/api/messages/**").hasAnyAuthority("ROLE_ADMIN", "VERIFIED_USER")
 
-                                // Notifications - require authentication
-                                .requestMatchers("/api/notifications/**").authenticated()
+                                // Notifications - verified users/admins only
+                                .requestMatchers("/api/notifications/**").hasAnyAuthority("ROLE_ADMIN", "VERIFIED_USER")
 
-                                // Analytics - require authentication
-                                .requestMatchers("/api/analytics/**").authenticated()
+                                // Analytics - verified users/admins only
+                                .requestMatchers("/api/analytics/**").hasAnyAuthority("ROLE_ADMIN", "VERIFIED_USER")
 
                                 // User profile endpoints (except public search and public profile)
                                 .requestMatchers(HttpMethod.GET, "/api/users/me", "/api/users/me/authorities").authenticated()

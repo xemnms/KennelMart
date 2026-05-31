@@ -42,6 +42,7 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponse register(RegisterRequest request) {
         log.info("Registering new user with email: {}", request.getEmail());
         String normalizedEmail = request.getEmail().toLowerCase();
+        String normalizedSchoolId = request.getStudentOrFacultyId().trim();
 
         validateRegistrationRequest(request);
 
@@ -54,15 +55,14 @@ public class AuthServiceImpl implements AuthService {
             throw new IllegalArgumentException("Passwords do not match");
         }
 
-        // Auto-verify if email and student ID exist in verified_identities
+        // Auto-verify only when BOTH email and student/faculty ID match a verified identity record.
         VerificationStatus verificationStatus = VerificationStatus.PENDING;
-        if (verifiedIdentityRepository.existsByEmail(normalizedEmail)) {
-            // Optional: also check that the studentOrFacultyId matches the schoolId
-            // For stricter check, find the record and compare IDs:
-            var optIdentity = verifiedIdentityRepository.findBySchoolId(request.getStudentOrFacultyId());
-            if (optIdentity.isPresent() && optIdentity.get().getEmail().equalsIgnoreCase(normalizedEmail)) {
+        var optIdentity = verifiedIdentityRepository.findBySchoolId(normalizedSchoolId);
+        if (optIdentity.isPresent()) {
+            VerifiedIdentity identity = optIdentity.get();
+            if (identity.getEmail().equalsIgnoreCase(normalizedEmail)) {
                 verificationStatus = VerificationStatus.VERIFIED;
-                log.info("User {} auto-verified via verified_identities", normalizedEmail);
+                log.info("User {} auto-verified via exact email+schoolId match", normalizedEmail);
             }
         }
 
@@ -73,7 +73,7 @@ public class AuthServiceImpl implements AuthService {
             request.getName(),
             normalizedEmail,
             encodedPassword,
-            request.getStudentOrFacultyId(),
+            normalizedSchoolId,
             role
         );
         user.setVerificationStatus(verificationStatus); // set auto-verified or pending
@@ -96,11 +96,6 @@ public class AuthServiceImpl implements AuthService {
         if (user.getAccountStatus() != AccountStatus.ACTIVE) {
             log.warn("Login attempt for suspended account: {}", normalizedEmail);
             throw new IllegalArgumentException("Account is suspended. Please contact support.");
-        }
-
-        if (user.getVerificationStatus() != VerificationStatus.VERIFIED) {
-            log.warn("Login attempt for unverified account: {}", normalizedEmail);
-            throw new IllegalArgumentException("Account not verified. Please submit your ID for verification.");
         }
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
