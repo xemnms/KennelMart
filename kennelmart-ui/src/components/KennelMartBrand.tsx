@@ -35,9 +35,7 @@ const iconPaths: Record<KennelMartIconName, string> = {
 };
 
 export const KennelMartMark = ({ className = '', role = 'presentation', ariaLabel }: KennelMartMarkProps) => {
-  const tileGradientId = useId();
-  const orbGradientId = useId();
-  const glossId = useId();
+  const gradientId = useId();
 
   return (
     <svg
@@ -47,40 +45,23 @@ export const KennelMartMark = ({ className = '', role = 'presentation', ariaLabe
       aria-label={role === 'img' ? (ariaLabel ?? 'KennelMart') : undefined}
     >
       <defs>
-        <linearGradient id={tileGradientId} x1="7" y1="6" x2="58" y2="60" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#0b2f8b" />
-          <stop offset="100%" stopColor="#06205f" />
+        <linearGradient id={gradientId} x1="10" y1="8" x2="54" y2="56" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#2563eb" />
+          <stop offset="54%" stopColor="#d4a62a" />
+          <stop offset="100%" stopColor="#0f172a" />
         </linearGradient>
-        <radialGradient id={orbGradientId} cx="34" cy="31" r="23" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#f7da6a" />
-          <stop offset="55%" stopColor="#d2a629" />
-          <stop offset="100%" stopColor="#8e6820" />
-        </radialGradient>
-        <radialGradient id={glossId} cx="24" cy="18" r="30" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="rgba(255,255,255,0.35)" />
-          <stop offset="100%" stopColor="rgba(255,255,255,0)" />
-        </radialGradient>
       </defs>
 
-      <rect x="2" y="2" width="60" height="60" rx="15" fill={`url(#${tileGradientId})`} />
-      <circle cx="32" cy="33" r="21" fill={`url(#${orbGradientId})`} />
-      <circle cx="32" cy="33" r="21" fill={`url(#${glossId})`} />
-
-      <circle cx="18" cy="24" r="3" fill="#ffffff" opacity="0.95" />
-      <circle cx="24.5" cy="18.5" r="3" fill="#ffffff" opacity="0.95" />
-      <circle cx="32" cy="16.5" r="3.1" fill="#ffffff" opacity="0.95" />
-      <circle cx="39.5" cy="18.5" r="3" fill="#ffffff" opacity="0.95" />
-      <circle cx="46" cy="24" r="3" fill="#ffffff" opacity="0.95" />
-
-      <path d="M19 33.4c4.6-5.9 21.4-5.9 26 0" fill="none" stroke="#ffffff" strokeWidth="3.1" strokeLinecap="round" />
-
-      <path d="M27 42.5c1.9-2.8 8.1-2.8 10 0" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" />
-      <rect x="25.5" y="42.5" width="13" height="7.5" rx="1.8" fill="none" stroke="#ffffff" strokeWidth="2" />
-      <line x1="28.5" y1="42.5" x2="28.5" y2="50" stroke="#ffffff" strokeWidth="1" strokeOpacity="0.6" />
-      <line x1="32" y1="42.5" x2="32" y2="50" stroke="#ffffff" strokeWidth="1" strokeOpacity="0.6" />
-      <line x1="35.5" y1="42.5" x2="35.5" y2="50" stroke="#ffffff" strokeWidth="1" strokeOpacity="0.6" />
-      <circle cx="28" cy="52.5" r="2.1" fill="#ffffff" opacity="0.92" />
-      <circle cx="36" cy="52.5" r="2.1" fill="#ffffff" opacity="0.92" />
+      <rect x="4" y="4" width="56" height="56" rx="18" fill={`url(#${gradientId})`} />
+      <path d="M20.5 35.5c0-6.1 5.2-11 11.5-11s11.5 4.9 11.5 11c0 6.4-5.2 10-11.5 10s-11.5-3.6-11.5-10Z" fill="rgba(255,255,255,0.16)" />
+      <circle cx="23" cy="22" r="4.2" fill="#fff" />
+      <circle cx="32" cy="18.5" r="4.2" fill="#fff" />
+      <circle cx="41" cy="22" r="4.2" fill="#fff" />
+      <circle cx="16" cy="28" r="4.2" fill="#fff" />
+      <circle cx="48" cy="28" r="4.2" fill="#fff" />
+      <path d="M21 44h22" stroke="#fff" strokeLinecap="round" strokeWidth="2.3" opacity="0.75" />
+      <circle cx="25" cy="48" r="2.7" fill="#fff" />
+      <circle cx="39" cy="48" r="2.7" fill="#fff" />
     </svg>
   );
 };
