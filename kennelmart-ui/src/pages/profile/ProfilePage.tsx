@@ -66,7 +66,7 @@ export const ProfilePage = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/auth/login');
+    navigate('/login');
   };
 
   const onProfileUpdate = async (data: UpdateProfileRequest) => {

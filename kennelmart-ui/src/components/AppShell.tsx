@@ -82,7 +82,7 @@ export const AppShell = () => {
               </NavLink>
             </>
           ) : (
-            <NavLink to="/auth/login" className="mobile-topbar-login">Log in</NavLink>
+            <NavLink to="/login" className="mobile-topbar-login">Log in</NavLink>
           )}
         </div>
       </header>
