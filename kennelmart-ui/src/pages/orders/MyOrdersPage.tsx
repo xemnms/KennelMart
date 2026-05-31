@@ -2,24 +2,41 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { orderService } from '../../services/orderService';
 import type { OrderResponse } from '../../types/order';
+import { SellerOrdersPage } from './SellerOrdersPage';
 import './MyOrders.css';
 
 export const MyOrdersPage = () => {
+  const [tab, setTab] = useState<'orders' | 'sales'>('orders');
   const [orders, setOrders] = useState<OrderResponse[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (tab !== 'orders') return;
+    setLoading(true);
     orderService.getMyOrders(0, 20)
       .then(data => setOrders(data.content))
       .catch(console.error)
       .finally(() => setLoading(false));
-  }, []);
-
-  if (loading) return <div className="loading">Loading your orders...</div>;
+  }, [tab]);
 
   return (
     <div className="my-orders-container">
-      <h1>My Orders</h1>
+      {/* ── Segment tabs ── */}
+      <div className="orders-tabs">
+        <button
+          className={`orders-tab${tab === 'orders' ? ' active' : ''}`}
+          onClick={() => setTab('orders')}
+        >My Orders</button>
+        <button
+          className={`orders-tab${tab === 'sales' ? ' active' : ''}`}
+          onClick={() => setTab('sales')}
+        >Sales</button>
+      </div>
+
+      {tab === 'sales' ? <SellerOrdersPage /> : null}
+      {tab === 'orders' && loading ? <div className="loading">Loading your orders...</div> : null}
+      {tab === 'orders' && !loading ? <>
+
       {orders.length === 0 ? (
         <div className="empty-orders">
           <p>You haven't placed any orders yet.</p>
@@ -44,6 +61,7 @@ export const MyOrdersPage = () => {
           ))}
         </div>
       )}
+      </> : null}
     </div>
   );
 };

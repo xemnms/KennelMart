@@ -23,7 +23,7 @@ export const CartPage = () => {
   if (items.length === 0) {
     return (
       <div className="cart-empty">
-        <h2>Your cart is empty</h2>
+        <h2>Your pawket is empty</h2>
         <Link to="/">Continue shopping</Link>
       </div>
     );
@@ -31,7 +31,7 @@ export const CartPage = () => {
 
   return (
     <div className="cart-container">
-      <h1>Shopping Cart</h1>
+      <h1>My Pawket</h1>
       <div className="cart-items">
         {items.map((item) => (
           <div key={item.id} className="cart-item">

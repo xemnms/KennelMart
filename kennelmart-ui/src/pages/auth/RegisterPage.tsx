@@ -36,6 +36,7 @@ export const RegisterPage = () => {
   };
 
   return (
+    <div className="auth-stage">
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-brand">
@@ -92,6 +93,7 @@ export const RegisterPage = () => {
           Already have an account? <Link to="/login">Login</Link>
         </p>
       </div>
+    </div>
     </div>
   );
 };

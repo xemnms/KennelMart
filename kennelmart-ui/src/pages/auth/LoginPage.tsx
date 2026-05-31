@@ -32,6 +32,7 @@ export const LoginPage = () => {
   };
 
   return (
+    <div className="auth-stage">
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-brand">
@@ -58,6 +59,7 @@ export const LoginPage = () => {
           Don't have an account? <Link to="/register">Register</Link>
         </p>
       </div>
+    </div>
     </div>
   );
 };

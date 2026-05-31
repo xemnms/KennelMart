@@ -13,38 +13,42 @@
   -moz-osx-font-smoothing: grayscale;
 
   /* ── Core Backgrounds ── */
-  --bg:            #080a12;
-  --bg-secondary:  #0d0f1a;
-  --bg-tertiary:   #111420;
-  --bg-card:       #131722;
-  --bg-surface:    rgba(18, 21, 35, 0.96);
-  --bg-elevated:   rgba(22, 26, 42, 0.98);
+  --bg:            #07090e;
+  --bg-secondary:  #0a0e18;
+  --bg-tertiary:   #0d1220;
+  --bg-card:       #101828;
+  --bg-surface:    rgba(13, 18, 38, 0.96);
+  --bg-elevated:   rgba(16, 24, 48, 0.98);
   --bg-glass:      rgba(255, 255, 255, 0.035);
   --bg-glass-heavy:rgba(255, 255, 255, 0.06);
 
   /* ── Kennel Brand Palette ── */
-  --kennel-amber:    #e8a020;
-  --kennel-amber-lt: #f4b944;
-  --kennel-rust:     #c95e28;
-  --kennel-brown:    #7a4828;
-  --kennel-warm:     rgba(232, 160, 32, 0.12);
+  --kennel-amber:    #d4a62a;
+  --kennel-amber-lt: #f0c040;
+  --kennel-rust:     #c8960f;
+  --kennel-brown:    #9a7015;
+  --kennel-warm:     rgba(212, 166, 42, 0.12);
 
-  /* ── Primary Interactive (Electric Blue) ── */
-  --blue:       #4f8ef7;
-  --blue-vivid: #2563eb;
-  --blue-dim:   rgba(79, 142, 247, 0.15);
-  --blue-glow:  rgba(79, 142, 247, 0.25);
+  /* ── Primary Interactive (Blue) ── */
+  --blue:       #3b82f6;
+  --blue-vivid: #1d4ed8;
+  --blue-dim:   rgba(59, 130, 246, 0.15);
+  --blue-glow:  rgba(59, 130, 246, 0.25);
 
-  /* ── Accent (Amber/Gold) ── */
-  --gold:       #e8a020;
-  --gold-lt:    #f4b944;
-  --gold-dim:   rgba(232, 160, 32, 0.14);
+  /* ── Accent (Gold) ── */
+  --gold:       #d4a62a;
+  --gold-lt:    #f0c040;
+  --gold-dim:   rgba(212, 166, 42, 0.14);
+
+  /* ── Mid tone (sky blue complement) ── */
+  --cobalt:       #60a5fa;
+  --cobalt-dim:   rgba(96, 165, 250, 0.15);
 
   /* ── Status ── */
-  --emerald:    #22c55e;
-  --emerald-dim:rgba(34, 197, 94, 0.14);
-  --red:        #f43f5e;
-  --red-dim:    rgba(244, 63, 94, 0.14);
+  --emerald:    #60a5fa;
+  --emerald-dim:rgba(59, 130, 246, 0.14);
+  --red:        #fbbf24;
+  --red-dim:    rgba(212, 166, 42, 0.12);
 
   /* ── Text Hierarchy ── */
   --text-primary:   #f0f4ff;
@@ -55,17 +59,17 @@
   /* ── Borders ── */
   --border-subtle:  rgba(255, 255, 255, 0.055);
   --border-default: rgba(255, 255, 255, 0.09);
-  --border-accent:  rgba(79, 142, 247, 0.24);
-  --border-gold:    rgba(232, 160, 32, 0.22);
+  --border-accent:  rgba(59, 130, 246, 0.24);
+  --border-gold:    rgba(212, 166, 42, 0.22);
 
   /* ── Shadows ── */
-  --shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.25);
-  --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 12px 36px rgba(0, 0, 0, 0.38);
-  --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.46);
-  --shadow-xl: 0 40px 90px rgba(0, 0, 0, 0.55);
-  --glow-blue: 0 0 40px rgba(79, 142, 247, 0.2);
-  --glow-gold: 0 0 40px rgba(232, 160, 32, 0.18);
+  --shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.28);
+  --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 12px 36px rgba(0, 0, 0, 0.42);
+  --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 40px 90px rgba(0, 0, 0, 0.58);
+  --glow-blue: 0 0 40px rgba(59, 130, 246, 0.22);
+  --glow-gold: 0 0 40px rgba(212, 166, 42, 0.18);
 
   /* ── Border Radius ── */
   --r-xs:  6px;
@@ -118,17 +122,17 @@ body {
   overflow-x: hidden;
 }
 
-/* Rich ambient background with kennel warmth */
+/* Rich ambient background — blue + gold warmth */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 90% 55% at 18% 8%,  rgba(79, 142, 247, 0.1)  0%, transparent 58%),
-    radial-gradient(ellipse 65% 45% at 88% 88%, rgba(232, 160, 32, 0.08) 0%, transparent 55%),
-    radial-gradient(ellipse 45% 65% at 50% 50%, rgba(201, 94, 40, 0.045) 0%, transparent 68%),
-    radial-gradient(ellipse 35% 35% at 75% 8%,  rgba(79, 142, 247, 0.07) 0%, transparent 52%);
+    radial-gradient(ellipse 90% 55% at 18%  8%,  rgba(29,  78, 216, 0.12)  0%, transparent 58%),
+    radial-gradient(ellipse 65% 45% at 88% 88%, rgba(212, 166, 42, 0.08)  0%, transparent 55%),
+    radial-gradient(ellipse 50% 65% at 50% 50%, rgba(59,  130, 246, 0.06)  0%, transparent 68%),
+    radial-gradient(ellipse 35% 35% at 75%  8%,  rgba(59,  130, 246, 0.07) 0%, transparent 52%);
   z-index: 0;
 }
 
@@ -283,10 +287,10 @@ p {
   text-transform: uppercase;
 }
 
-.badge.success, .status-chip.success { color: #16a34a; background: var(--emerald-dim); }
-.badge.warning, .status-chip.warning { color: #b45309; background: var(--gold-dim); }
+.badge.success, .status-chip.success { color: #60a5fa; background: var(--emerald-dim); }
+.badge.warning, .status-chip.warning { color: #f0c040; background: var(--gold-dim); }
 .badge.info,    .status-chip.info    { color: var(--blue); background: var(--blue-dim); }
-.badge.danger,  .status-chip.danger  { color: var(--red); background: var(--red-dim); }
+.badge.danger,  .status-chip.danger  { color: #fbbf24; background: rgba(212, 166, 42, 0.12); }
 
 /* ── Buttons ── */
 .modal-actions button,
@@ -325,7 +329,7 @@ p {
 .modal-actions button[type='submit'] {
   color: #fff;
   background: linear-gradient(135deg, var(--blue-vivid) 0%, var(--blue) 100%);
-  box-shadow: 0 8px 24px rgba(79, 142, 247, 0.28);
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.28);
 }
 
 .primary-action:hover,
@@ -335,7 +339,7 @@ p {
 .pagination button.active:hover,
 .modal-actions button[type='submit']:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 36px rgba(79, 142, 247, 0.4);
+  box-shadow: 0 14px 36px rgba(59, 130, 246, 0.4);
 }
 
 .secondary-action,
@@ -376,10 +380,10 @@ p {
 .error-message {
   margin-bottom: 1rem;
   padding: 0.85rem 1rem;
-  border: 1px solid rgba(244, 63, 94, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.25);
   border-radius: var(--r-md);
-  color: #fca5a5;
-  background: var(--red-dim);
+  color: #fbbf24;
+  background: rgba(212, 166, 42, 0.08);
   font-size: 0.875rem;
 }
 

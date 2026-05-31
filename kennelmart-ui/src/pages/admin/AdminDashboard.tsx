@@ -193,11 +193,13 @@ export const AdminDashboard = () => {
                 <tbody>
                   {users.map(user => (
                     <tr key={user.id}>
-                      <td>{user.name}</td>
-                      <td>{user.email}</td>
-                      <td><span className={`status ${user.verificationStatus.toLowerCase()}`}>{user.verificationStatus}</span></td>
-                      <td><span className={`status ${user.accountStatus.toLowerCase()}`}>{user.accountStatus}</span></td>
-                      <td>
+                      <td className="td-primary">{user.name}</td>
+                      <td className="td-secondary">{user.email}</td>
+                      <td className="td-badges">
+                        <span className={`status ${user.verificationStatus.toLowerCase()}`}>{user.verificationStatus}</span>
+                        <span className={`status ${user.accountStatus.toLowerCase()}`}>{user.accountStatus}</span>
+                      </td>
+                      <td className="actions">
                         {user.accountStatus === 'ACTIVE' ? (
                           <button onClick={() => handleSuspend(user.id)}>Suspend</button>
                         ) : (
@@ -242,10 +244,15 @@ export const AdminDashboard = () => {
                 <tbody>
                   {listings.map(listing => (
                     <tr key={listing.id}>
-                      <td>{listing.title}</td>
-                      <td>{listing.sellerName}</td>
-                      <td>₱{listing.price}</td>
-                      <td><span className={`status ${listing.status.toLowerCase()}`}>{listing.status}</span></td>
+                      <td className="td-primary">{listing.title}</td>
+                      <td className="td-secondary">
+                        <span>{listing.sellerName}</span>
+                        <span className="meta-sep">·</span>
+                        <span className="td-price">₱{listing.price}</span>
+                      </td>
+                      <td className="td-badges">
+                        <span className={`status ${listing.status.toLowerCase()}`}>{listing.status}</span>
+                      </td>
                       <td className="actions">
                         {listing.status === 'PENDING_APPROVAL' && (
                           <div className="button-group">
@@ -296,11 +303,15 @@ export const AdminDashboard = () => {
                 <tbody>
                   {reports.map(report => (
                     <tr key={report.id}>
-                      <td>{report.reporterEmail}</td>
-                      <td>{report.targetType}</td>
-                      <td>{report.targetId}</td>
-                      <td>{report.reason}</td>
-                      <td><span className={`status ${report.status.toLowerCase()}`}>{report.status}</span></td>
+                      <td className="td-primary">{report.reporterEmail}</td>
+                      <td className="td-secondary">
+                        <span className={`type-tag type-${report.targetType.toLowerCase()}`}>{report.targetType}</span>
+                        <span className="meta-sep">·</span>
+                        <span>{report.reason}</span>
+                      </td>
+                      <td className="td-badges">
+                        <span className={`status ${report.status.toLowerCase()}`}>{report.status}</span>
+                      </td>
                       <td className="actions">
                         {(report.status === 'PENDING' || report.status === 'REVIEWING') && (
                           <div className="button-group">
@@ -347,11 +358,15 @@ export const AdminDashboard = () => {
                 <tbody>
                   {pendingVerifications.map(user => (
                     <tr key={user.id}>
-                      <td>{user.name}</td>
-                      <td>{user.email}</td>
-                      <td>{user.studentOrFacultyId}</td>
-                      <td><span className={`status ${user.verificationStatus.toLowerCase()}`}>{user.verificationStatus}</span></td>
-                      <td>
+                      <td className="td-primary">{user.name}</td>
+                      <td className="td-secondary">
+                        <span>{user.email}</span>
+                        {user.studentOrFacultyId && <><span className="meta-sep">·</span><span>{user.studentOrFacultyId}</span></>}
+                      </td>
+                      <td className="td-badges">
+                        <span className={`status ${user.verificationStatus.toLowerCase()}`}>{user.verificationStatus}</span>
+                      </td>
+                      <td className="actions">
                         <div className="button-group">
                           <button onClick={() => handleApproveVerification(user.id)} className="approve-btn">Approve</button>
                           <button onClick={() => handleRejectVerification(user.id)} className="reject-btn">Reject</button>

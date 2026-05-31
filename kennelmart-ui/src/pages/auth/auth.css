@@ -1,11 +1,25 @@
+/* ── Outer stage: fills viewport, centers the phone column ── */
+.auth-stage {
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  background: #000;
+}
+
+/* ── Phone column: matches the AppShell mobile frame ── */
 .auth-container {
   position: relative;
   isolation: isolate;
-  min-height: 100%;
+  width: 100%;
+  max-width: 540px;
+  min-height: 100dvh;
   display: grid;
   place-items: center;
   padding: 2rem;
   overflow: hidden;
+  background: var(--bg, #080a12);
+  border-left: 1px solid var(--border-subtle, rgba(255,255,255,0.07));
+  border-right: 1px solid var(--border-subtle, rgba(255,255,255,0.07));
 }
 
 .auth-container::before,

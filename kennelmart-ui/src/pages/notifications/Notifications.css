@@ -68,11 +68,11 @@
 }
 
 .notification-item.unread {
-  background: rgba(79, 142, 247, 0.05);
+  background: rgba(139,92,246,0.05);
 }
 
 .notification-item.unread:hover {
-  background: rgba(79, 142, 247, 0.09);
+  background: rgba(59,130,246,0.05);
 }
 
 /* Avatar circle */
@@ -83,7 +83,7 @@
   width: 2.75rem;
   height: 2.75rem;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(79,142,247,0.25), rgba(232,160,32,0.2));
+  background: linear-gradient(135deg, rgba(29,78,216,0.25), rgba(212,166,42,0.2));
   font-size: 1.15rem;
   border: 1.5px solid rgba(255,255,255,0.08);
 }

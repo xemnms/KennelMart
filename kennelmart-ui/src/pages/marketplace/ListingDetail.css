@@ -105,8 +105,8 @@
   font-weight: 700;
   font-size: 0.9rem;
   color: #fff;
-  background: linear-gradient(135deg, var(--blue-vivid), #1746d1);
-  box-shadow: 0 8px 24px rgba(79,142,247,0.24);
+  background: linear-gradient(135deg, var(--blue-vivid), #0f2f6b);
+  box-shadow: 0 8px 24px rgba(59,130,246,0.24);
   border: none;
   cursor: pointer;
   transition: opacity 0.2s;
@@ -145,7 +145,7 @@
   transition: background 0.15s;
 }
 
-.report-btn:hover { background: rgba(232,64,64,0.07); color: #fca5a5; }
+.report-btn:hover { background: rgba(212,166,42,0.08); color: #fbbf24; }
 
 /* ── Reviews ── */
 .reviews-section {

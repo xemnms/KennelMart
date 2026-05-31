@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { LoginPage } from '../pages/auth/LoginPage';
 import { RegisterPage } from '../pages/auth/RegisterPage';
+import { SplashPage } from '../pages/auth/SplashPage';
 import { MarketplacePage } from '../pages/marketplace/MarketplacePage';
 import { ListingDetailPage } from '../pages/marketplace/ListingDetailPage';
 import { PrivateRoute } from '../components/PrivateRoute';
@@ -14,7 +15,8 @@ import { AdminDashboard } from '../pages/admin/AdminDashboard';
 import { AdminRoute } from '../components/AdminRoute';
 import { CartPage } from '../pages/cart/CartPage';
 import { CheckoutPage } from '../pages/checkout/CheckoutPage';
-import { MessagesWorkspacePage } from '../pages/messages/MessagesWorkspacePage';
+import { InboxPage } from '../pages/messages/InboxPage';
+import { ChatPage } from '../pages/messages/ChatPage';
 import { EditListingPage } from '../pages/seller/EditListingPage';
 import { NotificationsPage } from '../pages/notifications/NotificationsPage';
 import { SellerReviewsPage } from '../pages/reviews/SellerReviewsPage';
@@ -23,16 +25,20 @@ import { AppShell } from '../components/AppShell';
 
 export const router = createBrowserRouter([
   {
+    path: '/welcome',
+    element: <SplashPage />,
+  },
+  {
+    path: '/login',
+    element: <LoginPage />,
+  },
+  {
+    path: '/register',
+    element: <RegisterPage />,
+  },
+  {
     element: <AppShell />,
     children: [
-      {
-        path: '/login',
-        element: <LoginPage />,
-      },
-      {
-        path: '/register',
-        element: <RegisterPage />,
-      },
       {
         index: true,
         element: (
@@ -115,11 +121,11 @@ export const router = createBrowserRouter([
       },
       {
         path: '/messages/inbox',
-        element: <PrivateRoute><MessagesWorkspacePage /></PrivateRoute>,
+        element: <PrivateRoute><InboxPage /></PrivateRoute>,
       },
       {
         path: '/messages/:userId',
-        element: <PrivateRoute><MessagesWorkspacePage /></PrivateRoute>,
+        element: <PrivateRoute><ChatPage /></PrivateRoute>,
       },
       {
         path: '/seller/listings/edit/:id',

@@ -7,12 +7,12 @@ import { getImageUrl } from '../utils/imageUtils';
 import { KennelMartIcon, KennelMartLogo, type KennelMartIconName } from './KennelMartBrand';
 import './AppShell.css';
 
-const navItems: Array<{ to: string; label: string; icon: KennelMartIconName; end?: boolean }> = [
+const navItems: Array<{ to: string; label: string; icon: KennelMartIconName; end?: boolean; center?: boolean }> = [
   { to: '/', label: 'Home', icon: 'home', end: true },
-  { to: '/seller/listings/new', label: 'Create', icon: 'create' },
-  { to: '/cart', label: 'Cart', icon: 'cart' },
+  { to: '/cart', label: 'Pawket', icon: 'cart' },
+  { to: '/seller/listings/new', label: 'Create', icon: 'create', center: true },
   { to: '/orders', label: 'Orders', icon: 'orders' },
-  { to: '/profile', label: 'Profile', icon: 'profile' },
+  { to: '/profile', label: 'Pawfile', icon: 'profile' },
 ];
 
 export const AppShell = () => {
@@ -120,11 +120,16 @@ export const AppShell = () => {
       {/* ── Bottom tab navigation ── */}
       <nav className="mobile-tabbar">
         {navItems.map((item) => (
-          <NavLink key={item.to} to={item.to} end={item.end} className="mobile-tab-item">
+          <NavLink
+            key={item.to}
+            to={item.to}
+            end={item.end}
+            className={`mobile-tab-item${item.center ? ' mobile-tab-create' : ''}`}
+          >
             <div className="mobile-tab-icon-wrap">
               <KennelMartIcon name={item.icon} className="shell-icon" />
             </div>
-            <span className="mobile-tab-label">{item.label}</span>
+            {!item.center && <span className="mobile-tab-label">{item.label}</span>}
           </NavLink>
         ))}
       </nav>

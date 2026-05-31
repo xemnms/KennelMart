@@ -33,7 +33,7 @@ export const MarketplacePage = () => {
   // Product search state
   const [listings, setListings] = useState<ProductListing[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState<ListingFilters>({ page: 0, size: 12 });
+  const [filters, setFilters] = useState<ListingFilters>({ page: 0, size: 12, sort: 'createdAt,desc' });
   const [totalPages, setTotalPages] = useState(0);
   
   // User search state
@@ -194,7 +194,8 @@ export const MarketplacePage = () => {
     setFilters(prev => ({
       ...prev,
       category: category === 'All' ? undefined : category,
-      page: 0
+      page: 0,
+      sort: 'createdAt,desc'
     }));
   };
 

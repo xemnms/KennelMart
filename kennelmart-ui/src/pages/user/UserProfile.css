@@ -31,7 +31,7 @@
   align-items: center;
   justify-content: center;
   font-size: 2.5rem;
-  background: linear-gradient(135deg, rgba(37,99,235,0.5), rgba(232,160,32,0.5));
+  background: linear-gradient(135deg, rgba(29,78,216,0.5), rgba(212,166,42,0.5));
   border: none;
   box-shadow: 0 0 0 2.5px var(--bg), 0 0 0 4px rgba(255,255,255,0.12);
 }
