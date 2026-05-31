@@ -27,6 +27,7 @@ import com.kennel.mart.kennelmart.enums.AccountStatus;
 import com.kennel.mart.kennelmart.enums.UserRole;
 import com.kennel.mart.kennelmart.enums.VerificationStatus;
 import com.kennel.mart.kennelmart.repository.UserRepository;
+import com.kennel.mart.kennelmart.repository.VerifiedIdentityRepository;
 import com.kennel.mart.kennelmart.security.JwtProvider;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,6 +36,9 @@ class AuthServiceImplTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private VerifiedIdentityRepository verifiedIdentityRepository;
 
     @Mock
     private PasswordEncoder passwordEncoder;
@@ -79,6 +83,7 @@ class AuthServiceImplTest {
     @DisplayName("Should register user successfully with valid data")
     void testRegisterSuccess() {
         when(userRepository.existsByEmail(anyString())).thenReturn(false);
+        when(verifiedIdentityRepository.existsByEmail(anyString())).thenReturn(false);
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPasswordHash");
         when(userRepository.save(any(User.class))).thenReturn(testUser);
         when(jwtProvider.generateToken(any())).thenReturn("mock-jwt-token");
