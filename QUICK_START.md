@@ -1,76 +1,122 @@
 # KennelMart Quick Start Guide
 
 ## Prerequisites
-- Java 21 or higher
-- PostgreSQL 12 or higher
-- Maven 3.8+
-- Node.js 18+ (for frontend)
+- Java 21+
+- Maven 3.8+ (or use the included `mvnw` wrapper)
+- Node.js 18+
+- Docker Desktop (for the database)
 
 ---
 
-## 🚀 Start Backend in 5 Minutes
+## 🖥️ All Terminal Commands — Copy & Run
 
-### 1. **Create PostgreSQL Database** (2 minutes)
+> **Paste these into your IDE terminal in order. That's all you need.**
+
 ```bash
-# Create the database
-createdb -U postgres kennelmart_db
+# ── Terminal 1: Database + Backend ───────────────────────────────────────
 
-# Verify it was created
-psql -U postgres -c "\l" | grep kennelmart_db
-```
+# (first time only) Create the Docker container + seed the database
+docker run -d --name postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=kennelmart_db -p 5432:5432 postgres:15
+docker exec -i postgres psql -U postgres -d kennelmart_db < database/verified_identities.sql
 
-### 2. **Setup Database Schema** (1 minute)
-```bash
-# Navigate to project root
-cd /workspaces/KennelMart
+# (every session) Start the existing container
+docker start postgres
 
-# Run the setup script
-bash database/setup.sh
-
-# Or manually:
-psql -U postgres -d kennelmart_db -f database/kennelmart_schema.sql
-```
-
-### 3. **Start Spring Boot Backend** (1 minute)
-```bash
+# Start the Spring Boot backend
 cd kennelmart
-
-# Build and run
 mvn spring-boot:run
 
-# Wait for message: "Started KennelmartApplication in X.XXX seconds"
+# ── Terminal 2: Frontend ──────────────────────────────────────────────────
+
+cd kennelmart-ui
+npm install     # first time only
+npm run dev
+
+# ── When done ───────────────────────────────────────────────────────────────
+
+docker stop postgres
 ```
 
-**Backend is now running on:** `http://localhost:8080`
+---
+
+## 🚀 Running Locally — 3 Steps
+
+### 1. Start the Database (Docker)
+
+> **▶ Run in terminal (first time):**
+
+```bash
+# First time — creates the container
+docker run -d \
+  --name postgres \
+  -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_DB=kennelmart_db \
+  -p 5432:5432 \
+  postgres:15
+
+# Seed verified identities (run once after creating the container)
+docker exec -i postgres psql -U postgres -d kennelmart_db < database/verified_identities.sql
+```
+
+> On subsequent sessions just run `docker start postgres`.
+
+> **▶ Run in terminal (every session):**
+
+```bash
+docker start postgres
+```
+
+### 2. Start the Backend
+
+> **▶ Run in terminal (Terminal 1):**
+
+```bash
+cd kennelmart
+mvn spring-boot:run
+```
+
+Wait for: `Started KennelmartApplication in X.XXX seconds`  
+Backend runs at: `http://localhost:8080`
+
+### 3. Start the Frontend
+
+> **▶ Run in terminal (Terminal 2):**
+
+```bash
+cd kennelmart-ui
+npm install    # first time only
+npm run dev
+```
+
+Frontend runs at: `http://localhost:5173`
 
 ---
 
 ## 📝 Test Your Setup
 
 ### Register Your Account
+
+> **▶ Run in terminal:**
+
 ```bash
 curl -X POST http://localhost:8080/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{
-    "firstName": "Axel",
-    "lastName": "Bagay",
+    "name": "Axel Drake Bagay",
     "email": "bagayam@students.nu-laguna.edu.ph",
     "password": "SecurePass123",
     "confirmPassword": "SecurePass123",
-    "schoolId": "2025-1020735"
+    "studentOrFacultyId": "2025-1020735"
   }'
 ```
 
-**Expected Response:**
+**Expected Response (201 Created):**
 ```json
 {
   "userId": "...",
-  "firstName": "Axel",
-  "lastName": "Bagay",
+  "name": "Axel Drake Bagay",
   "email": "bagayam@students.nu-laguna.edu.ph",
   "role": "ADMIN",
-  "verificationStatus": "VERIFIED",
-  "accountStatus": "ACTIVE",
   "accessToken": "eyJhbGciOiJIUzUxMiJ9...",
   "tokenType": "Bearer",
   "expiresIn": 86400
@@ -78,6 +124,9 @@ curl -X POST http://localhost:8080/api/auth/register \
 ```
 
 ### Login with Your Account
+
+> **▶ Run in terminal:**
+
 ```bash
 curl -X POST http://localhost:8080/api/auth/login \
   -H "Content-Type: application/json" \
@@ -89,20 +138,9 @@ curl -X POST http://localhost:8080/api/auth/login \
 
 ---
 
-## 📱 Start Frontend
+## 📱 Accessing the App
 
-### 1. Install Dependencies
-```bash
-cd kennelmart-ui
-npm install
-```
-
-### 2. Start Dev Server
-```bash
-npm run dev
-```
-
-**Frontend is now running on:** `http://localhost:5173`
+Open `http://localhost:5173` in your browser and sign in with your credentials.
 
 ---
 
@@ -119,7 +157,7 @@ npm run dev
 
 ## 📚 Additional Test Users
 
-These verified users are in the database. Register with any of them:
+These accounts are pre-seeded in the database. Register with any of them to create a `USER` account:
 
 | Email | Name |
 |-------|------|
@@ -128,168 +166,48 @@ These verified users are in the database. Register with any of them:
 | pedro.reyes@students.nu-laguna.edu.ph | Pedro Reyes |
 | robert.johnson@students.nu-laguna.edu.ph | Dr. Robert Johnson |
 
-All test users will get the USER role (can buy and sell).
-
 ---
 
-## 🛑 Stop Services
-
-### Stop Backend
+## 🛑 Stopping Services
+> **▶ Run in terminal:**
 ```bash
-# Press Ctrl+C in the terminal running "mvn spring-boot:run"
-```
+# Stop backend — Ctrl+C in the mvn terminal
 
-### Stop Frontend
-```bash
-# Press Ctrl+C in the terminal running "npm run dev"
-```
+# Stop frontend — Ctrl+C in the npm terminal
 
-### Stop PostgreSQL
-```bash
-# Linux:
-sudo service postgresql stop
-
-# Or:
-sudo systemctl stop postgresql
+# Stop database
+docker stop postgres
 ```
 
 ---
 
 ## 🔧 Configuration Files
 
-**Backend Configuration:**
-- `kennelmart/src/main/resources/application.properties`
-  - Database: `jdbc:postgresql://localhost:5432/kennelmart_db`
-  - User: `postgres`
-  - Password: `postgres` (change if different)
-
-**Database Schema:**
-- `database/kennelmart_schema.sql` - Main schema
-- `database/setup.sh` - Automated setup script
-
-**Frontend Configuration:**
-- `kennelmart-ui/vite.config.ts` - Vite configuration
-- `kennelmart-ui/.env` - Environment variables (create if needed)
+| File | Purpose |
+|---|---|
+| `kennelmart/src/main/resources/application.properties` | Backend — DB connection, JWT, CORS, file upload |
+| `kennelmart-ui/vite.config.ts` | Frontend — dev server, proxy config |
+| `database/verified_identities.sql` | Seed data for allowed NU accounts |
 
 ---
 
 ## ✅ Verification Checklist
 
-- [ ] PostgreSQL running
-- [ ] Database `kennelmart_db` created
-- [ ] Schema imported successfully
+- [ ] Docker Desktop running
+- [ ] `postgres` container started
+- [ ] Seed applied (`verified_identities.sql`)
 - [ ] Backend starts without errors
-- [ ] Can register account at `POST /api/auth/register`
-- [ ] Can login at `POST /api/auth/login`
-- [ ] Received JWT token
 - [ ] Frontend starts without errors
-- [ ] Frontend connects to backend API
+- [ ] Can register and receive a JWT token
+- [ ] Browser opens marketplace at `http://localhost:5173`
 
 ---
 
-## 📊 Database Tables Created
+## 🐛 Common Issues
 
-```
-verified_identities  - List of verified NU students/faculty
-users               - Registered users in the system
-```
-
-## 🔐 User Roles
-
-- **ADMIN** - Full system access (your account)
-- **USER** - Can buy and sell (other users)
-
----
-
-## 📖 Useful Commands
-
-### Check PostgreSQL Status
-```bash
-# Check if running
-psql -U postgres -c "SELECT 1"
-
-# List databases
-psql -U postgres -c "\l"
-
-# Connect to database
-psql -U postgres -d kennelmart_db
-
-# Exit psql
-\q
-```
-
-### Backend Logs
-```bash
-# View real-time logs from backend
-tail -f kennelmart/target/logs/application.log
-
-# Build project
-cd kennelmart && mvn clean install
-
-# Run tests
-mvn test
-```
-
-### Frontend Logs
-```bash
-# Check build
-cd kennelmart-ui && npm run build
-
-# Run tests
-npm test
-```
-
----
-
-## ⚠️ Common Issues
-
-**Issue: "Database already exists"**
-```bash
-# Drop existing database and recreate
-dropdb -U postgres kennelmart_db
-createdb -U postgres kennelmart_db
-psql -U postgres -d kennelmart_db -f database/kennelmart_schema.sql
-```
-
-**Issue: "Connection refused" for PostgreSQL**
-```bash
-# PostgreSQL not running, start it:
-sudo service postgresql start
-```
-
-**Issue: "Password authentication failed"**
-```bash
-# Update in application.properties:
-spring.datasource.password=your_actual_password
-```
-
-**Issue: Port 8080 already in use**
-```bash
-# Change port in application.properties:
-server.port=8081
-```
-
----
-
-## 🎯 Next Steps
-
-1. ✅ Start both backend and frontend
-2. ✅ Register your account
-3. ✅ Explore the authentication endpoints
-4. ⏳ Phase 2: Implement Product Listing functionality
-5. ⏳ Phase 3: Build marketplace browsing
-6. ⏳ Phase 4: Add cart and order system
-7. ⏳ Phase 5: Create admin moderation dashboard
-
----
-
-## 📞 Support Files
-
-- **[DEVELOPER_SETUP.md](DEVELOPER_SETUP.md)** - Detailed setup instructions
-- **[PHASE_1_SUMMARY.md](PHASE_1_SUMMARY.md)** - Authentication module documentation
-- **[DATABASE_SETUP.md](DATABASE_SETUP.md)** - Database setup guide
-- **[INTEGRATION_COMPLETE.md](INTEGRATION_COMPLETE.md)** - Integration verification
-
----
-
-**You're all set! Backend + Frontend running = Ready to develop Phase 2 features! 🚀**
+| Problem | Fix |
+|---|---|
+| `Connection refused` on port 5432 | Run `docker start postgres` |
+| `Failed to connect` in browser | Check backend is running on `:8080` |
+| `npm: command not found` | Install Node.js 18+ from nodejs.org |
+| Port 5432 already in use | Stop local PostgreSQL: `sudo service postgresql stop` |
