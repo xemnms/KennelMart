@@ -75,6 +75,7 @@ public class SecurityConfig {
                         authorize
                                 // Public endpoints - no authentication required
                                 .requestMatchers("/api/auth/**").permitAll()
+                                .requestMatchers("/error", "/error/**").permitAll()
                                 .requestMatchers("/", "/index.html", "/static/**", "/public/**").permitAll()
                                 .requestMatchers("/h2-console/**").permitAll()
                                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()

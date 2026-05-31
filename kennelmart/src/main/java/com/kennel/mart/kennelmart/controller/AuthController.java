@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 import com.kennel.mart.kennelmart.dto.AuthResponse;
 import com.kennel.mart.kennelmart.dto.LoginRequest;
 import com.kennel.mart.kennelmart.dto.RegisterRequest;
@@ -28,7 +30,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
         log.info("Registration request received for email: {}", request.getEmail());
         try {
             AuthResponse response = authService.register(request);
@@ -36,12 +38,13 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (IllegalArgumentException e) {
             log.warn("Registration failed: {}", e.getMessage());
-            throw e;
+            String message = e.getMessage() == null ? "Registration failed" : e.getMessage();
+            return ResponseEntity.badRequest().body(Map.of("message", message));
         }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
         log.info("Login request received for email: {}", request.getEmail());
         try {
             AuthResponse response = authService.login(request);
@@ -49,7 +52,11 @@ public class AuthController {
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
             log.warn("Login failed: {}", e.getMessage());
-            throw e;
+            String message = e.getMessage() == null ? "Login failed" : e.getMessage();
+            HttpStatus status = message.toLowerCase().contains("not verified") || message.toLowerCase().contains("suspended")
+                    ? HttpStatus.FORBIDDEN
+                    : HttpStatus.UNAUTHORIZED;
+            return ResponseEntity.status(status).body(Map.of("message", message));
         }
     }
 
