@@ -24,8 +24,8 @@ type QuickWidget = 'cart' | 'notifications' | 'messages' | 'sell' | null;
 export const MarketplacePage = () => {
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
-  const { unreadCount: msgUnreadCount, fetchUnreadCount: fetchMsgUnreadCount } = useMessageStore();
-  const { unreadCount: notifUnreadCount, fetchUnreadCount: fetchNotifUnreadCount } = useNotificationStore();
+  const msgUnreadCount = useMessageStore((state) => state.unreadCount);
+  const notifUnreadCount = useNotificationStore((state) => state.unreadCount);
   const { items: cartItems, totalPrice: cartTotal, isLoading: cartLoading, fetchCart } = useCartStore();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -180,14 +180,6 @@ export const MarketplacePage = () => {
       setUserPage(0);
     }
   }, [searchMode, searchInput]);
-
-  // Message & notification counts
-  useEffect(() => {
-    if (user) {
-      fetchMsgUnreadCount();
-      fetchNotifUnreadCount();
-    }
-  }, [user, fetchMsgUnreadCount, fetchNotifUnreadCount]);
 
   const handleCategoryChange = (category: string) => {
     updateSearchParams('products', searchInput);

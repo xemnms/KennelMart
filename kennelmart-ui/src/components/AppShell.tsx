@@ -17,8 +17,10 @@ const navItems: Array<{ to: string; label: string; icon: KennelMartIconName; end
 
 export const AppShell = () => {
   const user = useAuthStore((state) => state.user);
-  const { unreadCount: messageUnreadCount, fetchUnreadCount: fetchMessageUnreadCount } = useMessageStore();
-  const { unreadCount: notificationUnreadCount, fetchUnreadCount: fetchNotificationUnreadCount } = useNotificationStore();
+  const messageUnreadCount = useMessageStore((state) => state.unreadCount);
+  const fetchMessageUnreadCount = useMessageStore((state) => state.fetchUnreadCount);
+  const notificationUnreadCount = useNotificationStore((state) => state.unreadCount);
+  const fetchNotificationUnreadCount = useNotificationStore((state) => state.fetchUnreadCount);
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [sidebarSearch, setSidebarSearch] = useState(searchParams.get('q') ?? '');
@@ -31,10 +33,17 @@ export const AppShell = () => {
 
   useEffect(() => {
     if (user) {
-      void fetchMessageUnreadCount();
-      void fetchNotificationUnreadCount();
+      void fetchMessageUnreadCount(true);
+      void fetchNotificationUnreadCount(true);
+
+      const intervalId = window.setInterval(() => {
+        void fetchMessageUnreadCount();
+        void fetchNotificationUnreadCount();
+      }, 20000);
+
+      return () => window.clearInterval(intervalId);
     }
-  }, [user, fetchMessageUnreadCount, fetchNotificationUnreadCount, location.pathname]);
+  }, [user, fetchMessageUnreadCount, fetchNotificationUnreadCount]);
 
   const updateMarketplaceSearch = (nextMode: 'products' | 'users', nextQuery: string) => {
     const trimmedQuery = nextQuery.trim();

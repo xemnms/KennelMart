@@ -12,7 +12,9 @@ import './Profile.css';
 
 export const ProfilePage = () => {
   const navigate = useNavigate();
-  const { user, fetchUser, logout } = useAuthStore();
+  const user = useAuthStore((state) => state.user);
+  const fetchUser = useAuthStore((state) => state.fetchUser);
+  const logout = useAuthStore((state) => state.logout);
   const [isEditing, setIsEditing] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
@@ -42,10 +44,8 @@ export const ProfilePage = () => {
   }, [user, navigate]);
 
   useEffect(() => {
-    if (user) {
-      fetchUser();
-    }
-  }, [user, fetchUser]);
+    void fetchUser();
+  }, [fetchUser]);
 
   useEffect(() => {
     if (user) {
