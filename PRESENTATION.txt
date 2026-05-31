@@ -1,0 +1,366 @@
+================================================================================
+KENNELMART - 20-MINUTE PRESENTATION SCRIPT
+CS / IT - Object-Oriented Programming
+National University Laguna | May 2026
+================================================================================
+
+HOW TO USE THIS SCRIPT
+- This is a full speaking script, not just bullet prompts.
+- Replace placeholders like [Name], [Course], and [Year Level].
+- Target pacing is 20 minutes total.
+
+TIME PLAN (TOTAL: 20:00)
+1. Slide 1 - Title ............................. 1:00
+2. Slide 2 - Team Introduction ................. 1:30
+3. Slide 3 - Problem Statement ................. 2:30
+4. Slide 4 - The Solution ...................... 3:00
+5. Slide 5 - Architecture and Feature Tour ..... 2:00
+6. Slide 6 - OOP Concepts Applied .............. 4:00
+7. Slide 7 - OOP Practices and Patterns ........ 3:30
+8. Slide 8 - Live Demo Walkthrough ............. 1:30
+9. Slide 9 - Conclusion and Q&A ................ 1:00
+
+================================================================================
+SLIDE 1 - TITLE (1:00)
+================================================================================
+
+ON SCREEN
+- KennelMart
+- A Campus Marketplace for NU Laguna - Built with OOP Principles
+
+FULL SCRIPT
+"Good [morning/afternoon], everyone. We are [Course] students from National
+University Laguna, and today we are presenting our project, KennelMart.
+
+KennelMart is a campus-only buy-and-sell platform designed specifically for
+verified NU Laguna students and faculty. In this presentation, we will show
+three main things: first, the real problem we identified in campus buying and
+selling; second, how our system solves that problem from end to end; and third,
+how Object-Oriented Programming principles and design patterns are applied
+throughout our backend and frontend architecture.
+
+By the end of this presentation, you will see that KennelMart is not only a
+functional full-stack application, but also a structured OOP-driven system that
+is maintainable, testable, and ready for real use."
+
+TRANSITION
+"To begin, let me introduce our team."
+
+================================================================================
+SLIDE 2 - TEAM INTRODUCTION (1:30)
+================================================================================
+
+ON SCREEN
+- Project Lead / Fullstack: [Name]
+- Backend Developer: [Name]
+- Frontend Developer: [Name]
+- UI/UX Designer: [Name]
+- Database / QA: [Name]
+
+FULL SCRIPT
+"Our team is composed of five members with clear responsibilities.
+
+I am [Name], [role], and I will guide this presentation.
+
+[Name] handled core backend development, including API design, service-layer
+logic, and security integration.
+
+[Name] focused on frontend development using React and TypeScript, including
+state management, routing, and page flows.
+
+[Name] handled UI and UX decisions, especially for the marketplace experience,
+auth screens, and mobile-friendly layouts.
+
+[Name] managed database setup, SQL validation data, and QA testing of major
+flows like registration, checkout, and admin moderation.
+
+We are all [Year Level] students taking [Course], and KennelMart is our final
+project for Object-Oriented Programming."
+
+TRANSITION
+"Now that you know the team, here is the exact problem we set out to solve."
+
+================================================================================
+SLIDE 3 - PROBLEM STATEMENT (2:30)
+================================================================================
+
+ON SCREEN
+- Unverified sellers
+- No campus-specific marketplace
+- No structured transaction flow
+- No moderation and reporting process
+
+FULL SCRIPT
+"Before building any system, we defined the real user problem.
+
+Students frequently buy and sell second-hand items such as uniforms,
+textbooks, gadgets, and services. But today, most of these transactions happen
+in Facebook groups or random group chats.
+
+The first issue is trust. There is no verified identity check, so buyers can
+easily be scammed.
+
+The second issue is context. Existing marketplaces are public and not tied to
+NU Laguna, so users cannot confidently know they are transacting within the
+campus community.
+
+The third issue is process. Informal chat-based selling has no order tracking,
+no status history, and no consistent payment or meetup flow.
+
+The fourth issue is accountability. If something goes wrong, there is no formal
+reporting and no admin workflow to review violations.
+
+So our formal problem statement is this:
+NU Laguna students and faculty need a safe, verified, and structured platform
+for campus-based buy-and-sell transactions.
+
+KennelMart was built to directly answer that need."
+
+TRANSITION
+"Next, I will show what KennelMart is and what users can do with it."
+
+================================================================================
+SLIDE 4 - THE SOLUTION: KENNELMART (3:00)
+================================================================================
+
+ON SCREEN
+- Verified campus marketplace
+- Java + Spring Boot backend
+- React + TypeScript frontend
+- End-to-end features: listing, cart, checkout, orders, messaging, reviews,
+  reporting, admin moderation
+
+FULL SCRIPT
+"KennelMart is a full-stack, campus-only marketplace for verified NU Laguna
+students and faculty.
+
+Registration is restricted to institutional email domains. After registration,
+the user identity is validated using our verified identity reference data. This
+prevents unverified outsiders from entering the platform.
+
+Our backend is built with Java 21 and Spring Boot, secured using Spring
+Security, JWT authentication with HS512, and BCrypt password hashing. Data is
+managed with Spring Data JPA and PostgreSQL.
+
+Our frontend is built with React 18 and TypeScript using Vite. We use React
+Router for navigation, Zustand for state management, and Axios for API calls.
+
+In terms of user features, KennelMart supports the complete commerce cycle:
+browsing listings, searching and filtering, adding items to cart, multi-seller
+checkout, order status tracking, direct messaging, notifications, and post-sale
+reviews.
+
+For governance and safety, we include reporting features and a dedicated admin
+dashboard for user management, listing moderation, and report resolution.
+
+In short, we transformed an informal and risky process into a structured,
+traceable, and moderated campus system."
+
+TRANSITION
+"Now let us look at how this is organized internally in the backend."
+
+================================================================================
+SLIDE 5 - SYSTEM ARCHITECTURE AND FEATURE TOUR (2:00)
+================================================================================
+
+ON SCREEN
+- Layered architecture:
+  HTTP -> Controller -> Service -> Repository -> Database
+- Domains:
+  auth -> user -> verification -> listings -> cart -> orders -> messages ->
+  notifications -> reviews -> reports -> analytics
+
+FULL SCRIPT
+"Our backend uses a clean layered architecture.
+
+At the top, controllers receive HTTP requests, validate inputs, and return
+responses.
+
+Controllers do not contain business logic. They delegate to services.
+
+The service layer contains all business rules, validation logic, cross-entity
+orchestration, and workflow decisions.
+
+Services then call repositories, which isolate database access using JPA query
+methods and JPQL where needed.
+
+Repositories interact with PostgreSQL, where our entities are stored as
+relational tables.
+
+This architecture gives us clean separation of concerns. Every layer has one
+job, and each layer is easier to maintain and test.
+
+Feature-wise, the system is organized into connected domains, from auth and
+user verification all the way to orders, messaging, reviews, reports, and
+analytics."
+
+TRANSITION
+"With that architecture in mind, I will now map our implementation to the four
+core OOP concepts."
+
+================================================================================
+SLIDE 6 - OOP CONCEPTS APPLIED (4:00)
+================================================================================
+
+ON SCREEN
+- Abstraction
+- Encapsulation
+- Inheritance
+- Polymorphism
+
+FULL SCRIPT
+"In this project, we intentionally applied all four OOP pillars.
+
+First is abstraction.
+We use an abstract BaseEntity and multiple service interfaces. BaseEntity
+defines common fields like id, createdAt, and updatedAt. Service interfaces
+define what operations are available, while hiding implementation details.
+Controllers only depend on interfaces, not concrete classes.
+
+Second is encapsulation.
+Our entities and DTOs keep fields private and expose controlled access through
+methods. For example, user password handling is never exposed directly; it is
+processed through secure service logic. This protects internal state and avoids
+invalid object mutation.
+
+Third is inheritance.
+All core entities inherit from BaseEntity. This avoids repeating boilerplate
+for identifiers and timestamps in every class. If we need to evolve shared
+fields later, we do it once in the parent class.
+
+Fourth is polymorphism.
+Service interfaces are implemented by concrete classes and injected by Spring at
+runtime. A controller can call OrderService without knowing whether the
+underlying implementation changes. This keeps modules decoupled and supports
+future extension.
+
+So these are not just textbook definitions. They are visible in our daily code
+structure, dependency boundaries, and runtime behavior."
+
+TRANSITION
+"After the OOP pillars, let me quickly cover the design patterns and best
+practices we used in implementation."
+
+================================================================================
+SLIDE 7 - OOP BEST PRACTICES AND DESIGN PATTERNS (3:30)
+================================================================================
+
+ON SCREEN
+- Builder Pattern
+- Repository Pattern
+- DTO Pattern
+- Service Layer Pattern
+- SRP, OCP, and DI/IoC
+
+FULL SCRIPT
+"Beyond the four pillars, we used practical OOP-friendly patterns.
+
+First, Builder Pattern.
+Our response DTOs often contain many fields, so we use builders for readable,
+order-safe object construction. This improves clarity and reduces constructor
+errors.
+
+Second, Repository Pattern.
+Data access is isolated in repository interfaces extending JpaRepository.
+Business logic stays in services, while repositories focus on persistence and
+queries.
+
+Third, DTO Pattern.
+We never expose entities directly to the API. Request DTOs validate inputs at
+the boundary, and response DTOs expose only safe, necessary fields.
+
+Fourth, Service Layer Pattern.
+Controllers do HTTP concerns only. Services own business workflows. This keeps
+the API layer thin and the domain layer cohesive.
+
+We also enforce SOLID principles:
+- SRP: each class has one clear responsibility.
+- OCP: modules are extendable through interfaces without breaking callers.
+- DI/IoC: constructor injection makes dependencies explicit and testable.
+
+As a result, our codebase remains organized even as features grow."
+
+TRANSITION
+"Now I will summarize the user journey in a quick live demo walkthrough."
+
+================================================================================
+SLIDE 8 - LIVE DEMO WALKTHROUGH (1:30)
+================================================================================
+
+ON SCREEN
+Demo flow:
+1) Register with NU email
+2) Browse and search listings
+3) Add to cart and checkout
+4) Track order status updates
+5) Leave review after delivery
+6) Admin moderation actions
+
+FULL SCRIPT
+"For the demo flow, we start with registration using a valid NU email and
+identity verification.
+
+Next, we browse listings, apply filters, and open a product detail page.
+
+We add an item to cart, proceed to checkout, choose a payment option, and place
+the order.
+
+Then we switch to the seller side and update order status through the order
+lifecycle.
+
+After delivery, the buyer can leave a rating and review, which updates the
+seller profile metrics.
+
+Finally, from the admin dashboard, we can approve pending listings and resolve
+reports. This demonstrates not only buying and selling, but also trust and
+moderation workflows."
+
+TRANSITION
+"To close, here is our final summary."
+
+================================================================================
+SLIDE 9 - CONCLUSION AND Q&A (1:00)
+================================================================================
+
+ON SCREEN
+- Full-stack verified campus marketplace
+- OOP principles applied end to end
+- Clean architecture and maintainable codebase
+
+FULL SCRIPT
+"To conclude, KennelMart is a full-stack campus marketplace with verification,
+transaction flow, communication, moderation, and analytics.
+
+What makes this project strong is not only feature completeness, but also the
+engineering discipline behind it. We applied abstraction, encapsulation,
+inheritance, and polymorphism in concrete ways, and reinforced them with proven
+patterns like Builder, Repository, DTO, and Service Layer.
+
+Because of this OOP-first design, our system is easier to maintain, easier to
+test, and easier to extend for future requirements.
+
+Thank you for listening. We are now ready for your questions."
+
+================================================================================
+OPTIONAL Q&A BANK (USE IF ASKED)
+================================================================================
+
+Q1: Why did you choose Java Spring Boot?
+A: We chose Spring Boot for strong enterprise patterns, built-in dependency
+injection, mature security libraries, and clean layering support for OOP.
+
+Q2: How is security handled?
+A: We use JWT bearer authentication, BCrypt password hashing, role-based
+authorization, and restricted institutional email registration.
+
+Q3: Why use DTOs instead of exposing entities?
+A: DTOs prevent overexposing internal fields, enforce API contracts, and keep
+controller-level validation clean.
+
+Q4: What can you improve next?
+A: We can add payment gateway integration, cloud file storage, stronger audit
+logs, and push notifications.
+
+================================================================================
+END OF SCRIPT
+================================================================================
