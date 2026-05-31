@@ -13,6 +13,12 @@ type KennelMartIconProps = {
   className?: string;
 };
 
+type KennelMartMarkProps = {
+  className?: string;
+  role?: 'img' | 'presentation';
+  ariaLabel?: string;
+};
+
 const iconPaths: Record<KennelMartIconName, string> = {
   home: 'M8 18.5 18 10l10 8.5V30H8z M13.5 30V21h9v9',
   search: 'M17 8.5a8.5 8.5 0 1 0 5.15 15.3L31 32.65 32.65 31l-8.85-8.85A8.5 8.5 0 0 0 17 8.5Z',
@@ -28,51 +34,62 @@ const iconPaths: Record<KennelMartIconName, string> = {
   bookmark: 'M9.5 8h13v17l-6.5-4-6.5 4V8Z',
 };
 
-export const KennelMartLogo = ({ compact = false, showTagline = true, className = '' }: KennelMartLogoProps) => {
-  const gradientId = useId();
-  const shimId = useId();
+export const KennelMartMark = ({ className = '', role = 'presentation', ariaLabel }: KennelMartMarkProps) => {
+  const tileGradientId = useId();
+  const orbGradientId = useId();
+  const glossId = useId();
 
+  return (
+    <svg
+      className={className || undefined}
+      viewBox="0 0 64 64"
+      role={role}
+      aria-label={role === 'img' ? (ariaLabel ?? 'KennelMart') : undefined}
+    >
+      <defs>
+        <linearGradient id={tileGradientId} x1="7" y1="6" x2="58" y2="60" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#0b2f8b" />
+          <stop offset="100%" stopColor="#06205f" />
+        </linearGradient>
+        <radialGradient id={orbGradientId} cx="34" cy="31" r="23" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#f7da6a" />
+          <stop offset="55%" stopColor="#d2a629" />
+          <stop offset="100%" stopColor="#8e6820" />
+        </radialGradient>
+        <radialGradient id={glossId} cx="24" cy="18" r="30" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="rgba(255,255,255,0.35)" />
+          <stop offset="100%" stopColor="rgba(255,255,255,0)" />
+        </radialGradient>
+      </defs>
+
+      <rect x="2" y="2" width="60" height="60" rx="15" fill={`url(#${tileGradientId})`} />
+      <circle cx="32" cy="33" r="21" fill={`url(#${orbGradientId})`} />
+      <circle cx="32" cy="33" r="21" fill={`url(#${glossId})`} />
+
+      <circle cx="18" cy="24" r="3" fill="#ffffff" opacity="0.95" />
+      <circle cx="24.5" cy="18.5" r="3" fill="#ffffff" opacity="0.95" />
+      <circle cx="32" cy="16.5" r="3.1" fill="#ffffff" opacity="0.95" />
+      <circle cx="39.5" cy="18.5" r="3" fill="#ffffff" opacity="0.95" />
+      <circle cx="46" cy="24" r="3" fill="#ffffff" opacity="0.95" />
+
+      <path d="M19 33.4c4.6-5.9 21.4-5.9 26 0" fill="none" stroke="#ffffff" strokeWidth="3.1" strokeLinecap="round" />
+
+      <path d="M27 42.5c1.9-2.8 8.1-2.8 10 0" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" />
+      <rect x="25.5" y="42.5" width="13" height="7.5" rx="1.8" fill="none" stroke="#ffffff" strokeWidth="2" />
+      <line x1="28.5" y1="42.5" x2="28.5" y2="50" stroke="#ffffff" strokeWidth="1" strokeOpacity="0.6" />
+      <line x1="32" y1="42.5" x2="32" y2="50" stroke="#ffffff" strokeWidth="1" strokeOpacity="0.6" />
+      <line x1="35.5" y1="42.5" x2="35.5" y2="50" stroke="#ffffff" strokeWidth="1" strokeOpacity="0.6" />
+      <circle cx="28" cy="52.5" r="2.1" fill="#ffffff" opacity="0.92" />
+      <circle cx="36" cy="52.5" r="2.1" fill="#ffffff" opacity="0.92" />
+    </svg>
+  );
+};
+
+export const KennelMartLogo = ({ compact = false, showTagline = true, className = '' }: KennelMartLogoProps) => {
   return (
     <div className={`kennelmart-logo ${compact ? 'compact' : ''} ${className}`.trim()}>
       <span className="kennelmart-logo-mark" aria-hidden="true">
-        <svg viewBox="0 0 64 64" role="presentation">
-          <defs>
-            <linearGradient id={gradientId} x1="6" y1="4" x2="58" y2="60" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#0f2f6b" />
-              <stop offset="45%" stopColor="#1d4ed8" />
-              <stop offset="100%" stopColor="#d4a62a" />
-            </linearGradient>
-            <radialGradient id={shimId} cx="38%" cy="22%" r="62%">
-              <stop offset="0%" stopColor="rgba(255,255,255,0.25)" />
-              <stop offset="100%" stopColor="rgba(255,255,255,0)" />
-            </radialGradient>
-          </defs>
-          <rect x="2" y="2" width="60" height="60" rx="16" fill={`url(#${gradientId})`} />
-          <rect x="2" y="2" width="60" height="60" rx="16" fill={`url(#${shimId})`} />
-          {/* 4 paw toe circles sitting ABOVE / ON TOP of the roof */}
-          <circle cx="22" cy="9" r="2.4" fill="#fff" opacity="0.92" />
-          <circle cx="28.5" cy="6" r="2.4" fill="#fff" opacity="0.92" />
-          <circle cx="35.5" cy="6" r="2.4" fill="#fff" opacity="0.92" />
-          <circle cx="42" cy="9" r="2.4" fill="#fff" opacity="0.92" />
-          {/* Kennel roof (no chimney) */}
-          <polygon points="10,30 32,10 54,30" fill="rgba(255,255,255,0.18)" />
-          <polyline points="10,30 32,10 54,30" fill="none" stroke="#fff" strokeWidth="2.6" strokeLinejoin="round" strokeLinecap="round" />
-          {/* Store body */}
-          <rect x="12" y="29" width="40" height="24" rx="3" fill="rgba(255,255,255,0.12)" />
-          <rect x="12" y="29" width="40" height="24" rx="3" fill="none" stroke="#fff" strokeWidth="2.4" />
-          {/* Door */}
-          <rect x="22" y="36" width="20" height="15" rx="2.5" fill="rgba(255,255,255,0.18)" />
-          {/* Basket handle arc */}
-          <path d="M 27 43 Q 32 37.5 37 43" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
-          {/* Basket body */}
-          <rect x="26.5" y="42.5" width="11" height="7.5" rx="1.8" fill="rgba(255,255,255,0.15)" stroke="#fff" strokeWidth="1.8" />
-          {/* Basket weave vertical */}
-          <line x1="29.5" y1="42.5" x2="29.5" y2="50" stroke="#fff" strokeWidth="1" strokeOpacity="0.55" />
-          <line x1="32" y1="42.5" x2="32" y2="50" stroke="#fff" strokeWidth="1" strokeOpacity="0.55" />
-          <line x1="34.5" y1="42.5" x2="34.5" y2="50" stroke="#fff" strokeWidth="1" strokeOpacity="0.55" />
-          {/* Basket weave horizontal */}
-          <line x1="26.5" y1="46" x2="37.5" y2="46" stroke="#fff" strokeWidth="0.8" strokeOpacity="0.4" />
-        </svg>
+        <KennelMartMark />
       </span>
 
       {showTagline && (
